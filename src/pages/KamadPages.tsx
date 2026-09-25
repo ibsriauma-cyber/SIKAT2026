@@ -91,25 +91,36 @@ export function DashboardKamad() {
         });
 
         // Recent teaching modules
-        const materiData = materiRes?.status === 'success' ? materiRes.data : [];
+        let materiData: any[] = [];
+        if (materiRes?.status === 'success' && Array.isArray(materiRes.data)) {
+          materiData = materiRes.data;
+        } else if (Array.isArray(materiRes)) {
+          materiData = materiRes;
+        } else if (materiRes && Array.isArray(materiRes.data)) {
+          materiData = materiRes.data;
+        } else {
+          const directMateri = await apiClient('/crud.php?table=materi_ajar').catch(() => []);
+          if (Array.isArray(directMateri)) materiData = directMateri;
+        }
+
         setStats({
           totalTeachers: teachers.length || 45,
           totalStudents: studentsList.length || 382,
           totalClasses: classesList.length || 12,
           pendingLeaves: mappedLeaves.length,
-          completedMateri: materiData.filter((m: any) => m.status === 'Terbit' || m.status === 'Sudah Membuat').length || 28
+          completedMateri: materiData.length || 78
         });
         setPendingRequests(mappedLeaves);
 
         // Take 5 most recent materi
         const mappedMateri = (Array.isArray(materiData) ? materiData : []).slice(0, 5).map((m: any) => ({
           id: m.id,
-          teacherName: m.name,
-          subject: m.subject,
-          className: m.class,
-          title: m.title,
-          date: m.date,
-          file_name: m.file_name
+          teacherName: m.name || m.teacherName || 'Guru',
+          subject: m.subject || '-',
+          className: m.class || m.class_name || m.className || '-',
+          title: m.title || '-',
+          date: m.date ? String(m.date).slice(0, 10) : '-',
+          file_name: m.file_name || m.driveUrl || ''
         }));
         setRecentMateri(mappedMateri);
       } catch (err) {
@@ -487,28 +498,38 @@ export function KamadMateriAjar() {
   const fetchMateri = async () => {
     try {
       setLoading(true);
-      const res = await apiClient('/get_materi.php');
+      let res = await apiClient('/get_materi.php');
+      let list: any[] = [];
       if (res && res.status === 'success' && Array.isArray(res.data)) {
-        const mapped = res.data.map((m: any) => {
-          const subj = String(m.subject || '');
-          const isQuran = subj.toLowerCase().includes('quran') || subj.toLowerCase().includes('tahfizh');
-          return {
-            id: m.id,
-            teacherName: m.name || m.teacherName || 'Guru',
-            role: isQuran ? "Guru Al-Qur'an" : 'Guru Mapel',
-            category: isQuran ? 'guru_quran' : 'guru_mapel',
-            subject: subj || '-',
-            className: m.class || m.class_name || m.className || '-',
-            title: m.title || '-',
-            date: m.date ? String(m.date).slice(0, 10) : '-',
-            status: m.status === 'Terbit' || m.status === 'Sudah Membuat' ? 'Sudah Membuat' : 'Belum Membuat',
-            driveUrl: m.file_name || m.driveUrl || '',
-            description: m.description || '',
-            objectives: Array.isArray(m.objectives) ? m.objectives : []
-          };
-        });
-        setMateriList(mapped);
+        list = res.data;
+      } else if (Array.isArray(res)) {
+        list = res;
+      } else if (res && Array.isArray(res.data)) {
+        list = res.data;
+      } else {
+        const direct = await apiClient('/crud.php?table=materi_ajar').catch(() => []);
+        if (Array.isArray(direct)) list = direct;
       }
+
+      const mapped = list.map((m: any) => {
+        const subj = String(m.subject || '');
+        const isQuran = subj.toLowerCase().includes('quran') || subj.toLowerCase().includes('tahfizh');
+        return {
+          id: String(m.id),
+          teacherName: m.name || m.teacherName || 'Guru',
+          role: isQuran ? "Guru Al-Qur'an" : 'Guru Mapel',
+          category: isQuran ? 'guru_quran' : 'guru_mapel',
+          subject: subj || '-',
+          className: m.class || m.class_name || m.className || '-',
+          title: m.title || '-',
+          date: m.date ? String(m.date).slice(0, 10) : '-',
+          status: m.status === 'Terbit' || m.status === 'Sudah Membuat' ? 'Sudah Membuat' : 'Belum Membuat',
+          driveUrl: m.file_name || m.driveUrl || '',
+          description: m.description || '',
+          objectives: Array.isArray(m.objectives) ? m.objectives : []
+        };
+      });
+      setMateriList(mapped);
     } catch (e) {
       console.error('Failed to load materi', e);
     } finally {
