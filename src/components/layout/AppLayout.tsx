@@ -50,12 +50,12 @@ export function AppLayout() {
       if (typeof window !== 'undefined') {
         try {
           const data = await apiClient('/crud.php?table=academic_terms');
-          const parsedTerms = data.map((t: any) => ({
+          const parsedTerms = Array.isArray(data) ? data.map((t: any) => ({
             id: String(t.id),
-            year: t.year,
+            year: String(t.year || ''),
             semester: t.semester,
             isActive: Boolean(t.is_active)
-          }));
+          })) : [];
           setTerms(parsedTerms);
           
           const savedId = remoteStorage.getItem('selectedAcademicTermId');
@@ -163,7 +163,7 @@ export function AppLayout() {
               </div>
             )}
             
-            <h2 className="text-sm font-bold text-slate-600 hidden sm:block">Dashboard {user.role.charAt(0).toUpperCase() + user.role.slice(1).replace('_', ' ')}</h2>
+            <h2 className="text-sm font-bold text-slate-600 hidden sm:block">Dashboard {user?.role ? (user.role.charAt(0).toUpperCase() + user.role.slice(1).replace('_', ' ')) : 'Pengguna'}</h2>
           </div>
           <div className="flex items-center space-x-3 sm:space-x-4">
             <div className="relative hidden sm:block">
@@ -174,16 +174,16 @@ export function AppLayout() {
             
             <div className="flex items-center space-x-2 sm:space-x-3 pl-2 sm:pl-4">
               <div className="flex flex-col items-end gap-1.5 text-right">
-                <p className="hidden sm:block text-xs font-bold text-slate-800">{user.name}</p>
+                <p className="hidden sm:block text-xs font-bold text-slate-800">{user?.name || 'Pengguna'}</p>
                 <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1.5 sm:gap-2">
-                  {user.roles && user.roles.length > 1 ? (
+                  {user?.roles && Array.isArray(user.roles) && user.roles.length > 1 ? (
                   <>
                     <div className="relative hidden sm:inline-block" ref={menuRef}>
                       <button
                         onClick={() => setIsRoleMenuOpen(!isRoleMenuOpen)}
                         className="flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[10px] text-emerald-700 font-black capitalize py-1 px-3 rounded-lg transition-all shadow-sm cursor-pointer select-none active:scale-95"
                       >
-                        <span>Role: {user.role.replace('_', ' ')}</span>
+                        <span>Role: {user?.role ? user.role.replace('_', ' ') : ''}</span>
                         <ChevronDown className={`w-3 h-3 text-emerald-600 transition-transform duration-200 ${isRoleMenuOpen ? 'rotate-180' : ''}`} />
                       </button>
 
@@ -196,8 +196,8 @@ export function AppLayout() {
                             transition={{ duration: 0.15, ease: "easeOut" }}
                             className="absolute right-0 mt-1.5 w-40 bg-white border border-slate-200/80 rounded-xl shadow-lg py-1 z-[9999] origin-top-right overflow-hidden"
                           >
-                            {(Array.isArray(user.roles) ? user.roles : [user.role]).map((r) => {
-                              const isActive = user.role === r;
+                            {(Array.isArray(user.roles) ? user.roles : [user.role || 'guru']).map((r) => {
+                              const isActive = user?.role === r;
                               return (
                                 <button
                                   key={r}
@@ -212,7 +212,7 @@ export function AppLayout() {
                                       : 'text-slate-600 hover:bg-slate-50'
                                   }`}
                                 >
-                                  <span>{r.replace('_', ' ')}</span>
+                                  <span>{String(r || '').replace('_', ' ')}</span>
                                   {isActive && <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />}
                                 </button>
                               );
@@ -223,7 +223,7 @@ export function AppLayout() {
                     </div>
                   </>
                 ) : (
-                  <p className="hidden sm:block text-[10px] text-slate-500 capitalize">{user.role.replace('_', ' ')}</p>
+                  <p className="hidden sm:block text-[10px] text-slate-500 capitalize">{user?.role ? user.role.replace('_', ' ') : ''}</p>
                 )}
 
                 </div>

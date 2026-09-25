@@ -148,6 +148,7 @@ export function DashboardAdmin() {
   const [activeTermSemester, setActiveTermSemester] = useState<string>('-');
   useEffect(() => {
     apiClient('/crud.php?table=academic_terms').then(data => {
+      if (!Array.isArray(data)) return;
       const selectedTermId = remoteStorage.getItem('selectedAcademicTermId');
       let activeTerm = null;
       if (selectedTermId) {

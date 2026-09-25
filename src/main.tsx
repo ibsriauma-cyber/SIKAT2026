@@ -1,6 +1,7 @@
 import {StrictMode} from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Toaster, toast } from 'react-hot-toast';
 
 // Override window.alert globally
@@ -43,7 +44,9 @@ if ('serviceWorker' in navigator) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
-    <Toaster position="top-center" reverseOrder={false} toastOptions={{ className: 'font-medium text-sm rounded-xl shadow-lg border border-slate-100', style: { padding: '12px 16px', background: '#fff', color: '#334155' }, success: { iconTheme: { primary: '#10b981', secondary: '#fff' } }, error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } } }} />
+    <ErrorBoundary>
+      <App />
+      <Toaster position="top-center" reverseOrder={false} toastOptions={{ className: 'font-medium text-sm rounded-xl shadow-lg border border-slate-100', style: { padding: '12px 16px', background: '#fff', color: '#334155' }, success: { iconTheme: { primary: '#10b981', secondary: '#fff' } }, error: { iconTheme: { primary: '#ef4444', secondary: '#fff' } } }} />
+    </ErrorBoundary>
   </StrictMode>,
 );

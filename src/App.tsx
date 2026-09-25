@@ -59,6 +59,8 @@ function DataSyncLayer({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     testFirebaseConnection().catch(console.warn);
+    const timer = setTimeout(() => setSynced(true), 3000);
+
     Promise.all([apiClient('/sync'), remoteStorage.init()])
       .then(([res, _]: any) => {
         if (res && res.users) {
@@ -89,12 +91,16 @@ function DataSyncLayer({ children }: { children: React.ReactNode }) {
             mockSubjects.splice(0, mockSubjects.length, ...syncedSubjects);
           }
         }
-        setSynced(true);
       })
       .catch(err => {
         console.error('Failed to sync data from DB', err);
+      })
+      .finally(() => {
+        clearTimeout(timer);
         setSynced(true);
       });
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -136,6 +142,9 @@ function RoleBasedDashboard() {
         {user?.role === 'wakakurikulum' && <DashboardWakaKurikulum />}
         {user?.role === 'wakakesiswaan' && <DashboardWakaKesiswaan />}
         {user?.role === 'guru_quran' && <DashboardGuru />}
+        {!['guru', 'walas', 'admin', 'ortu', 'bk', 'pustaka', 'siswa', 'kamad', 'wakakurikulum', 'wakakesiswaan', 'guru_quran'].includes(user?.role || '') && (
+          <DashboardAdmin />
+        )}
       </div>
 
       {/* Mobile-optimized Dashboard with 3x3 Grid Menu */}

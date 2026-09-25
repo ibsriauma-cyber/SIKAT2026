@@ -1,4 +1,4 @@
-export type Role = 'guru' | 'walas' | 'ortu' | 'bk' | 'pustaka' | 'kamad' | 'admin' | 'siswa' | 'wakakurikulum' | 'wakakesiswaan' | 'guru_quran';
+export type Role = 'guru' | 'walas' | 'ortu' | 'bk' | 'pustaka' | 'kamad' | 'admin' | 'siswa' | 'wakakurikulum' | 'wakakesiswaan' | 'guru_quran' | 'wakatu' | 'guru_mapel' | 'kesiswaan';
 
 export interface User {
   id: string;
@@ -10,14 +10,17 @@ export interface User {
   avatar?: string;
   gender?: 'L' | 'P';
   className?: string; // For Walas
+  class_name?: string;
   childId?: string; // For Ortu
   childName?: string; // For Ortu
   subjects?: { id: string; subjectName: string; className: string }[]; // For Guru
   nuptk?: string; // NUPTK/NIPTK
+  email?: string;
 }
 
 export interface AcademicHistory {
   className: string;
+  class_name?: string;
   academicYear?: string;
   attendance?: {
     present: number;
@@ -35,6 +38,7 @@ export interface Student {
   nis: string;
   grade: string; // 'X', 'XI', 'XII' etc.
   className: string; // Rombel Name
+  class_name?: string;
   gender?: 'L' | 'P';
   attendance?: {
     present: number;

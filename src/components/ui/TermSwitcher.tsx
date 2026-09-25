@@ -15,12 +15,12 @@ export function TermSwitcher() {
     async function loadTerms() {
       try {
         const data = await apiClient('/crud.php?table=academic_terms');
-        const parsedTerms = data.map((t: any) => ({
+        const parsedTerms = Array.isArray(data) ? data.map((t: any) => ({
           id: String(t.id),
-          year: t.year,
+          year: String(t.year || ''),
           semester: t.semester,
           isActive: Boolean(t.is_active)
-        }));
+        })) : [];
         setTerms(parsedTerms);
         
         const savedId = remoteStorage.getItem('selectedAcademicTermId');
@@ -66,7 +66,7 @@ export function TermSwitcher() {
         onClick={() => setIsTermMenuOpen(!isTermMenuOpen)}
         className="flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 text-[10px] text-blue-700 font-black py-1 px-3 rounded-lg transition-all shadow-sm cursor-pointer select-none active:scale-95"
       >
-        <span>SMT {activeTerm.semester} {activeTerm.year?.split('/')[0]}</span>
+        <span>SMT {activeTerm.semester || '-'} {String(activeTerm.year || '').split('/')[0]}</span>
         <ChevronDown className={`w-3 h-3 text-blue-600 transition-transform duration-200 ${isTermMenuOpen ? 'rotate-180' : ''}`} />
       </button>
       <AnimatePresence>

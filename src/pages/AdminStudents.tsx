@@ -65,7 +65,7 @@ export function AdminStudents() {
   const [studentGender, setStudentGender] = useState<'L' | 'P'>('L');
   const [studentPassword, setStudentPassword] = useState('');
 
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [feedback, setFeedback] = useState<{ type: 'success' | 'error' | 'info'; message: string } | null>(null);
 
   useEffect(() => {
     let usersChanged = false;

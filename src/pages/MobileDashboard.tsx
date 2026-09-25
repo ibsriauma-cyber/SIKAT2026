@@ -69,12 +69,12 @@ export function MobileDashboard() {
     async function loadTerms() {
       try {
         const data = await apiClient('/crud.php?table=academic_terms');
-        const parsedTerms = data.map((t: any) => ({
+        const parsedTerms = Array.isArray(data) ? data.map((t: any) => ({
           id: String(t.id),
-          year: t.year,
+          year: String(t.year || ''),
           semester: t.semester,
           isActive: Boolean(t.is_active)
-        }));
+        })) : [];
         setTerms(parsedTerms);
         const savedSelected = remoteStorage.getItem('selectedAcademicTermId');
         if (savedSelected && parsedTerms.find((t: any) => t.id === savedSelected)) {
@@ -163,7 +163,7 @@ export function MobileDashboard() {
 
   // Helper to get ALL menus for each role
   const getRoleMenus = () => {
-    const teachesXII = user?.subjects?.some(s => s.className.includes('XII') || s.className.includes('12')) || user?.className?.includes('XII') || user?.className?.includes('12');
+    const teachesXII = Boolean(user?.subjects?.some((s: any) => s?.className?.includes('XII') || s?.className?.includes('12')) || user?.className?.includes('XII') || user?.className?.includes('12'));
     switch (user?.role) {
       case 'guru':
         const guruLinks = [{

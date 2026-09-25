@@ -52,7 +52,7 @@ export function Sidebar({ unreadNotifCount = 0 }: { unreadNotifCount?: number })
   const { user, logout } = useAuth();
 
   const getLinks = () => {
-    const teachesXII = user?.subjects?.some(s => s.className.includes('XII') || s.className.includes('12')) || user?.className?.includes('XII') || user?.className?.includes('12');
+    const teachesXII = Boolean(user?.subjects?.some((s: any) => s?.className?.includes('XII') || s?.className?.includes('12')) || user?.className?.includes('XII') || user?.className?.includes('12'));
 
     if (user?.role === 'guru') {
       const guruLinks = [
