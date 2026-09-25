@@ -210,9 +210,9 @@ export function DashboardWalas() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm">
-                {students.length === 0 ? <tr>
+                {(!Array.isArray(students) || students.length === 0) ? <tr>
                     <td colSpan={4} className="px-5 py-8 text-center text-slate-500 italic">Belum ada data siswa</td>
-                  </tr> : students.slice(0, 5).map(student => {
+                  </tr> : (Array.isArray(students) ? students : []).slice(0, 5).map(student => {
                 const record = pemantauanRecords.find(r => String(r.student_id) === String(student.id));
                 const isPiket = record?.kebersihan === 'Piket';
                 const isLengkap = record?.seragam === 'Lengkap';

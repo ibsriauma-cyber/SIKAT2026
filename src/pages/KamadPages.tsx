@@ -102,7 +102,7 @@ export function DashboardKamad() {
         setPendingRequests(mappedLeaves);
 
         // Take 5 most recent materi
-        const mappedMateri = materiData.slice(0, 5).map((m: any) => ({
+        const mappedMateri = (Array.isArray(materiData) ? materiData : []).slice(0, 5).map((m: any) => ({
           id: m.id,
           teacherName: m.name,
           subject: m.subject,
@@ -1834,7 +1834,7 @@ const match = laporanHarian.find((lh: any) => {
                             
                             {/* Quick task pills */}
                             <div className="flex flex-wrap items-center gap-1.5 mt-2">
-                              {staf.tasks.slice(0, 4).map((t: any, tIdx: number) => {
+                              {(Array.isArray(staf.tasks) ? staf.tasks : []).slice(0, 4).map((t: any, tIdx: number) => {
                                 let shortName = t.name;
                                 if (shortName.includes('Absensi siswa')) shortName = 'Absen Pagi';
                                 else if (shortName.includes('Pemantauan pagi')) shortName = 'Pemantauan';

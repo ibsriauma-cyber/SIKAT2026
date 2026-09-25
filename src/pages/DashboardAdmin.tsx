@@ -170,7 +170,7 @@ export function DashboardAdmin() {
     const fetchAnnouncements = async () => {
       try {
         const data = await apiClient('/announcements.php');
-        setAnnouncements(data);
+        setAnnouncements(Array.isArray(data) ? data : []);
       } catch (err) {
         setAnnouncements([]);
       }
@@ -218,7 +218,7 @@ export function DashboardAdmin() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {announcements.length > 0 ? announcements.slice(0, 2).map(ann => <div key={ann.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100 flex gap-3 items-start">
+          {Array.isArray(announcements) && announcements.length > 0 ? announcements.slice(0, 2).map(ann => <div key={ann.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100 flex gap-3 items-start">
                 <div className={`p-2.5 rounded-lg shrink-0 ${ann.category === 'Penting' ? 'bg-red-100 text-red-700' : ann.category === 'Maintenance' ? 'bg-orange-100 text-orange-700' : ann.category === 'Kegiatan' ? 'bg-indigo-100 text-indigo-700' : 'bg-emerald-100 text-emerald-700'}`}>
                   {ann.category === 'Maintenance' ? <Laptop className="w-5 h-5" /> : <CalendarDays className="w-5 h-5" />}
                 </div>

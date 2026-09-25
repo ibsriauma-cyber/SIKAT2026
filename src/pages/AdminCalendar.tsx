@@ -285,7 +285,7 @@ export function AdminCalendar() {
           ))}
         </div>
         <div className="flex sm:hidden justify-center gap-0.5 mt-1 flex-wrap w-full">
-          {dayAgenda.slice(0, 3).map(a => {
+          {(Array.isArray(dayAgenda) ? dayAgenda : []).slice(0, 3).map(a => {
             const bgClass = a.color ? a.color.split(' ')[0] : 'bg-emerald-500';
             const dotColor = bgClass.replace('-100', '-500').replace('-50', '-500');
             return (
