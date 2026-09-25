@@ -132,11 +132,11 @@ async function handleFirestoreFallback(endpoint: string, options: RequestInit = 
   if (endpoint.includes('announcements')) {
     if (method === 'GET') {
       return clientGetCollection('announcements');
-    } else if (method === 'POST') {
-      const docId = body.id || Date.now().toString();
+    } else if (method === 'POST' || method === 'PUT') {
+      const docId = String(body.id || id || Date.now().toString());
       return clientSaveDoc('announcements', docId, body);
     } else if (method === 'DELETE') {
-      return clientDeleteDoc('announcements', body.id || id);
+      return clientDeleteDoc('announcements', String(body?.id || id));
     }
   }
 

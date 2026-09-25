@@ -73,10 +73,18 @@ export function AdminAnnouncements() {
 
   const fetchAnnouncements = async () => {
     try {
-      const data = await apiClient('/announcements.php');
-      setAnnouncements(data);
+      const res = await apiClient('/announcements.php');
+      if (Array.isArray(res)) {
+        setAnnouncements(res);
+      } else if (res && Array.isArray(res.data)) {
+        setAnnouncements(res.data);
+      } else {
+        const direct = await apiClient('/crud.php?table=announcements').catch(() => []);
+        setAnnouncements(Array.isArray(direct) ? direct : []);
+      }
     } catch (err) {
-      console.error(err);
+      console.error('Failed to fetch announcements:', err);
+      setAnnouncements([]);
     }
   };
 
@@ -121,9 +129,13 @@ export function AdminAnnouncements() {
     }
   };
 
-  const filteredAnnouncements = announcements.filter(ann => {
-    const matchesSearch = ann.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          ann.content.toLowerCase().includes(searchQuery.toLowerCase());
+  const safeAnnouncements = Array.isArray(announcements) ? announcements : [];
+  const filteredAnnouncements = safeAnnouncements.filter(ann => {
+    if (!ann) return false;
+    const annTitle = String(ann.title || '');
+    const annContent = String(ann.content || '');
+    const matchesSearch = annTitle.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          annContent.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = categoryFilter === 'Semua' || ann.category === categoryFilter;
     return matchesSearch && matchesCategory;
   });

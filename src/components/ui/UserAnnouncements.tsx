@@ -21,23 +21,32 @@ export function UserAnnouncements() {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const data = await apiClient('/announcements.php');
-        if (Array.isArray(data)) {
-          let active = data.filter(a => a.isPublished !== false && a.status !== 'Draft');
-          
-          if (user?.role === 'siswa') {
-            active = active.filter(a => a.target === 'Semua');
-          } else if (user?.role === 'guru' || user?.role === 'walas' || user?.role === 'bk' || user?.role === 'pustaka' || user?.role === 'wakatu' || user?.role === 'kamad') {
-            active = active.filter(a => a.target === 'Semua' || a.target === 'Guru');
-          } else if (user?.role === 'ortu') {
-            active = active.filter(a => a.target === 'Semua' || a.target === 'Wali Murid');
-          }
-          
-          active.sort((a, b) => new Date(b.date || b.created_at).getTime() - new Date(a.date || a.created_at).getTime());
-          setAnnouncements(active);
+        let list: any[] = [];
+        const res = await apiClient('/announcements.php');
+        if (Array.isArray(res)) {
+          list = res;
+        } else if (res && Array.isArray(res.data)) {
+          list = res.data;
+        } else {
+          const direct = await apiClient('/crud.php?table=announcements').catch(() => []);
+          list = Array.isArray(direct) ? direct : [];
         }
+
+        let active = list.filter(a => a && a.isPublished !== false && a.status !== 'Draft');
+        
+        if (user?.role === 'siswa') {
+          active = active.filter(a => a.target === 'Semua');
+        } else if (user?.role === 'guru' || user?.role === 'walas' || user?.role === 'bk' || user?.role === 'pustaka' || user?.role === 'wakatu' || user?.role === 'kamad') {
+          active = active.filter(a => a.target === 'Semua' || a.target === 'Guru');
+        } else if (user?.role === 'ortu') {
+          active = active.filter(a => a.target === 'Semua' || a.target === 'Wali Murid');
+        }
+        
+        active.sort((a, b) => new Date(b.date || b.created_at || 0).getTime() - new Date(a.date || a.created_at || 0).getTime());
+        setAnnouncements(active);
       } catch (e) {
         console.error('Failed to fetch announcements:', e);
+        setAnnouncements([]);
       }
     };
     
