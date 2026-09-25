@@ -107,6 +107,7 @@ export function Sidebar({ unreadNotifCount = 0 }: { unreadNotifCount?: number })
         { to: '/admin/plotting', icon: UserCheck, label: 'Plotting Pengajar' },
         { to: '/admin/terms', icon: Calendar, label: 'Tahun Ajaran & Semester' },
         { to: '/admin/jadwal', icon: CalendarDays, label: 'Jadwal Pelajaran' },
+        { to: '/kamad/materi', icon: BookOpen, label: 'Pantau Materi Ajar' },
         { to: '/admin/reports', icon: FileBarChart, label: 'Laporan & Statistik' },
         { to: '/admin/sarpras', icon: Building2, label: 'Sarpras Inventaris' },
         { to: '/admin/announcements', icon: Megaphone, label: 'Pengumuman' },

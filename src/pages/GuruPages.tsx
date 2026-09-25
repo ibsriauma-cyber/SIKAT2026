@@ -1451,21 +1451,25 @@ export function PerangkatNgajar() {
     try {
       setLoading(true);
       const res = await apiClient('/get_materi.php');
-      if (res.status === 'success') {
-        const mapped = res.data.map((m: any) => ({
-          id: m.id,
-          teacherName: m.name,
-          role: m.subject.toLowerCase().includes('quran') || m.subject.toLowerCase().includes('tahfizh') ? 'Guru Al-Qur\'an' : 'Guru Mapel',
-          category: m.subject.toLowerCase().includes('quran') || m.subject.toLowerCase().includes('tahfizh') ? 'guru_quran' : 'guru_mapel',
-          subject: m.subject,
-          className: m.class,
-          title: m.title,
-          date: m.date,
-          status: m.status === 'Terbit' || m.status === 'Sudah Membuat' ? 'Sudah Membuat' : 'Belum Membuat',
-          driveUrl: m.file_name,
-          description: m.description,
-          objectives: m.objectives || []
-        }));
+      if (res && res.status === 'success' && Array.isArray(res.data)) {
+        const mapped = res.data.map((m: any) => {
+          const subj = String(m.subject || '');
+          const isQuran = subj.toLowerCase().includes('quran') || subj.toLowerCase().includes('tahfizh');
+          return {
+            id: m.id,
+            teacherName: m.name || m.teacherName || 'Guru',
+            role: isQuran ? "Guru Al-Qur'an" : 'Guru Mapel',
+            category: isQuran ? 'guru_quran' : 'guru_mapel',
+            subject: subj || '-',
+            className: m.class || m.class_name || m.className || '-',
+            title: m.title || '-',
+            date: m.date ? String(m.date).slice(0, 10) : '-',
+            status: m.status === 'Terbit' || m.status === 'Sudah Membuat' ? 'Sudah Membuat' : 'Belum Membuat',
+            driveUrl: m.file_name || m.driveUrl || '',
+            description: m.description || '',
+            objectives: Array.isArray(m.objectives) ? m.objectives : []
+          };
+        });
         setModulList(mapped);
       }
     } catch (e) {

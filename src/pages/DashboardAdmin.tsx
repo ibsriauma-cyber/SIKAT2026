@@ -366,6 +366,18 @@ export function DashboardAdmin() {
                </div>
                <span className="text-xs font-bold text-slate-400 group-hover:text-emerald-600">→</span>
              </button>
+             <button onClick={() => navigate('/kamad/materi')} className="w-full flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-colors group">
+               <div className="flex items-center gap-3">
+                 <div className="w-8 h-8 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-600 group-hover:text-emerald-600 group-hover:border-emerald-200">
+                   <BookOpen className="w-4 h-4" />
+                 </div>
+                 <div className="text-left">
+                   <p className="text-sm font-bold text-slate-800">Pantau Materi Ajar</p>
+                   <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">Modul & Perangkat Mengajar Guru</p>
+                 </div>
+               </div>
+               <span className="text-xs font-bold text-slate-400 group-hover:text-emerald-600">→</span>
+             </button>
              <button onClick={() => navigate('/admin/sarpras')} className="w-full flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-colors group">
                <div className="flex items-center gap-3">
                  <div className="w-8 h-8 rounded-md bg-white border border-slate-200 flex items-center justify-center text-slate-600 group-hover:text-emerald-600 group-hover:border-emerald-200">

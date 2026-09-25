@@ -419,6 +419,13 @@ export function MobileDashboard() {
           bg: 'bg-amber-50',
           desc: 'Semester & kalender aktif'
         }, {
+          to: '/kamad/materi',
+          icon: BookOpen,
+          label: 'Materi Ajar',
+          color: 'text-blue-600',
+          bg: 'bg-blue-50',
+          desc: 'Pantau materi & modul guru'
+        }, {
           to: '/admin/reports',
           icon: FileBarChart,
           label: 'Laporan & Stat',
@@ -946,8 +953,7 @@ export function MobileDashboard() {
     }
   };
   const allMenusRaw = getRoleMenus();
-  const bottomNavPaths = ['/', '/kalender-akademik', '/settings', getRoleSpecificLinkTo()];
-  const allMenus = allMenusRaw.filter(item => !bottomNavPaths.includes(item.to));
+  const allMenus = allMenusRaw.filter(item => item.to !== '/');
 
   // Bottom menu usually contains: Beranda, Kalender, Notifikasi, Setelan.
   // Thus we put the first 7 items in the grid, and 8th is "Menu Lainnya"
