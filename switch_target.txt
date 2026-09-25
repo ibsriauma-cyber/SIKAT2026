@@ -1,0 +1,43 @@
+switch (selectedReportType) {
+      case 'absensi_siswa':
+        isGrouped = true;
+        headers = ['No', 'NIS', 'Nama Siswa', 'Hadir', 'Tidak Hadir'];
+        classes.forEach(c => {
+          const classRows = currentStudents.filter(s => (s.class_name || s.className || '').trim() === (c.name || '').trim()).map((s, i) => {
+            const studentAtts = studentAttendance.filter(a => a.student_id === s.id && isDateInRange(a.date));
+            const hadir = studentAtts.filter(a => a.status === 'Hadir').length;
+            const tidakHadir = studentAtts.filter(a => a.status && a.status !== 'Hadir').length;
+            return [i + 1, s.nis || '-', s.name || '-', hadir, tidakHadir];
+          });
+          if (classRows.length > 0) {
+            groups.push({
+              className: c.name,
+              rows: classRows
+            });
+          }
+        });
+        break;
+      case 'sholat_siswa':
+        isGrouped = true;
+        headers = ['No', 'NIS', 'Nama Siswa', 'Zuhur (Jamaah)', 'Zuhur (Tidak)', 'Dhuha (Jamaah)', 'Dhuha (Tidak)'];
+        classes.forEach(c => {
+          const classRows = currentStudents.filter(s => (s.class_name || s.className || '').trim() === (c.name || '').trim()).map((s, i) => {
+            const studentPrayers = ibadahSiswa.filter(a => String(a.student_id) === String(s.id) && isDateInRange(a.date || a.created_at));
+            
+            const zuhurJamaah = studentPrayers.filter(a => (a.type === 'Zuhur' || String(a.jenis_ibadah).toLowerCase() === 'zuhur') && a.status === 'Jamaah').length;
+            const zuhurTidak = studentPrayers.filter(a => (a.type === 'Zuhur' || String(a.jenis_ibadah).toLowerCase() === 'zuhur') && a.status === 'Tidak').length;
+            
+            const dhuhaJamaah = studentPrayers.filter(a => (a.type === 'Dhuha' || String(a.jenis_ibadah).toLowerCase() === 'dhuha') && a.status === 'Jamaah').length;
+            const dhuhaTidak = studentPrayers.filter(a => (a.type === 'Dhuha' || String(a.jenis_ibadah).toLowerCase() === 'dhuha') && a.status === 'Tidak').length;
+
+            return [i + 1, s.nis || '-', s.name || '-', zuhurJamaah, zuhurTidak, dhuhaJamaah, dhuhaTidak];
+          });
+          if (classRows.length > 0) {
+            groups.push({
+              className: c.name,
+              rows: classRows
+            });
+          }
+        });
+        break;
+    }

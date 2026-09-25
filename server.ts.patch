@@ -1,0 +1,107 @@
+--- server.ts
++++ server.ts
+@@ -6,21 +6,22 @@
+ dotenv.config();
+ 
+ // Initialize database connection pool
+ let host = process.env.DB_HOST || 'localhost';
+ let port = parseInt(process.env.DB_PORT || '3306');
+ 
+ if (host.includes(':')) {
+   const parts = host.split(':');
+   host = parts[0];
+   if (parts[1]) {
+     const parsedPort = parseInt(parts[1], 10);
+     if (!isNaN(parsedPort)) {
+       port = parsedPort;
+     }
+   }
+ }
+ 
+ const dbConfig = {
+   host,
+   user: process.env.DB_USER || 'root',
+   password: process.env.DB_PASSWORD || '',
+   database: process.env.DB_NAME || 'test',
+   port
+ };
+ 
+ let pool: mysql.Pool;
+@@ -41,10 +42,86 @@
+   app.use(express.json());
+ 
+   // API Routes
++  
++  // Generic CRUD routes for all tables
++  const allowedTables = [
++    'academic_history', 'academic_terms', 'agenda', 'announcements', 'bk_cases',
++    'cbt_exams', 'cbt_questions', 'cbt_submissions', 'classes', 'grades',
++    'kinerja_staf', 'leave_requests', 'materi_ajar', 'materi_objectives',
++    'notifications', 'sarpras', 'schedules', 'student_attendance', 'students',
++    'subjects', 'teacher_attendance', 'teaching_assignments', 'users'
++  ];
++
++  app.get('/api/crud/:table', async (req, res) => {
++    const { table } = req.params;
++    if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
++    if (!pool) return res.status(503).json({ error: 'DB not connected' });
++    try {
++      const [rows] = await pool.query(`SELECT * FROM ${table}`);
++      res.json(rows);
++    } catch (err: any) {
++      res.status(500).json({ error: err.message });
++    }
++  });
++
++  app.post('/api/crud/:table', async (req, res) => {
++    const { table } = req.params;
++    if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
++    if (!pool) return res.status(503).json({ error: 'DB not connected' });
++    try {
++      const data = req.body;
++      if (Array.isArray(data)) {
++         // bulk insert not implemented simply
++         return res.status(400).json({error: 'Bulk not supported'});
++      }
++      const keys = Object.keys(data);
++      const values = Object.values(data);
++      const placeholders = keys.map(() => '?').join(', ');
++      const sql = `INSERT INTO ${table} (${keys.join(', ')}) VALUES (${placeholders})`;
++      const [result] = await pool.query(sql, values);
++      res.json(result);
++    } catch (err: any) {
++      res.status(500).json({ error: err.message });
++    }
++  });
++
++  app.put('/api/crud/:table/:id', async (req, res) => {
++    const { table, id } = req.params;
++    if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
++    if (!pool) return res.status(503).json({ error: 'DB not connected' });
++    try {
++      const data = req.body;
++      const keys = Object.keys(data);
++      const values = Object.values(data);
++      const setClause = keys.map(k => `${k} = ?`).join(', ');
++      const sql = `UPDATE ${table} SET ${setClause} WHERE id = ?`;
++      const [result] = await pool.query(sql, [...values, id]);
++      res.json(result);
++    } catch (err: any) {
++      res.status(500).json({ error: err.message });
++    }
++  });
++
++  app.delete('/api/crud/:table/:id', async (req, res) => {
++    const { table, id } = req.params;
++    if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
++    if (!pool) return res.status(503).json({ error: 'DB not connected' });
++    try {
++      const sql = `DELETE FROM ${table} WHERE id = ?`;
++      const [result] = await pool.query(sql, [id]);
++      res.json(result);
++    } catch (err: any) {
++      res.status(500).json({ error: err.message });
++    }
++  });
+ 
+   // Example API to get announcements from the database

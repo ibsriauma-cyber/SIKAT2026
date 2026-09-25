@@ -1,0 +1,70 @@
+          const addSingleTask = (
+            taskName: string,
+            group: string,
+            deadline?: string,
+            customCheckFn?: () => { completed: boolean; completedAt?: string } | null
+          ) => {
+            const foundKinerja = userKinerja.find((k: any) => 
+              k.task === taskName || 
+              String(k.task).toLowerCase() === String(taskName).toLowerCase()
+            );
+
+            let isDone = false;
+            let doneAtStr: string | null = null;
+
+            if (foundKinerja) {
+              isDone = true;
+              doneAtStr = foundKinerja.created_at || null;
+            } else if (customCheckFn) {
+              const customRes = customCheckFn();
+              if (customRes && customRes.completed) {
+                isDone = true;
+                doneAtStr = customRes.completedAt || null;
+              }
+            }
+
+            const doneHM = extractTimestampHM(doneAtStr);
+
+            let status: 'selesai' | 'selesai_telat' | 'proses' | 'terlewat' = 'proses';
+            let timeStr = '';
+            let statusText = '';
+            let isLate = false;
+
+            if (isDone) {
+              isLate = Boolean(deadline && doneHM && isTimePastDeadline(doneHM, deadline));
+              if (isLate) {
+                status = 'selesai_telat';
+                statusText = 'SELESAI (TERLAMBAT)';
+                timeStr = doneHM ? `Selesai: ${doneHM} WIB (Terlambat)` : 'Selesai (Terlambat)';
+              } else {
+                status = 'selesai';
+                statusText = 'SELESAI (TEPAT WAKTU)';
+                timeStr = doneHM ? `Selesai: ${doneHM} WIB (Tepat Waktu)` : 'Selesai (Tepat Waktu)';
+              }
+            } else {
+              const isOverdue = isPastDate || (deadline && isTimePastDeadline(currentHourMin, deadline));
+              if (isOverdue) {
+                status = 'terlewat';
+                statusText = 'BELUM (TERLEWAT)';
+                timeStr = deadline ? `Belum Mengisi (Batas ${deadline} WIB)` : 'Belum Dikerjakan';
+              } else {
+                status = 'proses';
+                statusText = 'DALAM PROSES';
+                timeStr = deadline ? `Batas s/d ${deadline} WIB` : 'Dalam Jam Kerja';
+              }
+            }
+
+            allTasks.push({
+              group,
+              name: taskName,
+              status,
+              statusText,
+              time: timeStr,
+              doneHM,
+              isDone,
+              isLate,
+              deadline: deadline ? `${deadline} WIB` : '',
+              deadlineHM: deadline
+            });
+          };
+

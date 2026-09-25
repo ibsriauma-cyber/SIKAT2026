@@ -1,0 +1,6 @@
+{
+  "name": "SIKAT MA AL-IHSAN",
+  "description": "SIKAT (Sistem Informasi Akademik Terpadu) MAS Al-Ihsan IBS Riau.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

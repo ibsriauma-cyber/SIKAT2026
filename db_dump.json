@@ -1,0 +1,4959 @@
+{
+  "academic_history": [],
+  "academic_terms": [
+    {
+      "id": 1,
+      "year": "2025/2026",
+      "semester": "Ganjil",
+      "is_active": 1
+    },
+    {
+      "id": 2,
+      "year": "2025/2026",
+      "semester": "Genap",
+      "is_active": 0
+    }
+  ],
+  "agenda": [
+    {
+      "id": 1,
+      "date": "2026-07-15T00:00:00.000Z",
+      "event": "Hari Pertama Masuk Sekolah",
+      "type": "Umum",
+      "color": "bg-emerald-100 text-emerald-800"
+    },
+    {
+      "id": 2,
+      "date": "2026-08-17T00:00:00.000Z",
+      "event": "Upacara HUT RI",
+      "type": "Libur Nasional",
+      "color": "bg-red-100 text-red-800"
+    },
+    {
+      "id": 3,
+      "date": "2026-09-21T00:00:00.000Z",
+      "event": "Penilaian Tengah Semester (PTS)",
+      "type": "Ujian",
+      "color": "bg-amber-100 text-amber-800"
+    }
+  ],
+  "announcements": [
+    {
+      "id": 1,
+      "title": "Rapat Awal Tahun Ajaran 2026/2027",
+      "content": "Diberitahukan kepada seluruh ustadz/ustadzah bahwa rapat pembagian tugas akan dilaksanakan hari Sabtu ini jam 08:30 WIB.",
+      "target_audience": "guru",
+      "created_by": 1,
+      "created_at": "2026-07-31T10:14:20.000Z",
+      "category": "Umum",
+      "is_published": 1
+    },
+    {
+      "id": 2,
+      "title": "Libur Menyambut Tahun Baru Hijriah",
+      "content": "Siswa-siswi diliburkan mulai tanggal 25 s.d 26 Muharram.",
+      "target_audience": "semua",
+      "created_by": 1,
+      "created_at": "2026-07-31T10:14:20.000Z",
+      "category": "Umum",
+      "is_published": 1
+    }
+  ],
+  "bk_cases": [],
+  "cbt_exams": [
+    {
+      "id": 1,
+      "title": "Ujian Harian Aljabar Linear",
+      "subject_name": "Matematika",
+      "class_name": "X MIPA 1",
+      "duration_minutes": 60,
+      "status": "Aktif",
+      "created_at": "2026-07-31T10:14:20.000Z"
+    }
+  ],
+  "cbt_questions": [
+    {
+      "id": 1,
+      "exam_id": 1,
+      "question_text": "Tentukan himpunan penyelesaian dari 2x + 5 = 15!",
+      "option_a": "x = 3",
+      "option_b": "x = 5",
+      "option_c": "x = 10",
+      "option_d": "x = 2",
+      "correct_option": "B"
+    },
+    {
+      "id": 2,
+      "exam_id": 1,
+      "question_text": "Jika f(x) = 3x - 1, maka f(4) adalah...",
+      "option_a": "11",
+      "option_b": "12",
+      "option_c": "13",
+      "option_d": "10",
+      "correct_option": "A"
+    }
+  ],
+  "cbt_submissions": [],
+  "classes": [
+    {
+      "id": 6,
+      "name": "X IBNU SINA",
+      "wali_kelas_id": 19
+    },
+    {
+      "id": 7,
+      "name": "X IBNU FIRNAS",
+      "wali_kelas_id": 20
+    },
+    {
+      "id": 8,
+      "name": "X IBNU BATTANI",
+      "wali_kelas_id": 22
+    }
+  ],
+  "grades": [],
+  "key_value_store": [
+    {
+      "k": "absenZuhur_13_01-08-2026",
+      "v": "true"
+    },
+    {
+      "k": "absenZuhur_19_01-08-2026",
+      "v": "true"
+    },
+    {
+      "k": "app_teaching_assignments",
+      "v": "[]"
+    },
+    {
+      "k": "attendance_X IBNU SINA_Bahasa Inggris",
+      "v": "{\"2026-08-01\":{\"4\":{\"status\":\"Alpa\"},\"5\":{\"status\":\"Alpa\"},\"6\":{\"status\":\"Alpa\"},\"7\":{\"status\":\"Alpa\"},\"8\":{\"status\":\"Alpa\"},\"9\":{\"status\":\"Alpa\"},\"10\":{\"status\":\"Alpa\"},\"11\":{\"status\":\"Alpa\"},\"12\":{\"status\":\"Alpa\"}}}"
+    },
+    {
+      "k": "attendance_X IBNU SINA_Presensi Wali Kelas",
+      "v": "{\"2026-07-31\":{\"4\":{\"status\":\"Hadir\"}},\"2026-08-01\":{\"4\":{\"status\":\"Hadir\"},\"5\":{\"status\":\"Hadir\"},\"6\":{\"status\":\"Hadir\"},\"7\":{\"status\":\"Hadir\"},\"8\":{\"status\":\"Hadir\"},\"9\":{\"status\":\"Hadir\"},\"10\":{\"status\":\"Hadir\"}},\"2026-08-03\":{\"4\":{\"status\":\"Hadir\",\"ket\":\"\"},\"5\":{\"status\":\"Hadir\",\"ket\":\"\"},\"6\":{\"status\":\"Hadir\",\"ket\":\"\"},\"7\":{\"status\":\"Hadir\",\"ket\":\"\"},\"8\":{\"status\":\"Hadir\",\"ket\":\"\"},\"9\":{\"status\":\"Hadir\",\"ket\":\"\"},\"10\":{\"status\":\"Hadir\",\"ket\":\"\"},\"11\":{\"status\":\"Hadir\",\"ket\":\"\"},\"12\":{\"status\":\"Hadir\",\"ket\":\"\"}}}"
+    },
+    {
+      "k": "attendance_X IBNU SINA_Tahfizh Al-Quran",
+      "v": "{\"2026-08-01\":{\"4\":{\"status\":\"Hadir\"},\"5\":{\"status\":\"Izin\"},\"6\":{\"status\":\"Hadir\"},\"7\":{\"status\":\"Hadir\"},\"8\":{\"status\":\"Hadir\"},\"9\":{\"status\":\"Hadir\"},\"10\":{\"status\":\"Hadir\"},\"11\":{\"status\":\"Hadir\"},\"12\":{\"status\":\"Hadir\"}}}"
+    },
+    {
+      "k": "bk_advokasi_data",
+      "v": "[]"
+    },
+    {
+      "k": "bk_cases_data",
+      "v": "[]"
+    },
+    {
+      "k": "bk_pengembangan_data",
+      "v": "[]"
+    },
+    {
+      "k": "bk_penyaluran_data",
+      "v": "[]"
+    },
+    {
+      "k": "bk_preventif_data",
+      "v": "[]"
+    },
+    {
+      "k": "bk_rekomendasi_sp",
+      "v": "[]"
+    },
+    {
+      "k": "cbt_banksoal_data",
+      "v": "[]"
+    },
+    {
+      "k": "cbt_exams_data",
+      "v": "[]"
+    },
+    {
+      "k": "grades_X IBNU SINA_Bahasa Inggris",
+      "v": "{\"4\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"},\"5\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"},\"6\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"},\"7\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"},\"8\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"},\"9\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"},\"10\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"},\"11\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"},\"12\":{\"uh1\":\"99\",\"uts\":\"99\",\"uas\":\"99\"}}"
+    },
+    {
+      "k": "grades_X IBNU SINA_Tahfizh Al-Quran",
+      "v": "{\"4\":{\"uh1\":\"90\"},\"5\":{\"uh1\":\"90\"},\"6\":{\"uh1\":\"98\"}}"
+    },
+    {
+      "k": "guru_subjects",
+      "v": "[]"
+    },
+    {
+      "k": "jurnals",
+      "v": "[{\"id\":\"1785575656147\",\"tanggal\":\"01-08-2026\",\"kelas\":\"X IBNU SINA\",\"mataPelajaran\":\"Bahasa Inggris\",\"materi\":\"Noun\",\"catatan\":\"\"}]"
+    },
+    {
+      "k": "kesiswaan_ekskul_data",
+      "v": "[]"
+    },
+    {
+      "k": "kesiswaan_pelanggaran_data",
+      "v": "[]"
+    },
+    {
+      "k": "limit_absen_siswa",
+      "v": "17:00"
+    },
+    {
+      "k": "limit_absen_zuhur",
+      "v": "13:00"
+    },
+    {
+      "k": "mockAcademicTerms",
+      "v": "[]"
+    },
+    {
+      "k": "mockAgenda",
+      "v": "[{\"id\":1787220980861.013,\"date\":\"2026-01-01\",\"event\":\"Tahun Baru 2026 Masehi\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.4326,\"date\":\"2026-02-18\",\"event\":\"Isra Mikraj Nabi Muhammad SAW\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.7334,\"date\":\"2026-03-03\",\"event\":\"Hari Suci Nyepi Tahun Baru Saka 1948\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.765,\"date\":\"2026-03-20\",\"event\":\"Hari Raya Idul Fitri 1447 Hijriah\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.7979,\"date\":\"2026-03-21\",\"event\":\"Hari Raya Idul Fitri 1447 Hijriah\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.9688,\"date\":\"2026-04-03\",\"event\":\"Wafat Yesus Kristus\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.2957,\"date\":\"2026-05-01\",\"event\":\"Hari Buruh Internasional\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.2263,\"date\":\"2026-05-14\",\"event\":\"Kenaikan Yesus Kristus\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.9907,\"date\":\"2026-05-27\",\"event\":\"Hari Raya Idul Adha 1447 Hijriah\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.552,\"date\":\"2026-05-31\",\"event\":\"Hari Raya Waisak 2570 BE\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.3347,\"date\":\"2026-06-01\",\"event\":\"Hari Lahir Pancasila\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.3938,\"date\":\"2026-06-16\",\"event\":\"Tahun Baru Islam 1448 Hijriah\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.8875,\"date\":\"2026-08-17\",\"event\":\"Hari Kemerdekaan Republik Indonesia\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.6829,\"date\":\"2026-08-26\",\"event\":\"Maulid Nabi Muhammad SAW\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.0303,\"date\":\"2026-12-25\",\"event\":\"Hari Raya Natal\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.0486,\"date\":\"2027-01-01\",\"event\":\"Tahun Baru 2027 Masehi\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.0505,\"date\":\"2027-02-07\",\"event\":\"Isra Mikraj Nabi Muhammad SAW\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.5115,\"date\":\"2027-03-09\",\"event\":\"Hari Raya Idul Fitri 1448 Hijriah\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.592,\"date\":\"2027-03-10\",\"event\":\"Hari Raya Idul Fitri 1448 Hijriah\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.4658,\"date\":\"2027-03-26\",\"event\":\"Wafat Yesus Kristus\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.1675,\"date\":\"2027-05-01\",\"event\":\"Hari Buruh Internasional\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.518,\"date\":\"2027-05-16\",\"event\":\"Hari Raya Idul Adha 1448 Hijriah\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.5823,\"date\":\"2027-06-01\",\"event\":\"Hari Lahir Pancasila\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.4578,\"date\":\"2027-06-06\",\"event\":\"Tahun Baru Islam 1449 Hijriah\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.3748,\"date\":\"2027-08-15\",\"event\":\"Maulid Nabi Muhammad SAW\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.524,\"date\":\"2027-08-17\",\"event\":\"Hari Kemerdekaan Republik Indonesia\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"},{\"id\":1787220980861.1921,\"date\":\"2027-12-25\",\"event\":\"Hari Raya Natal\",\"type\":\"Libur Nasional\",\"color\":\"bg-red-100 text-red-800\"}]"
+    },
+    {
+      "k": "mockStudents",
+      "v": "[]"
+    },
+    {
+      "k": "school_lat_l",
+      "v": "0.419789"
+    },
+    {
+      "k": "school_lat_p",
+      "v": "0.419596"
+    },
+    {
+      "k": "school_lng_l",
+      "v": "101.418739"
+    },
+    {
+      "k": "school_lng_p",
+      "v": "101.419115"
+    },
+    {
+      "k": "school_radius_l",
+      "v": "15"
+    },
+    {
+      "k": "school_radius_p",
+      "v": "15"
+    },
+    {
+      "k": "selectedAcademicTermId",
+      "v": "1"
+    },
+    {
+      "k": "walas_cases_data",
+      "v": "[]"
+    }
+  ],
+  "kinerja_staf": [],
+  "leave_requests": [
+    {
+      "id": 8,
+      "user_id": 19,
+      "type": "sakit",
+      "start_date": "2026-08-03T00:00:00.000Z",
+      "end_date": "2026-08-04T00:00:00.000Z",
+      "reason": "Demam",
+      "status": "approved",
+      "created_at": "2026-08-03T04:11:39.000Z"
+    }
+  ],
+  "materi_ajar": [],
+  "materi_objectives": [],
+  "notifications": [],
+  "sarpras": [
+    {
+      "id": 1,
+      "item_name": "Proyektor Epson EB-X400",
+      "code": "Eps-PJ-01",
+      "category": "Elektronik",
+      "qty_baik": 1,
+      "qty_rusak_ringan": 0,
+      "qty_rusak_berat": 0,
+      "room": "Ruang Kelas X MIPA 1",
+      "created_at": "2026-07-31T10:14:20.000Z"
+    },
+    {
+      "id": 2,
+      "item_name": "Kursi Belajar Kayu Jati",
+      "code": "Krs-KW-12",
+      "category": "Mebel",
+      "qty_baik": 36,
+      "qty_rusak_ringan": 0,
+      "qty_rusak_berat": 0,
+      "room": "Ruang Kelas X MIPA 1",
+      "created_at": "2026-07-31T10:14:20.000Z"
+    },
+    {
+      "id": 3,
+      "item_name": "AC Panasonic 1.5 PK",
+      "code": "AC-Pan-03",
+      "category": "Elektronik",
+      "qty_baik": 0,
+      "qty_rusak_ringan": 1,
+      "qty_rusak_berat": 0,
+      "room": "Ruang Perpustakaan",
+      "created_at": "2026-07-31T10:14:20.000Z"
+    }
+  ],
+  "schedules": [
+    {
+      "id": 5,
+      "class_name": "X IBNU FIRNAS",
+      "subject_name": "Tahfizh Al-Quran",
+      "teacher_id": 21,
+      "day": "Selasa",
+      "start_time": "07:15:00",
+      "end_time": "08:00:00"
+    },
+    {
+      "id": 6,
+      "class_name": "X IBNU BATTANI",
+      "subject_name": "Ekonomi",
+      "teacher_id": 22,
+      "day": "Rabu",
+      "start_time": "07:15:00",
+      "end_time": "08:00:00"
+    },
+    {
+      "id": 14,
+      "class_name": "X IBNU SINA",
+      "subject_name": "Tahfizh Al-Quran",
+      "teacher_id": 19,
+      "day": "Senin",
+      "start_time": "07:15:00",
+      "end_time": "08:00:00"
+    }
+  ],
+  "student_attendance": [],
+  "students": [
+    {
+      "id": 4,
+      "user_id": null,
+      "name": "ABRIZAN HARITZ MORALISETYO",
+      "nis": "1001",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:43.000Z"
+    },
+    {
+      "id": 5,
+      "user_id": null,
+      "name": "AKIF MUHAMMAD DZAKIY",
+      "nis": "1002",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:43.000Z"
+    },
+    {
+      "id": 6,
+      "user_id": null,
+      "name": "ALDEN HAFIZUDDIN AZIZAN",
+      "nis": "1003",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:43.000Z"
+    },
+    {
+      "id": 7,
+      "user_id": null,
+      "name": "ATHIF ABDURRAHMAN",
+      "nis": "1004",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:43.000Z"
+    },
+    {
+      "id": 8,
+      "user_id": null,
+      "name": "DAFFA REZKY HABIBI",
+      "nis": "1005",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:43.000Z"
+    },
+    {
+      "id": 9,
+      "user_id": null,
+      "name": "FADHIL HADI ARRASYID",
+      "nis": "1006",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:43.000Z"
+    },
+    {
+      "id": 10,
+      "user_id": null,
+      "name": "FAIQ ANUGERAH",
+      "nis": "1007",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:43.000Z"
+    },
+    {
+      "id": 11,
+      "user_id": null,
+      "name": "FATIH MUHAMMAD ALFARIQ",
+      "nis": "1008",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 12,
+      "user_id": null,
+      "name": "FAWWAZ AULIA ANMAR",
+      "nis": "1009",
+      "class_name": "X IBNU SINA",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 13,
+      "user_id": null,
+      "name": "FUAD AL HUSAINI",
+      "nis": "1010",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 14,
+      "user_id": null,
+      "name": "GHAZI FADHIL HILMI",
+      "nis": "1011",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 15,
+      "user_id": null,
+      "name": "IRFAN FATURRIZKI",
+      "nis": "1012",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 16,
+      "user_id": null,
+      "name": "JEVAN DANISH DHAIFULLAH ",
+      "nis": "1013",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 17,
+      "user_id": null,
+      "name": "KHAIRUL ABDIL",
+      "nis": "1014",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 18,
+      "user_id": null,
+      "name": "M. ZAKI MUBARRAQ DANI",
+      "nis": "1015",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 19,
+      "user_id": null,
+      "name": "MOH. FADIL ALFARISI",
+      "nis": "1016",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 20,
+      "user_id": null,
+      "name": "MUHAMMAD AZKA FIRMANSYAH",
+      "nis": "1017",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 21,
+      "user_id": null,
+      "name": "MUHAMMAD SAID ALAMSYAH",
+      "nis": "1018",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 22,
+      "user_id": null,
+      "name": "MUHAMMAD SULTAN FAKHRI",
+      "nis": "1019",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:44.000Z"
+    },
+    {
+      "id": 23,
+      "user_id": null,
+      "name": "MUHAMMAD YUSUF AL GHIFARI",
+      "nis": "1020",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 24,
+      "user_id": null,
+      "name": "NAUFAL DZAKI WIJAYA",
+      "nis": "1021",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 25,
+      "user_id": null,
+      "name": "QURZADHA ALFARIZI ADIANSYA",
+      "nis": "1022",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 26,
+      "user_id": null,
+      "name": "RAHID RAMADHAN JAS",
+      "nis": "1023",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 27,
+      "user_id": null,
+      "name": "SAHEL AIMAN SADAAD",
+      "nis": "1024",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 28,
+      "user_id": null,
+      "name": "WAFI ANRRI AKRAM",
+      "nis": "1025",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 29,
+      "user_id": null,
+      "name": "AFDAL HIDAYATUL RAHMAT",
+      "nis": "1026",
+      "class_name": "X IBNU FIRNAS",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 30,
+      "user_id": null,
+      "name": "ADITYA DAFFA FATONI",
+      "nis": "1027",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 31,
+      "user_id": null,
+      "name": "AHMAD HANNAN ZAIDAN",
+      "nis": "1028",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 32,
+      "user_id": null,
+      "name": "ALIF KHALFANI AYDIN RAMADHAN",
+      "nis": "1029",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 33,
+      "user_id": null,
+      "name": "BARIQ ZABIR AHMADI",
+      "nis": "1030",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 34,
+      "user_id": null,
+      "name": "DARMA WANSYAH",
+      "nis": "1031",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 35,
+      "user_id": null,
+      "name": "DZAKWAN AFKARI",
+      "nis": "1032",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:45.000Z"
+    },
+    {
+      "id": 36,
+      "user_id": null,
+      "name": "FADEL MUKHLISIN",
+      "nis": "1033",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 37,
+      "user_id": null,
+      "name": "FARIID AL HAFIIZH",
+      "nis": "1034",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 38,
+      "user_id": null,
+      "name": "FAUZAN KAMIL",
+      "nis": "1035",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 39,
+      "user_id": null,
+      "name": "FAZLI AZZAM",
+      "nis": "1036",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 40,
+      "user_id": null,
+      "name": "FUDHAIL IHSAN AYYASHI",
+      "nis": "1037",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 41,
+      "user_id": null,
+      "name": "M. ZIDAN ",
+      "nis": "1038",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 42,
+      "user_id": null,
+      "name": "HABRI GHASSANI ARDI",
+      "nis": "1039",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 43,
+      "user_id": null,
+      "name": "KHAIRIL ABDIL",
+      "nis": "1040",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 44,
+      "user_id": null,
+      "name": "IZZAN FARHAN AHMAD",
+      "nis": "1041",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 45,
+      "user_id": null,
+      "name": "KEEFA HAFIDZ IBADURRAHMAN",
+      "nis": "1042",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 46,
+      "user_id": null,
+      "name": "M. IRHAB NABIL",
+      "nis": "1043",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:46.000Z"
+    },
+    {
+      "id": 47,
+      "user_id": null,
+      "name": "MOHAMMAD AZKA ",
+      "nis": "1044",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 48,
+      "user_id": null,
+      "name": "MUHAMMAD ABDURRAHMAN",
+      "nis": "1045",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 49,
+      "user_id": null,
+      "name": "MUHAMMAD FAHRI KAMIL",
+      "nis": "1046",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 50,
+      "user_id": null,
+      "name": "MUHAMMAD SOLIHIN",
+      "nis": "1047",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 51,
+      "user_id": null,
+      "name": "NAUFAL ARIIQ FADHLURROHMAN",
+      "nis": "1048",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 52,
+      "user_id": null,
+      "name": "NAUFAL DZAKWAN HANIF",
+      "nis": "1049",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 53,
+      "user_id": null,
+      "name": "RIFQI DWI SETIAWAN",
+      "nis": "1050",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 54,
+      "user_id": null,
+      "name": "RIZUKA SYAHRIZA AZHARI",
+      "nis": "1051",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 55,
+      "user_id": null,
+      "name": "ABID YUSRI ABQARY",
+      "nis": "1052",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 56,
+      "user_id": null,
+      "name": "AGUS NUR RAMADANI",
+      "nis": "1053",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 57,
+      "user_id": null,
+      "name": "AHDAL ALI HAJJ",
+      "nis": "1054",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:47.000Z"
+    },
+    {
+      "id": 58,
+      "user_id": null,
+      "name": "AHMAD AGHA ZIKRI SITOMPUL",
+      "nis": "1055",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 59,
+      "user_id": null,
+      "name": "ALDEN HAFIZUDDIN AZIZAN",
+      "nis": "1056",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 60,
+      "user_id": null,
+      "name": "ATTALARIQ SYAH HENDRIAN",
+      "nis": "1057",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 61,
+      "user_id": null,
+      "name": "BYANTARA LUTHFI ARDANA",
+      "nis": "1058",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 62,
+      "user_id": null,
+      "name": "DAFFA FAYYAD ARROFI",
+      "nis": "1059",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 63,
+      "user_id": null,
+      "name": "FADHLI DZIL IKRAM",
+      "nis": "1060",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 64,
+      "user_id": null,
+      "name": "HAFIZ JABâ€™BAR MAULANA",
+      "nis": "1061",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 65,
+      "user_id": null,
+      "name": "IBNU KHAIRAN KETAREN",
+      "nis": "1062",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 66,
+      "user_id": null,
+      "name": "M. FAQIH HALIM",
+      "nis": "1063",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 67,
+      "user_id": null,
+      "name": "M. RAFFA NOVRIANZAH",
+      "nis": "1064",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 68,
+      "user_id": null,
+      "name": "M. SYAUQI FIRDAUS",
+      "nis": "1065",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 69,
+      "user_id": null,
+      "name": "MUHAMMAD AQIL ALFATH ELMAIS",
+      "nis": "1066",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:48.000Z"
+    },
+    {
+      "id": 70,
+      "user_id": null,
+      "name": "MUHAMMAD FIKRI KHOIR",
+      "nis": "1067",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 71,
+      "user_id": null,
+      "name": "MUHAMMAD IBNU YUSUF",
+      "nis": "1068",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 72,
+      "user_id": null,
+      "name": "MUHAMMAD MUMTAZUL AZKA",
+      "nis": "1069",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 73,
+      "user_id": null,
+      "name": "NAUFAL KHOIRUL AZHHAR",
+      "nis": "1070",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 74,
+      "user_id": null,
+      "name": "NOUVAL ADITYA NUGRAHA ZALUKHU",
+      "nis": "1071",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 75,
+      "user_id": null,
+      "name": "RENO PANGESTU",
+      "nis": "1072",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 76,
+      "user_id": null,
+      "name": "RIZIQ FRIZIANSYAH",
+      "nis": "1073",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 77,
+      "user_id": null,
+      "name": "RIZKY AL FARIZ",
+      "nis": "1074",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 78,
+      "user_id": null,
+      "name": "SAYYID ALFATH FAEYZA",
+      "nis": "1075",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 79,
+      "user_id": null,
+      "name": "ADI ZAMRI RAHMAN",
+      "nis": "1076",
+      "class_name": "X IBNU BATTANI",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 80,
+      "user_id": null,
+      "name": "AHMAD ABID",
+      "nis": "1077",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:49.000Z"
+    },
+    {
+      "id": 81,
+      "user_id": null,
+      "name": "AHMAD ZAKKI AL-MUFLIH",
+      "nis": "1078",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 82,
+      "user_id": null,
+      "name": "AL FIRASH FAYYAD AZROM",
+      "nis": "1079",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 83,
+      "user_id": null,
+      "name": "ALKINDI ANOURI",
+      "nis": "1080",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 84,
+      "user_id": null,
+      "name": "DZAKWAN AL-HAZEM DINATA",
+      "nis": "1081",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 85,
+      "user_id": null,
+      "name": "FAIZAN HABBIB ALMUZAKKI",
+      "nis": "1082",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 86,
+      "user_id": null,
+      "name": "IHSAN  HABIB",
+      "nis": "1083",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 87,
+      "user_id": null,
+      "name": "M. DZAKI BUKHAIRIL MA'ARIF",
+      "nis": "1084",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 88,
+      "user_id": null,
+      "name": "M. FAKHRI RIFANI",
+      "nis": "1085",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 89,
+      "user_id": null,
+      "name": "M. RISKI HAFIZI",
+      "nis": "1086",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 90,
+      "user_id": null,
+      "name": "MUHAMMAD ARIL",
+      "nis": "1087",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:50.000Z"
+    },
+    {
+      "id": 91,
+      "user_id": null,
+      "name": "MUHAMMAD FAHISH AL FAYYEDH",
+      "nis": "1088",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:51.000Z"
+    },
+    {
+      "id": 92,
+      "user_id": null,
+      "name": "MUHAMMAD FAUZAN AZIMA",
+      "nis": "1089",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:51.000Z"
+    },
+    {
+      "id": 93,
+      "user_id": null,
+      "name": "MUHAMMAD SYEHAN SYARIF AFDISA",
+      "nis": "1090",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:52.000Z"
+    },
+    {
+      "id": 94,
+      "user_id": null,
+      "name": "NAUFAL UTHMAN",
+      "nis": "1091",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:52.000Z"
+    },
+    {
+      "id": 95,
+      "user_id": null,
+      "name": "RAFA ATHALLAH ARDIANO",
+      "nis": "1092",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:53.000Z"
+    },
+    {
+      "id": 96,
+      "user_id": null,
+      "name": "RAYHAN AZRA RAMADANI",
+      "nis": "1093",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:53.000Z"
+    },
+    {
+      "id": 97,
+      "user_id": null,
+      "name": "RIDHO  PAHLEVI",
+      "nis": "1094",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:54.000Z"
+    },
+    {
+      "id": 98,
+      "user_id": null,
+      "name": "RIENDHI ALFARD DWI PIDAN",
+      "nis": "1095",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:32:54.000Z"
+    },
+    {
+      "id": 100,
+      "user_id": null,
+      "name": "ABDURRAHMAN AZIZI",
+      "nis": "1096",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:21.000Z"
+    },
+    {
+      "id": 101,
+      "user_id": null,
+      "name": "AFFAN HABIBURROHMAN ",
+      "nis": "1097",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:21.000Z"
+    },
+    {
+      "id": 102,
+      "user_id": null,
+      "name": "AFIF WALDAN",
+      "nis": "1098",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:21.000Z"
+    },
+    {
+      "id": 103,
+      "user_id": null,
+      "name": "ALBAR HERSA PRATAMA",
+      "nis": "1099",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:21.000Z"
+    },
+    {
+      "id": 104,
+      "user_id": null,
+      "name": "ALHAFIZI HERMAWAN",
+      "nis": "1100",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:22.000Z"
+    },
+    {
+      "id": 105,
+      "user_id": null,
+      "name": "ALKHENDRI",
+      "nis": "1101",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:22.000Z"
+    },
+    {
+      "id": 106,
+      "user_id": null,
+      "name": "AMRU SOFIAN TANJUNG",
+      "nis": "1102",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:22.000Z"
+    },
+    {
+      "id": 107,
+      "user_id": null,
+      "name": "FAHRI RIZKI RAMADHAN",
+      "nis": "1103",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:22.000Z"
+    },
+    {
+      "id": 108,
+      "user_id": null,
+      "name": "IKRAR RIDA PAHLAWAN",
+      "nis": "1104",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:22.000Z"
+    },
+    {
+      "id": 109,
+      "user_id": null,
+      "name": "M. FADHIL ARRAFY",
+      "nis": "1105",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:22.000Z"
+    },
+    {
+      "id": 110,
+      "user_id": null,
+      "name": "M. HABIBUR ROHMAN ",
+      "nis": "1106",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:23.000Z"
+    },
+    {
+      "id": 111,
+      "user_id": null,
+      "name": "MUHAMMAD ABDULLAH IHSAN JAMIL",
+      "nis": "1107",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:23.000Z"
+    },
+    {
+      "id": 112,
+      "user_id": null,
+      "name": "MUHAMMAD ADIB ADINATA",
+      "nis": "1108",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:23.000Z"
+    },
+    {
+      "id": 113,
+      "user_id": null,
+      "name": "MUHAMMAD AMRULLAH ",
+      "nis": "1109",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:23.000Z"
+    },
+    {
+      "id": 114,
+      "user_id": null,
+      "name": "MUHAMMAD ASSADIL AZAM",
+      "nis": "1110",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:24.000Z"
+    },
+    {
+      "id": 115,
+      "user_id": null,
+      "name": "MUHAMMAD FAUZAN AZIMA",
+      "nis": "1111",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:24.000Z"
+    },
+    {
+      "id": 116,
+      "user_id": null,
+      "name": "MUHAMMAD FAYYADH AFIFUDDIN",
+      "nis": "1112",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:24.000Z"
+    },
+    {
+      "id": 117,
+      "user_id": null,
+      "name": "MUHAMMAD HAMDANI",
+      "nis": "1113",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:24.000Z"
+    },
+    {
+      "id": 118,
+      "user_id": null,
+      "name": "PASHA RAMADHAN",
+      "nis": "1114",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:24.000Z"
+    },
+    {
+      "id": 119,
+      "user_id": null,
+      "name": "RAFA RADITYA",
+      "nis": "1115",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:24.000Z"
+    },
+    {
+      "id": 120,
+      "user_id": null,
+      "name": "RAGHID ARYA SATYA PUTRA",
+      "nis": "1116",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:24.000Z"
+    },
+    {
+      "id": 121,
+      "user_id": null,
+      "name": "RIFQI DWI SETIAWAN",
+      "nis": "1117",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:24.000Z"
+    },
+    {
+      "id": 122,
+      "user_id": null,
+      "name": "SYAHMUDA PARHIMPUNAN HSB",
+      "nis": "1118",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:25.000Z"
+    },
+    {
+      "id": 123,
+      "user_id": null,
+      "name": "SYAUQI EL PAMILY",
+      "nis": "1119",
+      "class_name": "X",
+      "gender": "L",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:25.000Z"
+    },
+    {
+      "id": 124,
+      "user_id": null,
+      "name": "ADIVA MARTHA NASUTION",
+      "nis": "1120",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:25.000Z"
+    },
+    {
+      "id": 125,
+      "user_id": null,
+      "name": "ALFIRA ZAHWA",
+      "nis": "1121",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:25.000Z"
+    },
+    {
+      "id": 126,
+      "user_id": null,
+      "name": "ANGGI RATUNANSYAH RITONGA",
+      "nis": "1122",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:25.000Z"
+    },
+    {
+      "id": 127,
+      "user_id": null,
+      "name": "ANISA AHMAT",
+      "nis": "1123",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:25.000Z"
+    },
+    {
+      "id": 128,
+      "user_id": null,
+      "name": "AQILA NADHIFAH",
+      "nis": "1124",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:25.000Z"
+    },
+    {
+      "id": 129,
+      "user_id": null,
+      "name": "ENCIK ZHAFIRA LUQYANA HANI",
+      "nis": "1125",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:25.000Z"
+    },
+    {
+      "id": 130,
+      "user_id": null,
+      "name": "FEBY AULIA SIREGAR",
+      "nis": "1126",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:26.000Z"
+    },
+    {
+      "id": 131,
+      "user_id": null,
+      "name": "GHAZYA NAZIRA KHANSA",
+      "nis": "1127",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:26.000Z"
+    },
+    {
+      "id": 132,
+      "user_id": null,
+      "name": "HANIFAH MEIDIANTY",
+      "nis": "1128",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:26.000Z"
+    },
+    {
+      "id": 133,
+      "user_id": null,
+      "name": "LUTHFIAH NAFI'AH",
+      "nis": "1129",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:26.000Z"
+    },
+    {
+      "id": 134,
+      "user_id": null,
+      "name": "MEIZYA KURNIA CANMEILLA",
+      "nis": "1130",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:26.000Z"
+    },
+    {
+      "id": 135,
+      "user_id": null,
+      "name": "NAILA NAFIA AFIFA",
+      "nis": "1131",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:26.000Z"
+    },
+    {
+      "id": 136,
+      "user_id": null,
+      "name": "NAVEEN SHAHRAZAD NADILLA",
+      "nis": "1132",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:26.000Z"
+    },
+    {
+      "id": 137,
+      "user_id": null,
+      "name": "NAZHIFA HAFSHA",
+      "nis": "1133",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:26.000Z"
+    },
+    {
+      "id": 138,
+      "user_id": null,
+      "name": "NAZWA ZAHIRA SHOFA",
+      "nis": "1134",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:27.000Z"
+    },
+    {
+      "id": 139,
+      "user_id": null,
+      "name": "NUR MALIKA NAFISA ",
+      "nis": "1135",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:27.000Z"
+    },
+    {
+      "id": 140,
+      "user_id": null,
+      "name": "NURUL ATIQAH ZAHRAH",
+      "nis": "1136",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:27.000Z"
+    },
+    {
+      "id": 141,
+      "user_id": null,
+      "name": "OLIVIA NATASYA PRAMUDITA",
+      "nis": "1137",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:27.000Z"
+    },
+    {
+      "id": 142,
+      "user_id": null,
+      "name": "RADHIYYA PUTRI PRATAMA",
+      "nis": "1138",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:27.000Z"
+    },
+    {
+      "id": 143,
+      "user_id": null,
+      "name": "SALSABILA RAISSA OLIVIA INDIRA HASIBUAN",
+      "nis": "1139",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:27.000Z"
+    },
+    {
+      "id": 144,
+      "user_id": null,
+      "name": "SHAFIYAH AL-KARIMAH DAULAY",
+      "nis": "1140",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:27.000Z"
+    },
+    {
+      "id": 145,
+      "user_id": null,
+      "name": "VIKA PUSPITA SARY",
+      "nis": "1141",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:27.000Z"
+    },
+    {
+      "id": 146,
+      "user_id": null,
+      "name": "ZAKIA ZAHRATU NISA",
+      "nis": "1142",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 147,
+      "user_id": null,
+      "name": "AISYA RAMADHANI",
+      "nis": "1143",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 148,
+      "user_id": null,
+      "name": "ALIYAH IZZATUNISA",
+      "nis": "1144",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 149,
+      "user_id": null,
+      "name": "ANDI SALSHABILA ARKANURIA BAHAR",
+      "nis": "1145",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 150,
+      "user_id": null,
+      "name": "ANGRAINI RISMAYANI",
+      "nis": "1146",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 151,
+      "user_id": null,
+      "name": "ANNISAH PUTRI FAHIRA",
+      "nis": "1147",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 152,
+      "user_id": null,
+      "name": "ATIFA ZAHRA PUTRI YATRA",
+      "nis": "1148",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 153,
+      "user_id": null,
+      "name": "DINDA PUTRI JELITA",
+      "nis": "1149",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 154,
+      "user_id": null,
+      "name": "FAIZA GHINA ARRIFA",
+      "nis": "1150",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 155,
+      "user_id": null,
+      "name": "HAFIZDA AZZAHRA",
+      "nis": "1151",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:28.000Z"
+    },
+    {
+      "id": 156,
+      "user_id": null,
+      "name": "HIFZIATUL HAKIMAH",
+      "nis": "1152",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:29.000Z"
+    },
+    {
+      "id": 157,
+      "user_id": null,
+      "name": "KEISHA FRIZKYLA ANINDA ",
+      "nis": "1153",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:29.000Z"
+    },
+    {
+      "id": 158,
+      "user_id": null,
+      "name": "LARASITHA PUTRI FAADILAH",
+      "nis": "1154",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:29.000Z"
+    },
+    {
+      "id": 159,
+      "user_id": null,
+      "name": "NAIFA WALIDINA",
+      "nis": "1155",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:29.000Z"
+    },
+    {
+      "id": 160,
+      "user_id": null,
+      "name": "NAYRA NAFISA",
+      "nis": "1156",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:29.000Z"
+    },
+    {
+      "id": 161,
+      "user_id": null,
+      "name": "NAZHIRA FIRSTA OTRI",
+      "nis": "1157",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:29.000Z"
+    },
+    {
+      "id": 162,
+      "user_id": null,
+      "name": "NUR HUSNA KAMILAH",
+      "nis": "1158",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:29.000Z"
+    },
+    {
+      "id": 163,
+      "user_id": null,
+      "name": "NUR UFAIRA",
+      "nis": "1159",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:29.000Z"
+    },
+    {
+      "id": 164,
+      "user_id": null,
+      "name": "NURUL KHAIRIN",
+      "nis": "1160",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 165,
+      "user_id": null,
+      "name": "QUEEN LATHIFAH",
+      "nis": "1161",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 166,
+      "user_id": null,
+      "name": "RAISA MUNIRA NAHDA",
+      "nis": "1162",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 167,
+      "user_id": null,
+      "name": "SALWA WIDI SYAHPUTRI",
+      "nis": "1163",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 168,
+      "user_id": null,
+      "name": "SRI HUSWATUN MUNAHWAROH ",
+      "nis": "1164",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 169,
+      "user_id": null,
+      "name": "ZAHIRA QOLBINA",
+      "nis": "1165",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 170,
+      "user_id": null,
+      "name": "ANDI ZALIKA QUINZA SYAFIAH",
+      "nis": "1166",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 171,
+      "user_id": null,
+      "name": "AISYAH PRATAMA HARIADI",
+      "nis": "1167",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 172,
+      "user_id": null,
+      "name": "ALISAHA ALFANI ",
+      "nis": "1168",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 173,
+      "user_id": null,
+      "name": "AMIRAH",
+      "nis": "1169",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 174,
+      "user_id": null,
+      "name": "ANNISA JAZILA RAHMA",
+      "nis": "1170",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 175,
+      "user_id": null,
+      "name": "ASYLA HUMAIRA YANUR",
+      "nis": "1171",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:30.000Z"
+    },
+    {
+      "id": 176,
+      "user_id": null,
+      "name": "CINTA AULIA ENARA",
+      "nis": "1172",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 177,
+      "user_id": null,
+      "name": "DINI SUGESTI",
+      "nis": "1173",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 178,
+      "user_id": null,
+      "name": "DZAFIRA ATHIFAH",
+      "nis": "1174",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 179,
+      "user_id": null,
+      "name": "HAFIZAH",
+      "nis": "1175",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 180,
+      "user_id": null,
+      "name": "JANETA SALSABILA ARIFIN",
+      "nis": "1176",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 181,
+      "user_id": null,
+      "name": "KHANZA PURNAMA MAHEN",
+      "nis": "1177",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 182,
+      "user_id": null,
+      "name": "KYANE ARTHA FEBIOLA",
+      "nis": "1178",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 183,
+      "user_id": null,
+      "name": "NABILAH QURRATUL AIN",
+      "nis": "1179",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 184,
+      "user_id": null,
+      "name": "NAJLA ZHAFIRA RAMADHINA REVA",
+      "nis": "1180",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:31.000Z"
+    },
+    {
+      "id": 185,
+      "user_id": null,
+      "name": "NAURA FATIHA FAHRANI",
+      "nis": "1181",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 186,
+      "user_id": null,
+      "name": "NAYLA AFIFAH ",
+      "nis": "1182",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 187,
+      "user_id": null,
+      "name": "NOFA PRIANI SARTIKA ",
+      "nis": "1183",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 188,
+      "user_id": null,
+      "name": "NURUL AFIFAH AZZAHRA",
+      "nis": "1184",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 189,
+      "user_id": null,
+      "name": "NURUL HIKMAH",
+      "nis": "1185",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 190,
+      "user_id": null,
+      "name": "RIRI AMELIA",
+      "nis": "1186",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 191,
+      "user_id": null,
+      "name": "SIREN ROHAN",
+      "nis": "1187",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 192,
+      "user_id": null,
+      "name": "SYARIFAH GHEFIRA AISKA",
+      "nis": "1188",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 193,
+      "user_id": null,
+      "name": "VANIA SALSABIL",
+      "nis": "1189",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 194,
+      "user_id": null,
+      "name": "WAFA  ATHIYAH  FISKA",
+      "nis": "1190",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 195,
+      "user_id": null,
+      "name": "ZAHYRAH ATTIFAH",
+      "nis": "1191",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 196,
+      "user_id": null,
+      "name": "ZHIVANA ALMIRA DISYA",
+      "nis": "1192",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:32.000Z"
+    },
+    {
+      "id": 197,
+      "user_id": null,
+      "name": "ATHIYAH TSAMINAH",
+      "nis": "1193",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 198,
+      "user_id": null,
+      "name": "ALYA PUTRI MADURI",
+      "nis": "1194",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 199,
+      "user_id": null,
+      "name": "ASYFA NURHASANAH",
+      "nis": "1195",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 200,
+      "user_id": null,
+      "name": "ADZRA ZAHIRAH ",
+      "nis": "1196",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 201,
+      "user_id": null,
+      "name": "CLARA ANDITHA PUTRI",
+      "nis": "1197",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 202,
+      "user_id": null,
+      "name": "FARWAH HANIYYA MUALLIM",
+      "nis": "1198",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 203,
+      "user_id": null,
+      "name": "HAMIDAH MUIZZATUS SU'ADA",
+      "nis": "1199",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 204,
+      "user_id": null,
+      "name": "HASNA AMIRAH",
+      "nis": "1200",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 205,
+      "user_id": null,
+      "name": "HAYATUNNUFUS",
+      "nis": "1201",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 206,
+      "user_id": null,
+      "name": "IZMI PUTRI DWIYANA",
+      "nis": "1202",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 207,
+      "user_id": null,
+      "name": "NUR AISYAH",
+      "nis": "1203",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:33.000Z"
+    },
+    {
+      "id": 208,
+      "user_id": null,
+      "name": "SARA AZAHRA RUSTI",
+      "nis": "1204",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 209,
+      "user_id": null,
+      "name": "HAFIDZAH AZ- ZAHRA  KHAIRUNNISA",
+      "nis": "1205",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 210,
+      "user_id": null,
+      "name": "SOFIYAH",
+      "nis": "1206",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 211,
+      "user_id": null,
+      "name": "SALWA  FADHILATUSSYIFAA",
+      "nis": "1207",
+      "class_name": "X",
+      "gender": "P",
+      "parent_id": null,
+      "behavior_score": 100,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    }
+  ],
+  "subjects": [
+    {
+      "id": 1,
+      "code": "MTK-01",
+      "name": "Matematika",
+      "category": "Wajib",
+      "weekly_hours": 4
+    },
+    {
+      "id": 2,
+      "code": "FIS-01",
+      "name": "Fisika",
+      "category": "Pilihan",
+      "weekly_hours": 3
+    },
+    {
+      "id": 3,
+      "code": "KIM-01",
+      "name": "Kimia",
+      "category": "Pilihan",
+      "weekly_hours": 3
+    },
+    {
+      "id": 4,
+      "code": "ARB-01",
+      "name": "Bahasa Arab",
+      "category": "Muatan Lokal",
+      "weekly_hours": 2
+    },
+    {
+      "id": 5,
+      "code": "TFZ-01",
+      "name": "Tahfizh Al-Quran",
+      "category": "Muatan Lokal",
+      "weekly_hours": 4
+    },
+    {
+      "id": 6,
+      "code": "FIQ-01",
+      "name": "Fiqih",
+      "category": "Wajib",
+      "weekly_hours": 2
+    },
+    {
+      "id": 7,
+      "code": "AKD-01",
+      "name": "Akidah Akhlak",
+      "category": "Wajib",
+      "weekly_hours": 2
+    },
+    {
+      "id": 8,
+      "code": "IND-01",
+      "name": "Bahasa Indonesia",
+      "category": "Wajib",
+      "weekly_hours": 4
+    },
+    {
+      "id": 9,
+      "code": "ENG-01",
+      "name": "Bahasa Inggris",
+      "category": "Wajib",
+      "weekly_hours": 4
+    },
+    {
+      "id": 10,
+      "code": "SJR-01",
+      "name": "Sejarah",
+      "category": "Wajib",
+      "weekly_hours": 2
+    },
+    {
+      "id": 11,
+      "code": "PJK-01",
+      "name": "Pendidikan Jasmani",
+      "category": "Wajib",
+      "weekly_hours": 2
+    },
+    {
+      "id": 12,
+      "code": "SNI-01",
+      "name": "Seni Budaya",
+      "category": "Muatan Lokal",
+      "weekly_hours": 2
+    },
+    {
+      "id": 13,
+      "code": "PKN-01",
+      "name": "Pendidikan Kewarganegaraan",
+      "category": "Wajib",
+      "weekly_hours": 2
+    },
+    {
+      "id": 14,
+      "code": "BIO-01",
+      "name": "Biologi",
+      "category": "Pilihan",
+      "weekly_hours": 3
+    },
+    {
+      "id": 15,
+      "code": "EKO-01",
+      "name": "Ekonomi",
+      "category": "Pilihan",
+      "weekly_hours": 3
+    },
+    {
+      "id": 16,
+      "code": "GEO-01",
+      "name": "Geografi",
+      "category": "Pilihan",
+      "weekly_hours": 3
+    },
+    {
+      "id": 17,
+      "code": "SOS-01",
+      "name": "Sosiologi",
+      "category": "Pilihan",
+      "weekly_hours": 3
+    },
+    {
+      "id": 18,
+      "code": "IKU-01",
+      "name": "Ilmu Tafsir",
+      "category": "Muatan Lokal",
+      "weekly_hours": 2
+    },
+    {
+      "id": 19,
+      "code": "HAD-01",
+      "name": "Ilmu Hadits",
+      "category": "Muatan Lokal",
+      "weekly_hours": 2
+    },
+    {
+      "id": 20,
+      "code": "SKD-01",
+      "name": "Sejarah Kebudayaan Islam",
+      "category": "Wajib",
+      "weekly_hours": 2
+    }
+  ],
+  "teacher_attendance": [],
+  "teaching_assignments": [
+    {
+      "id": 12,
+      "teacher_id": 19,
+      "subject_name": "Tahfizh Al-Quran",
+      "class_name": "X IBNU SINA"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "admin",
+      "name": "Administrator MA IBS",
+      "role": "admin",
+      "roles": [
+        "admin"
+      ],
+      "nuptk": "1234567890",
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Administrator%20MA%20IBS",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T10:14:20.000Z"
+    },
+    {
+      "id": 12,
+      "username": "misran",
+      "password": "$2b$10$15wecNmXqIvJPn98WWCSMeDiGAZCnlHiBsPqrKKHF54alPrZatfdu",
+      "name": "Misran, SE.Sy",
+      "role": "kamad",
+      "roles": [
+        "kamad",
+        "admin",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Misran%2C%20SE.Sy",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:57.000Z"
+    },
+    {
+      "id": 13,
+      "username": "dodi",
+      "password": "$2b$10$Mz6v070bfXH..f2OYx.2D.49Q6NcOomgeTxbAafs73999EdGsCkh.",
+      "name": "Dodi Oktarisa, Lc, Gr",
+      "role": "wakakurikulum",
+      "roles": [
+        "wakakurikulum",
+        "guru",
+        "admin"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Dodi%20Oktarisa%2C%20Lc%2C%20Gr",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:57.000Z"
+    },
+    {
+      "id": 14,
+      "username": "adey",
+      "password": "$2b$10$ncxPWxabtQ8dXt3WbUlQAePT49x5nhra1ttvjtax0BAw1tC44sK0e",
+      "name": "Adey Anuggrah, M.Pd",
+      "role": "wakakesiswaan",
+      "roles": [
+        "wakakesiswaan",
+        "guru",
+        "admin"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Adey%20Anuggrah%2C%20M.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:57.000Z"
+    },
+    {
+      "id": 15,
+      "username": "dwi",
+      "password": "$2b$10$QaE3m1UOsgjwaf99KYt5RuxBtOvNuEOQK3K3rQauF6GGWWjwgUmiy",
+      "name": "Dwi Nur Faratiwi, S.Pd",
+      "role": "wakakesiswaan",
+      "roles": [
+        "wakakesiswaan",
+        "guru",
+        "admin"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Dwi%20Nur%20Faratiwi%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:57.000Z"
+    },
+    {
+      "id": 16,
+      "username": "dasdi",
+      "password": "$2b$10$CpGa5w/zDYpnHAT.kOlxieD5z4Rn27CflbZTLxN.NRWmJ6EQyGSbK",
+      "name": "Dasdi Hastuti, A.Md",
+      "role": "admin",
+      "roles": [
+        "admin"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Dasdi%20Hastuti%2C%20A.Md",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:57.000Z"
+    },
+    {
+      "id": 17,
+      "username": "mulizen",
+      "password": "$2b$10$6iq9IJHZy0cUm9QBOAcfGun/m5cd.eV2SPyXBZ.BOgIdbkV8Py7cm",
+      "name": "Mulizen, S.Pd",
+      "role": "admin",
+      "roles": [
+        "admin",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Mulizen%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:57.000Z"
+    },
+    {
+      "id": 18,
+      "username": "fitrizal",
+      "password": "$2b$10$rhsv2akhvTl.iap70SR6T.slwiZKh41UFNBsgj/eOTAAkrCZNiPle",
+      "name": "Fitrizal, ST",
+      "role": "admin",
+      "roles": [
+        "admin"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Fitrizal%2C%20ST",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:57.000Z"
+    },
+    {
+      "id": 19,
+      "username": "andre",
+      "password": "$2b$10$C3Di7.ap/wiOe4bYVhtO1.SOFjfFgjJoyXpPeBV6mMpEq175Qq/fG",
+      "name": "Andre  Wahyudi, S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru_quran"
+      ],
+      "nuptk": "0135467",
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Andre%20%20Wahyudi%2C%20S.Pd",
+      "class_name": "X IBNU SINA",
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:57.000Z"
+    },
+    {
+      "id": 20,
+      "username": "adey1",
+      "password": "$2b$10$sBwNpIuHyGIFNHNjHKTdfu17XMK1tvpYAi02nedzQUMayHdE5Nlc2",
+      "name": "Adey Fajri Dwi Putra, S.Psi",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru",
+        "bk"
+      ],
+      "nuptk": "123456789",
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Adey%20Fajri%20Dwi%20Putra%2C%20S.Psi",
+      "class_name": "X IBNU FIRNAS",
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 21,
+      "username": "muhammad",
+      "password": "$2b$10$PSVdhIf6vraYWrcsAloete9w41e6dNCEmaaTtjwliaouWO/Mb08pi",
+      "name": "Muhammad Rudini, S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Muhammad%20Rudini%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 22,
+      "username": "suyani",
+      "password": "$2b$10$J1KyTdoD.8FvzHdzjZpaZ.K.R7Qthxz.RkX6mb8bg8akmKit69FJG",
+      "name": "Suyani, S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Suyani%2C%20S.Pd",
+      "class_name": "X IBNU BATTANI",
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 23,
+      "username": "kholilullah",
+      "password": "$2b$10$lxP1EsXJDBD14oyyDXmjK.9mz/E/0Yx1dqOlwqzLz2cFkvkQ2aB26",
+      "name": "Kholilullah Al-hafizh",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Kholilullah%20Al-hafizh",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 24,
+      "username": "muhammad1",
+      "password": "$2b$10$eUUhy.kIHj12pnr.Nip4QuL5h9IO5b/EvrYzn/p2MmvzQIQ3S4.EG",
+      "name": "Muhammad Al Firman, ME",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Muhammad%20Al%20Firman%2C%20ME",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 25,
+      "username": "ali",
+      "password": "$2b$10$Z/jZlUXfTHAkH4JPCLufQ.N/CjijEWhnjqpclt1IfOTNbS9ZHg1yq",
+      "name": "Ali Ridho, S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ali%20Ridho%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 26,
+      "username": "rizki",
+      "password": "$2b$10$PndAgO0Y5qDFy4G9Veebr.MtompqSrwlJ7h08TlKj0DfGnNa4DFRS",
+      "name": "Rizki Kurniawan, M.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "bk"
+      ],
+      "nuptk": "12345",
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rizki%20Kurniawan%2C%20M.Pd",
+      "class_name": "",
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 27,
+      "username": "muhammad2",
+      "password": "$2b$10$Eg7JhNPq8b/7TJRFt6LDxeaI5/KzsrzkHs8C0iTwWMESKKKIkX0Fe",
+      "name": "Muhammad Azwam,S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Muhammad%20Azwam%2CS.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 28,
+      "username": "andi",
+      "password": "$2b$10$WqnXNnAO.3apPjMdMYQu5u71lgCuqN9qBkRwysKcDyf8tzWs61GlO",
+      "name": "Andi Sahputra, M.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Andi%20Sahputra%2C%20M.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 29,
+      "username": "ainun",
+      "password": "$2b$10$BbbJKqWnG1qV3wL6afUMuexT3E9hZXUpq9ycuxf1s.W825AYWZMR2",
+      "name": "Ainun Na'im, Lc",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ainun%20Na'im%2C%20Lc",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 30,
+      "username": "fahrul",
+      "password": "$2b$10$jym.49V/WSiJONRmobgb2eZF6/lMm7ZC5qlrLtMS9bbrBL7mQVh3S",
+      "name": "Fahrul Rozi, Lc, MH",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Fahrul%20Rozi%2C%20Lc%2C%20MH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 31,
+      "username": "pujiono",
+      "password": "$2b$10$1Fd/4olcyc7x5jbmtET2f.W.xgGO33n5QaZoIuktQV1q6YUEPNfkm",
+      "name": "Pujiono, S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Pujiono%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 32,
+      "username": "herman",
+      "password": "$2b$10$JlUp/OZi3VKDyQzIFAi2yOnyAqxeLB.q2QepXVVUHvj3tlW1I8QYy",
+      "name": "Herman Alfarizi, S.Ud, MH",
+      "role": "guru_quran",
+      "roles": [
+        "guru_quran",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Herman%20Alfarizi%2C%20S.Ud%2C%20MH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:58.000Z"
+    },
+    {
+      "id": 33,
+      "username": "nurman",
+      "password": "$2b$10$un3GGgFGJoTJz8IueeD/EOjaE/1/aTWPybf5EpcL6Il4XD1za0cnm",
+      "name": "Nurman Sattar, Se",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Nurman%20Sattar%2C%20Se",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 34,
+      "username": "delvian",
+      "password": "$2b$10$aaXLxaCyfKvea/pTjjacHefWCH/XmuZQYYxF3ct1hbPoc/WvO2EsW",
+      "name": "Delvian Ariyanto, S.Pd",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Delvian%20Ariyanto%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 35,
+      "username": "winda",
+      "password": "$2b$10$H6.l0aoWcxdQbmVUT9ly1OK3OG8jQV.F3VSpOAnV8AzQInGN0KDvS",
+      "name": "Winda Wijayani, S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Winda%20Wijayani%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 36,
+      "username": "defi",
+      "password": "$2b$10$aF6vTpZb1VrEBE6/YTjGbuzUx57f2qfGud7j2/ELo.D/R7xtWPG/S",
+      "name": "Defi Andriani, S.Psi",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Defi%20Andriani%2C%20S.Psi",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 37,
+      "username": "nurainun",
+      "password": "$2b$10$cG4AE9ldFs7ifyUJOmUWp.y4l0qLutT7Sxi0c7gte761BwySFYAnW",
+      "name": "Nurainun Ritonga, M. Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Nurainun%20Ritonga%2C%20M.%20Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 38,
+      "username": "rohani",
+      "password": "$2b$10$S9qBrbU2HfrqGrWZBIIQUeNkx8hVtEQG9uigWpQ5TdNLxfgIpdIQa",
+      "name": "Rohani Al-Hafizhah",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rohani%20Al-Hafizhah",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 39,
+      "username": "norly",
+      "password": "$2b$10$AKWreTlUJqM63JaxSD9jBOSMnSh4A.pKZ1Q3zXXkDcKD7hArDN2FG",
+      "name": "Norly Ardianti Sarafina, S.I.Q., S.Ag",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Norly%20Ardianti%20Sarafina%2C%20S.I.Q.%2C%20S.Ag",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 40,
+      "username": "annisa",
+      "password": "$2b$10$nyyUFXUC5eQhnkaNPKtUYOO/LQWZkIJ5hMA4Uaws8mwb5hIMXhzR.",
+      "name": "Annisa Salsabila Rizfi, S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Annisa%20Salsabila%20Rizfi%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 41,
+      "username": "sartika",
+      "password": "$2b$10$Zm2UOExcjjkx1QIRLJjCP.pUOVUu7EEx.Zdbf1MJkUqKg3RW.VkfK",
+      "name": "Sartika Wahyu Ilham, S.Pd.I",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sartika%20Wahyu%20Ilham%2C%20S.Pd.I",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 42,
+      "username": "sartika1",
+      "password": "$2b$10$VVxNqKrjR4NSwb7hhBHgxe.q4rwxniu6t.SVLuf4BI2r9Yb1Ef0qm",
+      "name": "Sartika, S.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sartika%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 43,
+      "username": "roza",
+      "password": "$2b$10$gjmQklGXjZeePGIowHa2TO2iHoqdlWCPd0cfwZTlfLE248dj8gxRO",
+      "name": "Roza Yulita, S.Si, M.Si",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Roza%20Yulita%2C%20S.Si%2C%20M.Si",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 44,
+      "username": "mawaddaturrohmah",
+      "password": "$2b$10$.eq53DUC8A759s4.fRYjdeFL4zVQQsk3DyZ1HbD2aQpnN67lRp74.",
+      "name": "Mawaddaturrohmah, S.Pd, M.Si",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Mawaddaturrohmah%2C%20S.Pd%2C%20M.Si",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:00:59.000Z"
+    },
+    {
+      "id": 45,
+      "username": "rahmi",
+      "password": "$2b$10$cDupmKLrY10eZxs3mjDGL.fvSnU3x90yDDTXoXZoDsLLOk7DzCtI2",
+      "name": "Rahmi Padilah Nasution, S.Ag",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Rahmi%20Padilah%20Nasution%2C%20S.Ag",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 46,
+      "username": "ratna",
+      "password": "$2b$10$T9/GF5Mj3sSTdhc4HA2cq./dHVlnRQ0ds8UEgb5P4epmw9H7M1CDC",
+      "name": "Ratna Mutu Anugrah, M.Pd",
+      "role": "walas",
+      "roles": [
+        "walas",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ratna%20Mutu%20Anugrah%2C%20M.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 47,
+      "username": "nurul",
+      "password": "$2b$10$eMzrf4mIvwXoVq9WrbtZLuwzJXshsI.M0vc.vpCeX14ibmirTtxBy",
+      "name": "Nurul Hudaina, S.Pd",
+      "role": "guru_quran",
+      "roles": [
+        "guru_quran",
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Nurul%20Hudaina%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 48,
+      "username": "eka",
+      "password": "$2b$10$UF8Ibtxe4nlcfzCwAwIFZ.z6SQTxfqt1jCImSgh8I88KB/eCz.af2",
+      "name": "Eka Yudiasti, Lc",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Eka%20Yudiasti%2C%20Lc",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 49,
+      "username": "istiharoh",
+      "password": "$2b$10$KozZCFztwOc/LIZMmUfAvO0Wskp.bVR18tg9gecUdFUUhSxfRjaJC",
+      "name": "Istiharoh, S.Pd",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Istiharoh%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 50,
+      "username": "uswatun",
+      "password": "$2b$10$OEnpePl8ifX/yifcDoKPSu3rfpUBlSjnS24zE/PxS9stk3NW4n0nK",
+      "name": "Uswatun Hasanah, S.Pd, Gr",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Uswatun%20Hasanah%2C%20S.Pd%2C%20Gr",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 51,
+      "username": "nur",
+      "password": "$2b$10$tQSxwPATRiA8P/PJjnmmnOIhvzOKScnPoDRCitGJH44KqmYZ8G6U6",
+      "name": "Nur Annisah, S.Ag",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Nur%20Annisah%2C%20S.Ag",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 52,
+      "username": "fadilah",
+      "password": "$2b$10$vtFCE6YQshiZQN1/u0rjZOHvRVn03vCfuyZyNA6c0Pre/uuookjFi",
+      "name": "Fadilah Sari, S.Si",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Fadilah%20Sari%2C%20S.Si",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 53,
+      "username": "fauzi",
+      "password": "$2b$10$Z1fzQtp66UeIOOip0HqciejJnLKLF3aTUYWMg0t9FCeKPojmzci0i",
+      "name": "Fauzi Hayat, Lc",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Fauzi%20Hayat%2C%20Lc",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 54,
+      "username": "firman",
+      "password": "$2b$10$ZUxeiqyAjor9yAswnddDs.Y0w5U79WoN0.DxjuImcdf39QS7B86Ua",
+      "name": "Firman Surya, Lc, Desa",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Firman%20Surya%2C%20Lc%2C%20Desa",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 55,
+      "username": "muallim",
+      "password": "$2b$10$enafL03NULgztVChpDYuw.erCpp82z6MvGfgwnf5VRmaD6KE5CTmO",
+      "name": "Muallim Bakram, Lc,Ma",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Muallim%20Bakram%2C%20Lc%2CMa",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:00.000Z"
+    },
+    {
+      "id": 56,
+      "username": "desnedi",
+      "password": "$2b$10$7RYMOQNjaOi7oUTJxcYMDuzjw7zUqvXekoV8cNcyMW5CrHkgsls1O",
+      "name": "Desnedi, S.S",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Desnedi%2C%20S.S",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 57,
+      "username": "najmuddin",
+      "password": "$2b$10$jEL9yKcOsRtdXWO6Ls8a8unREelhQtTuwOftFVbLpnDZ0a/YghQP2",
+      "name": "Najmuddin Eko Santoso",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Najmuddin%20Eko%20Santoso",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 58,
+      "username": "ummi",
+      "password": "$2b$10$w9S.FAitLUwOH7gQo1Iy8e2kfDUplmaiBk.yKCvqSEQfQiExLIRpm",
+      "name": "Ummi Hustiah Husni Said, Lc, MA",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "P",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ummi%20Hustiah%20Husni%20Said%2C%20Lc%2C%20MA",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 59,
+      "username": "muhammad3",
+      "password": "$2b$10$2EC.xTEgEKrWTCcKpqDnu.XH7CUr6ACP.76c7OjUcv4msXV5y/gXS",
+      "name": "Muhammad Akhyar Rifqi, Lc, MH",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Muhammad%20Akhyar%20Rifqi%2C%20Lc%2C%20MH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 60,
+      "username": "helmi",
+      "password": "$2b$10$XRfs64taP.FO1Mle3oVl/OpfyD.wztMruBMLqxqepZmTlk24wvep6",
+      "name": "Helmi Hidayat, ST, M.Pd",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Helmi%20Hidayat%2C%20ST%2C%20M.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 61,
+      "username": "wamdi",
+      "password": "$2b$10$kbPbc7v.FVtYnMdTOGTNoukLkUW.IjGZfrFRuR604LLDztmS64klq",
+      "name": "Wamdi, S.Pd.I., M.H.Gr",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Wamdi%2C%20S.Pd.I.%2C%20M.H.Gr",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 62,
+      "username": "usman",
+      "password": "$2b$10$Y4Ip2kxNbv8Rv2E.CNgK8um3.jXoNiJpybhU850g8//Z1bLvDlhC.",
+      "name": "Usman, S.Pd",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Usman%2C%20S.Pd",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 63,
+      "username": "khairuddin",
+      "password": "$2b$10$GT830dY5MrowG5ObseSvoOq7wG84lDUl3hRIkzQDXnusL7D9blFfK",
+      "name": "Khairuddin, Lc.,M.H",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Khairuddin%2C%20Lc.%2CM.H",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 64,
+      "username": "wahidussomad",
+      "password": "$2b$10$dJGHK8dX5Nv4jlDFUaHGKe6hLcGLCcmgHZUUWarrEBCLUOZILYX8a",
+      "name": "Wahidussomad, Lc, M.Sy",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Wahidussomad%2C%20Lc%2C%20M.Sy",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 65,
+      "username": "afrinaldo",
+      "password": "$2b$10$ODZCSPEwLIcJviCtc78nKukFy14mGHAZIIyBtZdjbuCjqPKbZeDi.",
+      "name": "Afrinaldo, A.md",
+      "role": "guru",
+      "roles": [
+        "guru"
+      ],
+      "nuptk": null,
+      "gender": "L",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Afrinaldo%2C%20A.md",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T11:01:01.000Z"
+    },
+    {
+      "id": 66,
+      "username": "abrizan",
+      "password": "$2b$10$WgE9zl3etGOakz85MrI4aOSUVpjaqmojjGyHJHsNvIOQnlQGi/ZNi",
+      "name": "Ayah/Bunda Ananda ABRIZAN HARITZ MORALISETYO",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ABRIZAN%20HARITZ%20MORALISETYO",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 67,
+      "username": "akif",
+      "password": "$2b$10$vqnXHmfgUnlu6Nbf53wBte4zsAWrKicIFcobc99xO6TRVx4B2rgBC",
+      "name": "Ayah/Bunda Ananda AKIF MUHAMMAD DZAKIY",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AKIF%20MUHAMMAD%20DZAKIY",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 68,
+      "username": "alden",
+      "password": "$2b$10$fYZh0/ptC5enkzwMgms.c.BfZ.KBfqp7eXRVja4UZkC6WpQShrQ0u",
+      "name": "Ayah/Bunda Ananda ALDEN HAFIZUDDIN AZIZAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ALDEN%20HAFIZUDDIN%20AZIZAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 69,
+      "username": "athif",
+      "password": "$2b$10$rz86kWDSCGcAOb54WxyGBOBYaa8dELc6woxZzPneBpGMluGjSC4cK",
+      "name": "Ayah/Bunda Ananda ATHIF ABDURRAHMAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ATHIF%20ABDURRAHMAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 70,
+      "username": "daffa",
+      "password": "$2b$10$ZFnCjfWSdpgN9OxxoH7ixu92Ag0hzlv5ZsCRg93or8JzDyCJ4o9ry",
+      "name": "Ayah/Bunda Ananda DAFFA REZKY HABIBI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20DAFFA%20REZKY%20HABIBI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 71,
+      "username": "fadhil",
+      "password": "$2b$10$aaK/k0m0AX2WJWah.Gs35uHW9HlnujH/VRJwrwRL9oa65HXxBsBte",
+      "name": "Ayah/Bunda Ananda FADHIL HADI ARRASYID",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FADHIL%20HADI%20ARRASYID",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 72,
+      "username": "faiq",
+      "password": "$2b$10$pj1u/ty6G3ZDd229uoBLn.dsFuLq6yX0gmCAB90XHXHDgUD/ZlYa6",
+      "name": "Ayah/Bunda Ananda FAIQ ANUGERAH",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FAIQ%20ANUGERAH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:34.000Z"
+    },
+    {
+      "id": 73,
+      "username": "fatih",
+      "password": "$2b$10$lMQssWYQPOFLG8bpLfMfA.6YhWCLM/nke0utygn2dPTMJW5Jcy8Qu",
+      "name": "Ayah/Bunda Ananda FATIH MUHAMMAD ALFARIQ",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FATIH%20MUHAMMAD%20ALFARIQ",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 74,
+      "username": "fawwaz",
+      "password": "$2b$10$nQpQ7Fp2rEuD0teUpxrBa.q.XdxWQ9izvkSTfYSPSzPh/QrnsOl5a",
+      "name": "Ayah/Bunda Ananda FAWWAZ AULIA ANMAR",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FAWWAZ%20AULIA%20ANMAR",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 75,
+      "username": "fuad",
+      "password": "$2b$10$06ckwggj4xqUfCLa1HQWKePGq3lZwTSAAGcX0hzjSXJtCGyG7AGra",
+      "name": "Ayah/Bunda Ananda FUAD AL HUSAINI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FUAD%20AL%20HUSAINI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 76,
+      "username": "ghazi",
+      "password": "$2b$10$czrJgq4pCOeFxIU9wx6DjukR96KEbsPI4ij8FHOXQVlrTJ4FhMd86",
+      "name": "Ayah/Bunda Ananda GHAZI FADHIL HILMI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20GHAZI%20FADHIL%20HILMI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 77,
+      "username": "irfan",
+      "password": "$2b$10$oNjpvz7iYB5QYcQIfkG1VuW28DuabUs6p/cOIrT6Gn4qeReAtZy5G",
+      "name": "Ayah/Bunda Ananda IRFAN FATURRIZKI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20IRFAN%20FATURRIZKI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 78,
+      "username": "jevan",
+      "password": "$2b$10$2OS1zQQEyXKbX8bcwU8VwuEWdcDLkPPu2NuSCvyOsF8OqekO/7Gq6",
+      "name": "Ayah/Bunda Ananda JEVAN DANISH DHAIFULLAH ",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20JEVAN%20DANISH%20DHAIFULLAH%20",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 79,
+      "username": "khairul",
+      "password": "$2b$10$N0xBJtvXZXSUNHp32qRBeOE7k1wUv/pKRrLJlCVYe6m/gb1fSrr5K",
+      "name": "Ayah/Bunda Ananda KHAIRUL ABDIL",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20KHAIRUL%20ABDIL",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 80,
+      "username": "m",
+      "password": "$2b$10$n0q6GyOi.9lJOez8bHJ8G.ySzlkkUYUD5G05aTPaS9eIF2DNwDoZe",
+      "name": "Ayah/Bunda Ananda M. ZAKI MUBARRAQ DANI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20M.%20ZAKI%20MUBARRAQ%20DANI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 81,
+      "username": "moh",
+      "password": "$2b$10$KQ6OTyqfh.5XoEgUcJasquT/kKAm8sWlnRBlTgLTaG.8zbK2ZsqFO",
+      "name": "Ayah/Bunda Ananda MOH. FADIL ALFARISI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MOH.%20FADIL%20ALFARISI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 82,
+      "username": "muhammad4",
+      "password": "$2b$10$gqOfpu1gLpN2hcbGx3KlJO4R1rVVM521rwM1AlwvO0GS3BGVaSZEe",
+      "name": "Ayah/Bunda Ananda MUHAMMAD AZKA FIRMANSYAH",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20AZKA%20FIRMANSYAH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:35.000Z"
+    },
+    {
+      "id": 83,
+      "username": "muhammad5",
+      "password": "$2b$10$zpfGcVYrGYp5fdwCBfzwSOtRHa7.wUnDg1Yeu1iaX7sgu0N7OGeCi",
+      "name": "Ayah/Bunda Ananda MUHAMMAD SAID ALAMSYAH",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20SAID%20ALAMSYAH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 84,
+      "username": "muhammad6",
+      "password": "$2b$10$SVAAncJ8OWLq3QVYljEO/OxCpvEuiEaGfEcJSHDecpvKHttoCVsXK",
+      "name": "Ayah/Bunda Ananda MUHAMMAD SULTAN FAKHRI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20SULTAN%20FAKHRI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 85,
+      "username": "muhammad7",
+      "password": "$2b$10$9ISNLMFLspKU0DnqGMueg.pj57O6ZCLMNxzkJrak7FPQZwvScl3bu",
+      "name": "Ayah/Bunda Ananda MUHAMMAD YUSUF AL GHIFARI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20YUSUF%20AL%20GHIFARI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 86,
+      "username": "naufal",
+      "password": "$2b$10$BqXzEzZD4qQTFcwCZjWU1OLx3VFkAHAmIaclVdUBzDgw5ybvQu1tW",
+      "name": "Ayah/Bunda Ananda NAUFAL DZAKI WIJAYA",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20NAUFAL%20DZAKI%20WIJAYA",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 87,
+      "username": "qurzadha",
+      "password": "$2b$10$peAG5VlkGQM.p6HEEM3zA.1cJg6.ittGipYkE9CTRDoZmROgkzZ5y",
+      "name": "Ayah/Bunda Ananda QURZADHA ALFARIZI ADIANSYA",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20QURZADHA%20ALFARIZI%20ADIANSYA",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 88,
+      "username": "rahid",
+      "password": "$2b$10$jGfqKi7I7uYfCzaoWt5o3ezLVKLlfvUdVIc9Y54y/Tz4VJJ1E01ze",
+      "name": "Ayah/Bunda Ananda RAHID RAMADHAN JAS",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20RAHID%20RAMADHAN%20JAS",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 89,
+      "username": "sahel",
+      "password": "$2b$10$pYMVxtTbhj1viRyqMnJFaeDwG1PztppieC33cXXdYIKzdrVwhY1s.",
+      "name": "Ayah/Bunda Ananda SAHEL AIMAN SADAAD",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20SAHEL%20AIMAN%20SADAAD",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 90,
+      "username": "wafi",
+      "password": "$2b$10$Oglb8098adA5dYsVSeKy7.KHTxG.XoxbCFV4VyOhdp8HlYm6EA7oa",
+      "name": "Ayah/Bunda Ananda WAFI ANRRI AKRAM",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20WAFI%20ANRRI%20AKRAM",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 91,
+      "username": "afdal",
+      "password": "$2b$10$G/DRN/XVKsq5hFc.CJPAD.FZ7pmGI0EzOZJM9UEf4wYBJnH80Kz3q",
+      "name": "Ayah/Bunda Ananda AFDAL HIDAYATUL RAHMAT",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AFDAL%20HIDAYATUL%20RAHMAT",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 92,
+      "username": "aditya",
+      "password": "$2b$10$8p4K7drZvRyde4LRgomPFOjQa4xUw9eQEG2Bc6IRQvzBLzvCOp.qK",
+      "name": "Ayah/Bunda Ananda ADITYA DAFFA FATONI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ADITYA%20DAFFA%20FATONI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 93,
+      "username": "ahmad",
+      "password": "$2b$10$03VRRk9JHpAvfpHsq0t3MOqui9XdXH2kIH4jWt01hPz1ZQSoQthu2",
+      "name": "Ayah/Bunda Ananda AHMAD HANNAN ZAIDAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AHMAD%20HANNAN%20ZAIDAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:36.000Z"
+    },
+    {
+      "id": 94,
+      "username": "alif",
+      "password": "$2b$10$T9/3BTziUIFBOWxpWZLVBO3dz6vo6jKz46v6CYIL4B1I6T/vwy.3i",
+      "name": "Ayah/Bunda Ananda ALIF KHALFANI AYDIN RAMADHAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ALIF%20KHALFANI%20AYDIN%20RAMADHAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:37.000Z"
+    },
+    {
+      "id": 95,
+      "username": "bariq",
+      "password": "$2b$10$fTdgPOjigqKdDocRsS08d.es/wEdFrRh3yWBOVomeNVmd.oyJkUUq",
+      "name": "Ayah/Bunda Ananda BARIQ ZABIR AHMADI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20BARIQ%20ZABIR%20AHMADI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:37.000Z"
+    },
+    {
+      "id": 96,
+      "username": "darma",
+      "password": "$2b$10$NqqiFmFXeVD3oBvTrh34DebF5YSGg1qZ77eyLf4Y/REO1V86L/7em",
+      "name": "Ayah/Bunda Ananda DARMA WANSYAH",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20DARMA%20WANSYAH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:37.000Z"
+    },
+    {
+      "id": 97,
+      "username": "dzakwan",
+      "password": "$2b$10$z8F.amGWbXhevPszM8o8P..Q5VmIZ2mpb/KBVnBbZK8HqR.BAWmsG",
+      "name": "Ayah/Bunda Ananda DZAKWAN AFKARI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20DZAKWAN%20AFKARI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:37.000Z"
+    },
+    {
+      "id": 98,
+      "username": "fadel",
+      "password": "$2b$10$Wa/LR0NNEVTAu9REzrOiTe4eSaLoqx8Iodb7arBZVTKuJ/S/JtnIy",
+      "name": "Ayah/Bunda Ananda FADEL MUKHLISIN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FADEL%20MUKHLISIN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:37.000Z"
+    },
+    {
+      "id": 99,
+      "username": "fariid",
+      "password": "$2b$10$vZFFkRaxhcenu2k3lAGjbO/x6ihj.UfKfd4z96i.n5IwsEf.1LLqu",
+      "name": "Ayah/Bunda Ananda FARIID AL HAFIIZH",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FARIID%20AL%20HAFIIZH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:37.000Z"
+    },
+    {
+      "id": 100,
+      "username": "fauzan",
+      "password": "$2b$10$rvIzkXZRf5dv/LZfslHFaezbZLF6S.JffqTFa4/CsTOf1VPfP4uB2",
+      "name": "Ayah/Bunda Ananda FAUZAN KAMIL",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FAUZAN%20KAMIL",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:37.000Z"
+    },
+    {
+      "id": 101,
+      "username": "fazli",
+      "password": "$2b$10$Av6H8XHu8HBKHDC7OppLOem0CBYGVZwXJPmrtqBxQISPBA.D7aEi.",
+      "name": "Ayah/Bunda Ananda FAZLI AZZAM",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FAZLI%20AZZAM",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:37.000Z"
+    },
+    {
+      "id": 102,
+      "username": "fudhail",
+      "password": "$2b$10$.VsA8IYOCkDv97Q2HT5FAuFdFIT4gTDiSy6FymoUR32i.2FjXu1fC",
+      "name": "Ayah/Bunda Ananda FUDHAIL IHSAN AYYASHI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FUDHAIL%20IHSAN%20AYYASHI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:38.000Z"
+    },
+    {
+      "id": 103,
+      "username": "m1",
+      "password": "$2b$10$7itoH0QRJYXP2ztqouv/yuBweBm94sSYkpoCAffxH8fNhTjIAv29i",
+      "name": "Ayah/Bunda Ananda M. ZIDAN ",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20M.%20ZIDAN%20",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:38.000Z"
+    },
+    {
+      "id": 104,
+      "username": "habri",
+      "password": "$2b$10$M0eflf4Y4H4d5k/5ihRhTOE1BzurJfbFjh0HiDe4A67/qCVtfmwUu",
+      "name": "Ayah/Bunda Ananda HABRI GHASSANI ARDI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20HABRI%20GHASSANI%20ARDI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:38.000Z"
+    },
+    {
+      "id": 105,
+      "username": "khairil",
+      "password": "$2b$10$xc3ju.8ZrC2RzDtVs3/wMe.MsLjS4/IFblrKOImIn3whPqQPn/QD6",
+      "name": "Ayah/Bunda Ananda KHAIRIL ABDIL",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20KHAIRIL%20ABDIL",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:38.000Z"
+    },
+    {
+      "id": 106,
+      "username": "izzan",
+      "password": "$2b$10$hQrLbrER31Shp2X7yQuQ6O3A5ihxBhqhm/KiSs2tf9Qh410CDySBm",
+      "name": "Ayah/Bunda Ananda IZZAN FARHAN AHMAD",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20IZZAN%20FARHAN%20AHMAD",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:38.000Z"
+    },
+    {
+      "id": 107,
+      "username": "keefa",
+      "password": "$2b$10$aOJoT2RwAwclzlPQQBPkVeHgt8ZFiBTEdcN.mbVZBfGN3lapPett.",
+      "name": "Ayah/Bunda Ananda KEEFA HAFIDZ IBADURRAHMAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20KEEFA%20HAFIDZ%20IBADURRAHMAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:38.000Z"
+    },
+    {
+      "id": 108,
+      "username": "m2",
+      "password": "$2b$10$YoiR0XruS7dP14fKuPbLUum2nEAUatqhr6yoVuoUMKfHzqythdpTi",
+      "name": "Ayah/Bunda Ananda M. IRHAB NABIL",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20M.%20IRHAB%20NABIL",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:38.000Z"
+    },
+    {
+      "id": 109,
+      "username": "mohammad",
+      "password": "$2b$10$5SEeBezOpvcTOXaKDxRLG.ao5Cg/2qNSXyNJzP56d/tGIxcHBBGAy",
+      "name": "Ayah/Bunda Ananda MOHAMMAD AZKA ",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MOHAMMAD%20AZKA%20",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 110,
+      "username": "muhammad8",
+      "password": "$2b$10$W1BIBVKNMcHhgp8/ZN//aeBt2UaKAT1MZKGpy/8nYEQe3XqpW0XRe",
+      "name": "Ayah/Bunda Ananda MUHAMMAD ABDURRAHMAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20ABDURRAHMAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 111,
+      "username": "muhammad9",
+      "password": "$2b$10$2NdAj1NSHJElc1CMZ6.uDO8qzj0E2p.BsAnOV9Zv3ZRPhgVqS9syW",
+      "name": "Ayah/Bunda Ananda MUHAMMAD FAHRI KAMIL",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20FAHRI%20KAMIL",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 112,
+      "username": "muhammad10",
+      "password": "$2b$10$juLRK8DyZ9FAwMdQG6AePeCndI/CGlfOqgL89Q4zZzk.Lma/rmWvK",
+      "name": "Ayah/Bunda Ananda MUHAMMAD SOLIHIN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20SOLIHIN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 113,
+      "username": "naufal1",
+      "password": "$2b$10$21Dc8SfAw2MTw2f2Z/whnOw7bc8zBqAhI/VroXHQKFKrKdg2fB3JW",
+      "name": "Ayah/Bunda Ananda NAUFAL ARIIQ FADHLURROHMAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20NAUFAL%20ARIIQ%20FADHLURROHMAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 114,
+      "username": "naufal2",
+      "password": "$2b$10$R3QDmD4IaobqLQZFuqGFweRtjIAQk7fqMOL/eq2jV805DKFYURScK",
+      "name": "Ayah/Bunda Ananda NAUFAL DZAKWAN HANIF",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20NAUFAL%20DZAKWAN%20HANIF",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 115,
+      "username": "rifqi",
+      "password": "$2b$10$vTUUFybG4K8qYY/WWdztg.VHJA9lTBWfBEBW7Y..TpOumvQ2GvbvK",
+      "name": "Ayah/Bunda Ananda RIFQI DWI SETIAWAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20RIFQI%20DWI%20SETIAWAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 116,
+      "username": "rizuka",
+      "password": "$2b$10$ZzntLWMABCES8VLu.8u1.O34GJ0vStpsP/Gq/ZqvrpaJvelQiMml.",
+      "name": "Ayah/Bunda Ananda RIZUKA SYAHRIZA AZHARI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20RIZUKA%20SYAHRIZA%20AZHARI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 117,
+      "username": "abid",
+      "password": "$2b$10$8sGyD1zH4nlucodKY01jQuRqHnjG./a.yuPjQslV3Kb6i0wBque26",
+      "name": "Ayah/Bunda Ananda ABID YUSRI ABQARY",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ABID%20YUSRI%20ABQARY",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 118,
+      "username": "agus",
+      "password": "$2b$10$Y/fBkrDWkXMH/86zeZVylezahAJFfPi4qXQ4IC2AX5GIYC0AaSsHm",
+      "name": "Ayah/Bunda Ananda AGUS NUR RAMADANI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AGUS%20NUR%20RAMADANI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 119,
+      "username": "ahdal",
+      "password": "$2b$10$eS0dUOCYimw6uDivEB.JpOFdbZEAAP5jLyny6LkCGz//rAZESz7dS",
+      "name": "Ayah/Bunda Ananda AHDAL ALI HAJJ",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AHDAL%20ALI%20HAJJ",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 120,
+      "username": "ahmad1",
+      "password": "$2b$10$FFX/4aoNNu.FfLQ955Kv6uRW.MjyGVT.ck2tvC83ylN0TdK1IGQyq",
+      "name": "Ayah/Bunda Ananda AHMAD AGHA ZIKRI SITOMPUL",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AHMAD%20AGHA%20ZIKRI%20SITOMPUL",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:39.000Z"
+    },
+    {
+      "id": 121,
+      "username": "alden1",
+      "password": "$2b$10$GsWNgJ1qf2VZkdOHUBS5N.aB4MomfM5r3sJUlXfrmfXlbx9VaGDBq",
+      "name": "Ayah/Bunda Ananda ALDEN HAFIZUDDIN AZIZAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ALDEN%20HAFIZUDDIN%20AZIZAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 122,
+      "username": "attalariq",
+      "password": "$2b$10$p9/qe4tP9hpHyVN0ntRMwuatbaDnukQ9d.97EuMoS/38JqC7QJNKq",
+      "name": "Ayah/Bunda Ananda ATTALARIQ SYAH HENDRIAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ATTALARIQ%20SYAH%20HENDRIAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 123,
+      "username": "byantara",
+      "password": "$2b$10$0ylj/vLXtgl9/y3sqU2YGultxXw39JdaXIIzXE0SCuGHGJ/SrisvG",
+      "name": "Ayah/Bunda Ananda BYANTARA LUTHFI ARDANA",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20BYANTARA%20LUTHFI%20ARDANA",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 124,
+      "username": "daffa1",
+      "password": "$2b$10$xmj8ZkFAHG0vj2GdzaOyI.tvumoVROYDZJHaRdmiGZYUHtFaw2wm2",
+      "name": "Ayah/Bunda Ananda DAFFA FAYYAD ARROFI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20DAFFA%20FAYYAD%20ARROFI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 125,
+      "username": "fadhli",
+      "password": "$2b$10$s6mBbsqnZdeuzIWhoXzD/uECf7oPTdmBjb/HQYAeYqEKqfSG7KXJm",
+      "name": "Ayah/Bunda Ananda FADHLI DZIL IKRAM",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20FADHLI%20DZIL%20IKRAM",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 126,
+      "username": "hafiz",
+      "password": "$2b$10$VMQ.pKZpqfg3CxFb7WKvQe95YXiCBHngKIK3Kjb0IBCOx13IXM466",
+      "name": "Ayah/Bunda Ananda HAFIZ JABâ€™BAR MAULANA",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20HAFIZ%20JAB%E2%80%99BAR%20MAULANA",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 127,
+      "username": "ibnu",
+      "password": "$2b$10$tRzkw/k8Ri7T7f7nkVajre.3.e8//MA29K3x2emJY631YOTmQzZZu",
+      "name": "Ayah/Bunda Ananda IBNU KHAIRAN KETAREN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20IBNU%20KHAIRAN%20KETAREN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 128,
+      "username": "m3",
+      "password": "$2b$10$GjyrC4LN47quhxmonhgcKeOnvVG9ATWCO3cCxFeWxOb0M7UY6WftC",
+      "name": "Ayah/Bunda Ananda M. FAQIH HALIM",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20M.%20FAQIH%20HALIM",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 129,
+      "username": "m4",
+      "password": "$2b$10$aLMPKYahwxBY07Aiu0KGUOn6i37JvxEblUyefZLZBC44J9kr.1G1S",
+      "name": "Ayah/Bunda Ananda M. RAFFA NOVRIANZAH",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20M.%20RAFFA%20NOVRIANZAH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 130,
+      "username": "m5",
+      "password": "$2b$10$YLpgq.WXPsVdWoJfB7IIIOtH9xi90.CIPUGc7PQecAL3ecM4OeP7a",
+      "name": "Ayah/Bunda Ananda M. SYAUQI FIRDAUS",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20M.%20SYAUQI%20FIRDAUS",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:40.000Z"
+    },
+    {
+      "id": 131,
+      "username": "muhammad11",
+      "password": "$2b$10$vta/MEDAV7qmk9nWY5EUmuJkmJn7f/8eqR5CBy1m.rdF.As3tMAfm",
+      "name": "Ayah/Bunda Ananda MUHAMMAD AQIL ALFATH ELMAIS",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20AQIL%20ALFATH%20ELMAIS",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 132,
+      "username": "muhammad12",
+      "password": "$2b$10$AmAWWko41cwdtYVmDQlWguRmnMMfSIlGYcM9nBt982mx8tzZ.DWsS",
+      "name": "Ayah/Bunda Ananda MUHAMMAD FIKRI KHOIR",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20FIKRI%20KHOIR",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 133,
+      "username": "muhammad13",
+      "password": "$2b$10$aemKdk8ys7WdWgnz31pZlO9hy630k0miOWZFJvWKjM/LZQgJg8N1y",
+      "name": "Ayah/Bunda Ananda MUHAMMAD IBNU YUSUF",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20IBNU%20YUSUF",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 134,
+      "username": "muhammad14",
+      "password": "$2b$10$V7dVQjjJdXiOneojc4r5vuEaYL/jhcIEwKvmsH1ko5VGzSXZOFLja",
+      "name": "Ayah/Bunda Ananda MUHAMMAD MUMTAZUL AZKA",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20MUHAMMAD%20MUMTAZUL%20AZKA",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 135,
+      "username": "naufal3",
+      "password": "$2b$10$U3R1btaIeRSpRjPidlKgy.NXirbe7YGaMkN7RnWBKy/vWr7JcvvNK",
+      "name": "Ayah/Bunda Ananda NAUFAL KHOIRUL AZHHAR",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20NAUFAL%20KHOIRUL%20AZHHAR",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 136,
+      "username": "nouval",
+      "password": "$2b$10$94DSY8lQxICRAm/WdeVad.XplVnakhx24GDxRAT.WyRonsHaLdBCC",
+      "name": "Ayah/Bunda Ananda NOUVAL ADITYA NUGRAHA ZALUKHU",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20NOUVAL%20ADITYA%20NUGRAHA%20ZALUKHU",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 137,
+      "username": "reno",
+      "password": "$2b$10$0Hyx6YHo8vHUohaN2GLaRegwBbBSnRW8rJ.pLa.abjomtXD5e4bv2",
+      "name": "Ayah/Bunda Ananda RENO PANGESTU",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20RENO%20PANGESTU",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 138,
+      "username": "riziq",
+      "password": "$2b$10$f4zs20d0cklYJgyRvqBKyufZtsBEla8qUPyhN9k/1bTD2LhN3oO4K",
+      "name": "Ayah/Bunda Ananda RIZIQ FRIZIANSYAH",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20RIZIQ%20FRIZIANSYAH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 139,
+      "username": "rizky",
+      "password": "$2b$10$0DyJDK99JxctBXZUVDDoKuQ5fH5WiaZNKDPQ.mXwvo3en76sOG88G",
+      "name": "Ayah/Bunda Ananda RIZKY AL FARIZ",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20RIZKY%20AL%20FARIZ",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 140,
+      "username": "sayyid",
+      "password": "$2b$10$Jk7PHO.VSE/mPZl30vkT3OZMwbdZrjyp68rTBgzbqn.TO0VckcKPS",
+      "name": "Ayah/Bunda Ananda SAYYID ALFATH FAEYZA",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20SAYYID%20ALFATH%20FAEYZA",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:41.000Z"
+    },
+    {
+      "id": 141,
+      "username": "adi",
+      "password": "$2b$10$RXHxGVxD0WLdiD.Zq0P9Uu3H3EmJoDUg.IqxcScQanISfcHBy1Hae",
+      "name": "Ayah/Bunda Ananda ADI ZAMRI RAHMAN",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ADI%20ZAMRI%20RAHMAN",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:42.000Z"
+    },
+    {
+      "id": 142,
+      "username": "ahmad2",
+      "password": "$2b$10$gIx.N7WOpSsYKLWQgckWK.Rax.3mIk51KHKpHr8/GrNV7UkWOTaEK",
+      "name": "Ayah/Bunda Ananda AHMAD ABID",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AHMAD%20ABID",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:42.000Z"
+    },
+    {
+      "id": 143,
+      "username": "ahmad3",
+      "password": "$2b$10$s4/Rhnu8NWwtkoirrGRDVe0o.ZoQLRt1MAS16IZiPCjg0T8U0hvGq",
+      "name": "Ayah/Bunda Ananda AHMAD ZAKKI AL-MUFLIH",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AHMAD%20ZAKKI%20AL-MUFLIH",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:42.000Z"
+    },
+    {
+      "id": 144,
+      "username": "al",
+      "password": "$2b$10$mYfSYQsY6QnYFhOzARBvKuWBYk9HS/RTWG5SmEWfV58XSEvK9Mqiq",
+      "name": "Ayah/Bunda Ananda AL FIRASH FAYYAD AZROM",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20AL%20FIRASH%20FAYYAD%20AZROM",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:42.000Z"
+    },
+    {
+      "id": 145,
+      "username": "alkindi",
+      "password": "$2b$10$AWMi0N4zPiXmcq3IBGcVnOheW/Ha3kWjRSW0lhQWKfJ.nZcD.gNsK",
+      "name": "Ayah/Bunda Ananda ALKINDI ANOURI",
+      "role": "ortu",
+      "roles": [
+        "ortu"
+      ],
+      "nuptk": null,
+      "gender": null,
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ayah%2FBunda%20Ananda%20ALKINDI%20ANOURI",
+      "class_name": null,
+      "child_id": null,
+      "created_at": "2026-07-31T12:33:42.000Z"
+    }
+  ]
+}

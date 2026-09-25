@@ -1,0 +1,7 @@
+<CustomSelect value={selectedReportType} onChange={setSelectedReportType} options={[{
+                value: 'absensi_siswa',
+                label: 'Absensi Siswa'
+              }, {
+                value: 'sholat_siswa',
+                label: 'Laporan Sholat Siswa'
+              }]} />

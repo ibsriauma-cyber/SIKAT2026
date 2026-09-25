@@ -1,0 +1,1 @@
+sed -i 's/    \.\.\.classAssignments\.map(a => a\.subject_name)/    ...classAssignments.map(a => a.subject_name),\n    ...subjects.filter((s: any) => norm(s.className || s.class_name) === norm(selectedClass)).map((s: any) => s.subjectName || s.subject_name)/' src/pages/GuruPages.tsx

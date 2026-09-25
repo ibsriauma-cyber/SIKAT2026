@@ -1,0 +1,218 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile in academic system",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "username": { "type": "string" }
+      }
+    },
+    "Student": {
+      "title": "Student",
+      "description": "Student record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "nisn": { "type": "string" },
+        "class_name": { "type": "string" }
+      }
+    },
+    "Class": {
+      "title": "Class",
+      "description": "School class entity",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "level": { "type": "string" }
+      }
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "Academic subject",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "code": { "type": "string" }
+      }
+    },
+    "Schedule": {
+      "title": "Schedule",
+      "description": "Timetable schedule",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "class_name": { "type": "string" },
+        "subject": { "type": "string" },
+        "day": { "type": "string" }
+      }
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Student or teacher attendance record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "Grade": {
+      "title": "Grade",
+      "description": "Student assessment grade",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "score": { "type": "number" },
+        "type": { "type": "string" }
+      }
+    },
+    "Ibadah": {
+      "title": "Ibadah",
+      "description": "Worship tracker record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string" }
+      }
+    },
+    "KeyValue": {
+      "title": "KeyValue",
+      "description": "General settings and key-value store",
+      "type": "object",
+      "properties": {
+        "k": { "type": "string" },
+        "v": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User accounts collection"
+    },
+    "/students/{studentId}": {
+      "schema": "Student",
+      "description": "Student records collection"
+    },
+    "/classes/{classId}": {
+      "schema": "Class",
+      "description": "Classes collection"
+    },
+    "/subjects/{subjectId}": {
+      "schema": "Subject",
+      "description": "Subjects collection"
+    },
+    "/academic_terms/{termId}": {
+      "schema": "KeyValue",
+      "description": "Academic terms collection"
+    },
+    "/schedules/{scheduleId}": {
+      "schema": "Schedule",
+      "description": "Schedules collection"
+    },
+    "/teaching_assignments/{assignmentId}": {
+      "schema": "KeyValue",
+      "description": "Teaching assignments collection"
+    },
+    "/student_attendance/{attendanceId}": {
+      "schema": "Attendance",
+      "description": "Student attendance collection"
+    },
+    "/teacher_attendance/{attendanceId}": {
+      "schema": "Attendance",
+      "description": "Teacher attendance collection"
+    },
+    "/grades/{gradeId}": {
+      "schema": "Grade",
+      "description": "Student grades collection"
+    },
+    "/laporan_harian/{reportId}": {
+      "schema": "KeyValue",
+      "description": "Daily reports collection"
+    },
+    "/ibadah_siswa/{recordId}": {
+      "schema": "Ibadah",
+      "description": "Student worship tracking"
+    },
+    "/ibadah_guru/{recordId}": {
+      "schema": "Ibadah",
+      "description": "Teacher worship tracking"
+    },
+    "/pemantauan_pagi/{recordId}": {
+      "schema": "Attendance",
+      "description": "Morning monitoring records"
+    },
+    "/kinerja_staf/{recordId}": {
+      "schema": "KeyValue",
+      "description": "Staff performance records"
+    },
+    "/sarpras/{itemId}": {
+      "schema": "KeyValue",
+      "description": "School assets and facilities"
+    },
+    "/leave_requests/{requestId}": {
+      "schema": "KeyValue",
+      "description": "Leave requests"
+    },
+    "/announcements/{announcementId}": {
+      "schema": "KeyValue",
+      "description": "School announcements"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "KeyValue",
+      "description": "User notifications"
+    },
+    "/cbt_exams/{examId}": {
+      "schema": "KeyValue",
+      "description": "Computer based tests"
+    },
+    "/cbt_questions/{questionId}": {
+      "schema": "KeyValue",
+      "description": "Test questions"
+    },
+    "/cbt_submissions/{submissionId}": {
+      "schema": "KeyValue",
+      "description": "Student exam submissions"
+    },
+    "/materi_ajar/{materiId}": {
+      "schema": "KeyValue",
+      "description": "Learning materials"
+    },
+    "/materi_objectives/{objectiveId}": {
+      "schema": "KeyValue",
+      "description": "Learning objectives"
+    },
+    "/nilai_sikap/{recordId}": {
+      "schema": "KeyValue",
+      "description": "Attitude assessment records"
+    },
+    "/agenda/{agendaId}": {
+      "schema": "KeyValue",
+      "description": "School agenda"
+    },
+    "/bk_cases/{caseId}": {
+      "schema": "KeyValue",
+      "description": "Counseling cases"
+    },
+    "/academic_history/{historyId}": {
+      "schema": "KeyValue",
+      "description": "Student academic history"
+    },
+    "/key_value_store/{keyId}": {
+      "schema": "KeyValue",
+      "description": "Global application key-value configuration and state"
+    },
+    "/system_test/{testId}": {
+      "schema": "KeyValue",
+      "description": "System health test records"
+    }
+  }
+}
