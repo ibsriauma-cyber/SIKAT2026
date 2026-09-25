@@ -57,18 +57,18 @@ export function Login() {
         body: JSON.stringify({ username, password })
       });
       
-      if (response.status === 'success' && response.user) {
+      if (response && response.status === 'success' && response.user) {
         login(response.user.id.toString(), response.user);
         setLoading(false);
         return;
       } else {
-        setError(response.message || 'Username atau password salah');
+        setError(response?.message || 'Username atau password salah');
         setLoading(false);
         return;
       }
-    } catch (apiError) {
+    } catch (apiError: any) {
       console.warn("API Login failed", apiError);
-      setError('Terjadi kesalahan pada server. Coba lagi nanti.');
+      setError(apiError?.message || 'Terjadi kesalahan pada server. Coba lagi nanti.');
     }
     setLoading(false);
   };

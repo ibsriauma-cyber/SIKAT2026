@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { remoteStorage } from '../../lib/remoteStorage';
 import { ChevronDown } from 'lucide-react';
 import { apiClient } from '../../lib/apiClient';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'motion/react';
 
 export function TermSwitcher() {
   const [terms, setTerms] = useState<any[]>([]);
