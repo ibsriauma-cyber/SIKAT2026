@@ -1080,6 +1080,8 @@ export function KamadIbadahSiswa() {
 }
 import { KamadWeeklyRecapModal } from '../components/KamadWeeklyRecapModal';
 
+let globalKinerjaCache: Record<string, any[]> = {};
+
 export function KamadKinerjaStaf() {
   const _syncTick = useRealtime();
   const [selectedStaf, setSelectedStaf] = useState<any>(null);
@@ -1091,36 +1093,71 @@ export function KamadKinerjaStaf() {
   });
 
   // Jobdesk structure according to SOP
-  const [stafList, setStafList] = useState<any[]>([]);
+  const [stafList, setStafList] = useState<any[]>(() => globalKinerjaCache[kinerjaStartDate] || []);
   
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        let [
-          users,
-          kinerja,
-          schedules,
-          assignments,
-          studentAttendance,
-          pemantauanPagi,
-          nilaiSikap,
-          ibadahSiswa,
-          laporanHarian,
-          materiAjar,
-          classes
-        ] = await Promise.all([
-          apiClient('/crud.php?table=users').catch(() => []),
-          apiClient('/crud.php?table=kinerja_staf').catch(() => []),
-          apiClient('/crud.php?table=schedules').catch(() => []),
-          apiClient('/crud.php?table=teaching_assignments').catch(() => []),
-          apiClient('/crud.php?table=student_attendance').catch(() => []),
-          apiClient('/crud.php?table=pemantauan_pagi').catch(() => []),
-          apiClient('/crud.php?table=nilai_sikap').catch(() => []),
-          apiClient('/crud.php?table=ibadah_siswa').catch(() => []),
-          apiClient('/crud.php?table=laporan_harian').catch(() => []),
-          apiClient('/crud.php?table=materi_ajar').catch(() => []),
-          apiClient('/crud.php?table=classes').catch(() => [])
-        ]);
+        let users: any[] = [];
+        let kinerja: any[] = [];
+        let schedules: any[] = [];
+        let assignments: any[] = [];
+        let studentAttendance: any[] = [];
+        let pemantauanPagi: any[] = [];
+        let nilaiSikap: any[] = [];
+        let ibadahSiswa: any[] = [];
+        let laporanHarian: any[] = [];
+        let materiAjar: any[] = [];
+        let classes: any[] = [];
+
+        try {
+          const bundleRes = await apiClient('/kinerja_bundle.php');
+          const data = bundleRes?.status === 'success' ? bundleRes.data : bundleRes;
+          if (data && data.users) {
+            users = data.users || [];
+            kinerja = data.kinerja || [];
+            schedules = data.schedules || [];
+            assignments = data.assignments || [];
+            studentAttendance = data.studentAttendance || [];
+            pemantauanPagi = data.pemantauanPagi || [];
+            nilaiSikap = data.nilaiSikap || [];
+            ibadahSiswa = data.ibadahSiswa || [];
+            laporanHarian = data.laporanHarian || [];
+            materiAjar = data.materiAjar || [];
+            classes = data.classes || [];
+          }
+        } catch (bundleErr) {
+          console.warn('Bundle fetch fallback to individual tables:', bundleErr);
+        }
+
+        if (users.length === 0) {
+          const res = await Promise.all([
+            apiClient('/crud.php?table=users').catch(() => []),
+            apiClient('/crud.php?table=kinerja_staf').catch(() => []),
+            apiClient('/crud.php?table=schedules').catch(() => []),
+            apiClient('/crud.php?table=teaching_assignments').catch(() => []),
+            apiClient('/crud.php?table=student_attendance').catch(() => []),
+            apiClient('/crud.php?table=pemantauan_pagi').catch(() => []),
+            apiClient('/crud.php?table=nilai_sikap').catch(() => []),
+            apiClient('/crud.php?table=ibadah_siswa').catch(() => []),
+            apiClient('/crud.php?table=laporan_harian').catch(() => []),
+            apiClient('/crud.php?table=materi_ajar').catch(() => []),
+            apiClient('/crud.php?table=classes').catch(() => [])
+          ]);
+          [
+            users,
+            kinerja,
+            schedules,
+            assignments,
+            studentAttendance,
+            pemantauanPagi,
+            nilaiSikap,
+            ibadahSiswa,
+            laporanHarian,
+            materiAjar,
+            classes
+          ] = res;
+        }
         
         if (Array.isArray(materiAjar)) {
           materiAjar.sort((a, b) => new Date(b.created_at || b.date || 0).getTime() - new Date(a.created_at || a.date || 0).getTime());
@@ -1513,6 +1550,7 @@ const match = laporanHarian.find((lh: any) => {
           }
         });
 
+        globalKinerjaCache[filterDateStr] = mappedStaf;
         setStafList(mappedStaf);
       } catch (err) {
         console.error("Failed to fetch staf list", err);

@@ -75,6 +75,49 @@ async function handleFirestoreFallback(endpoint: string, options: RequestInit = 
   }
 
   // 6. Materi ajar
+  if (endpoint.includes('kinerja_bundle')) {
+    const [
+      users,
+      kinerja,
+      schedules,
+      assignments,
+      studentAttendance,
+      pemantauanPagi,
+      nilaiSikap,
+      ibadahSiswa,
+      laporanHarian,
+      materiAjar,
+      classes
+    ] = await Promise.all([
+      clientGetCollection('users'),
+      clientGetCollection('kinerja_staf'),
+      clientGetCollection('schedules'),
+      clientGetCollection('teaching_assignments'),
+      clientGetCollection('student_attendance'),
+      clientGetCollection('pemantauan_pagi'),
+      clientGetCollection('nilai_sikap'),
+      clientGetCollection('ibadah_siswa'),
+      clientGetCollection('laporan_harian'),
+      clientGetCollection('materi_ajar'),
+      clientGetCollection('classes')
+    ]);
+    return {
+      status: 'success',
+      data: {
+        users,
+        kinerja,
+        schedules,
+        assignments,
+        studentAttendance,
+        pemantauanPagi,
+        nilaiSikap,
+        ibadahSiswa,
+        laporanHarian,
+        materiAjar,
+        classes
+      }
+    };
+  }
   if (endpoint.includes('get_materi')) {
     return clientGetMateri();
   }

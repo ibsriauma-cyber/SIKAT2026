@@ -64,8 +64,20 @@ async function startServer() {
   });
 
 
-  // Ensure database columns on start
+  // Ensure database columns and pre-warm memory cache on start
   testPoolAndInit().catch(console.error);
+
+  // Pre-warm tables in background to make Kinerja and other menus instantaneous
+  setTimeout(() => {
+    Promise.all([
+      getCollectionDocs('users'),
+      getCollectionDocs('kinerja_staf'),
+      getCollectionDocs('schedules'),
+      getCollectionDocs('teaching_assignments'),
+      getCollectionDocs('materi_ajar'),
+      getCollectionDocs('classes')
+    ]).catch(err => console.warn('[Warmup] Pre-warm notice:', err.message));
+  }, 100);
 
   // API Routes
 
@@ -407,6 +419,56 @@ async function startServer() {
     } catch (error: any) {
       console.error(error);
       res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get(['/api/kinerja_bundle', '/api/kinerja_bundle.php'], async (req, res) => {
+    try {
+      const [
+        users,
+        kinerja,
+        schedules,
+        assignments,
+        studentAttendance,
+        pemantauanPagi,
+        nilaiSikap,
+        ibadahSiswa,
+        laporanHarian,
+        materiAjar,
+        classes
+      ] = await Promise.all([
+        getCollectionDocs('users'),
+        getCollectionDocs('kinerja_staf'),
+        getCollectionDocs('schedules'),
+        getCollectionDocs('teaching_assignments'),
+        getCollectionDocs('student_attendance'),
+        getCollectionDocs('pemantauan_pagi'),
+        getCollectionDocs('nilai_sikap'),
+        getCollectionDocs('ibadah_siswa'),
+        getCollectionDocs('laporan_harian'),
+        getCollectionDocs('materi_ajar'),
+        getCollectionDocs('classes')
+      ]);
+
+      res.json({
+        status: 'success',
+        data: {
+          users,
+          kinerja,
+          schedules,
+          assignments,
+          studentAttendance,
+          pemantauanPagi,
+          nilaiSikap,
+          ibadahSiswa,
+          laporanHarian,
+          materiAjar,
+          classes
+        }
+      });
+    } catch (error: any) {
+      console.error('kinerja_bundle error:', error);
+      res.status(500).json({ status: 'error', message: error.message });
     }
   });
 
