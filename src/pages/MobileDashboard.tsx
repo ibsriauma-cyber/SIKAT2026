@@ -50,8 +50,15 @@ export function MobileDashboard() {
   useEffect(() => {
     const fetchAnnouncements = async () => {
       try {
-        const data = await apiClient('/announcements.php');
-        setAnnouncements(Array.isArray(data) ? data : []);
+        let list: any[] = [];
+        const res = await apiClient('/announcements.php');
+        if (Array.isArray(res)) list = res;
+        else if (res && Array.isArray(res.data)) list = res.data;
+        else {
+          const direct = await apiClient('/crud.php?table=announcements').catch(() => []);
+          list = Array.isArray(direct) ? direct : [];
+        }
+        setAnnouncements(list);
       } catch (err) {
         console.error('Failed to fetch from API', err);
         setAnnouncements([]);

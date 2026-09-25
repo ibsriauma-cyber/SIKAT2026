@@ -70,10 +70,15 @@ export function DashboardAdmin() {
   }]);
   const fetchData = async () => {
     try {
-      const [studentsData, classesData, usersData, attendanceData] = await Promise.all([apiClient('/crud.php?table=students'), apiClient('/crud.php?table=classes'), apiClient('/crud.php?table=users'), apiClient('/crud.php?table=student_attendance')]);
-      setStudents(studentsData);
-      setClasses(classesData);
-      setUsers(usersData);
+      const [studentsData, classesData, usersData, attendanceData] = await Promise.all([
+        apiClient('/crud.php?table=students'),
+        apiClient('/crud.php?table=classes'),
+        apiClient('/crud.php?table=users'),
+        apiClient('/crud.php?table=student_attendance')
+      ]);
+      if (Array.isArray(studentsData)) setStudents(studentsData);
+      if (Array.isArray(classesData)) setClasses(classesData);
+      if (Array.isArray(usersData)) setUsers(usersData);
 
       // Process weekly attendance
       if (Array.isArray(attendanceData)) {
@@ -127,7 +132,10 @@ export function DashboardAdmin() {
 
           if (adjustedIndex >= 0 && adjustedIndex <= 6) {
             const status = record.status; // Hadir, Sakit, Izin, Alpa
-            if (status === 'Hadir') initialWeek[adjustedIndex].Hadir += 1;else if (status === 'Sakit') initialWeek[adjustedIndex].Sakit += 1;else if (status === 'Izin') initialWeek[adjustedIndex].Izin += 1;else if (status === 'Alpa') initialWeek[adjustedIndex].Alpa += 1;
+            if (status === 'Hadir') initialWeek[adjustedIndex].Hadir += 1;
+            else if (status === 'Sakit') initialWeek[adjustedIndex].Sakit += 1;
+            else if (status === 'Izin') initialWeek[adjustedIndex].Izin += 1;
+            else if (status === 'Alpa') initialWeek[adjustedIndex].Alpa += 1;
           }
         });
 
@@ -136,12 +144,12 @@ export function DashboardAdmin() {
         setWeeklyAttendance(activeDays);
       }
     } catch (e) {
-      console.error(e);
+      console.error('Failed to fetch dashboard data:', e);
     }
   };
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [_syncTick]);
   const navigate = useNavigate();
   const [announcements, setAnnouncements] = useState<any[]>([]);
   const [activeTermName, setActiveTermName] = useState<string>('-');
@@ -167,15 +175,67 @@ export function DashboardAdmin() {
     }).catch(console.error);
   }, [_syncTick]);
   useEffect(() => {
-    const fetchAnnouncements = async () => {
+    const fetchAnnouncementsAndAgenda = async () => {
       try {
-        const data = await apiClient('/announcements.php');
-        setAnnouncements(Array.isArray(data) ? data : []);
+        let combined: any[] = [];
+        
+        // 1. Load Announcements from API / Firestore
+        let annList: any[] = [];
+        const res = await apiClient('/announcements.php');
+        if (Array.isArray(res)) {
+          annList = res;
+        } else if (res && Array.isArray(res.data)) {
+          annList = res.data;
+        } else {
+          const direct = await apiClient('/crud.php?table=announcements').catch(() => []);
+          annList = Array.isArray(direct) ? direct : [];
+        }
+
+        annList.forEach((a: any) => {
+          if (a && a.isPublished !== false && a.status !== 'Draft') {
+            combined.push({
+              id: a.id || `ann_${Date.now()}_${Math.random()}`,
+              title: a.title || 'Pengumuman Madrasah',
+              content: a.content || '',
+              category: a.category || 'Penting',
+              date: a.date || a.created_at || 'Terbaru',
+              isAnnouncement: true
+            });
+          }
+        });
+
+        // 2. Load Calendar / Agendas from remoteStorage or table
+        const rawAgenda = remoteStorage.getItem('mockAgenda');
+        if (rawAgenda) {
+          try {
+            const parsedAgenda = JSON.parse(rawAgenda);
+            if (Array.isArray(parsedAgenda)) {
+              const todayStr = (function(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})();
+              const activeAgendas = parsedAgenda
+                .filter((ag: any) => ag && ag.event && (String(ag.date) >= todayStr || String(ag.date).startsWith(todayStr.slice(0, 7))))
+                .slice(0, 4);
+
+              activeAgendas.forEach((ag: any) => {
+                combined.push({
+                  id: ag.id || `ag_${Date.now()}_${Math.random()}`,
+                  title: ag.event,
+                  content: ag.type || 'Agenda Madrasah',
+                  category: ag.type === 'Libur Nasional' ? 'Kegiatan' : 'Penting',
+                  date: ag.date,
+                  isAgenda: true
+                });
+              });
+            }
+          } catch(e) {}
+        }
+
+        setAnnouncements(combined);
       } catch (err) {
+        console.error('Failed to fetch announcements/agenda:', err);
         setAnnouncements([]);
       }
     };
-    fetchAnnouncements();
+    fetchAnnouncementsAndAgenda();
   }, [_syncTick]);
   const totalSakit = students.reduce((acc, curr) => acc + (curr.attendance?.sick || 0), 0);
   const totalIzin = students.reduce((acc, curr) => acc + (curr.attendance?.permission || 0), 0);
@@ -249,7 +309,7 @@ export function DashboardAdmin() {
             <Users className="w-4 h-4" /> Total Pengguna
           </div>
           <div className="flex items-end mt-2">
-            <span className="text-3xl font-black text-slate-800">{mockUsers.length}</span>
+            <span className="text-3xl font-black text-slate-800">{users.length > 0 ? users.length : (mockUsers.length || 0)}</span>
           </div>
         </div>
         
@@ -258,7 +318,7 @@ export function DashboardAdmin() {
             <BookOpen className="w-4 h-4" /> Total Rombel
           </div>
           <div className="flex items-end mt-2">
-            <span className="text-3xl font-black text-slate-800">{mockClasses.length}</span>
+            <span className="text-3xl font-black text-slate-800">{classes.length > 0 ? classes.length : (mockClasses.length || 0)}</span>
           </div>
         </div>
         
