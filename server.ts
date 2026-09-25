@@ -109,7 +109,7 @@ async function startServer() {
     'subjects', 'teacher_attendance', 'laporan_harian', 'teaching_assignments', 'users'
   ];
 
-  app.all('/api/keyval.php', async (req, res) => {
+  app.all(['/api/keyval', '/api/keyval.php'], async (req, res) => {
     try {
       const method = req.method;
       if (method === 'GET') {
@@ -170,12 +170,7 @@ async function startServer() {
     if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
     try {
       const data = req.body;
-      const existing = await getCollectionDocs(table);
-      let id = data.id;
-      if (!id) {
-        const maxId = existing.reduce((max: number, x: any) => Math.max(max, Number(x.id) || 0), 0);
-        id = maxId + 1;
-      }
+      let id = data.id || `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       await saveDoc(table, id, { ...data, id });
       globalEmitter.emit('update', { table, action: 'insert', id });
       res.json({ insertId: id, id });
@@ -541,16 +536,41 @@ async function startServer() {
             if (allowedTables.includes(table)) {
               const docs = await getCollectionDocs(table);
               const whereClause = match[3];
-              if (whereClause) {
+              if (!whereClause || !whereClause.trim()) {
+                for (const docItem of docs) {
+                  if (docItem.id) {
+                    await removeDoc(table, docItem.id);
+                  }
+                }
+              } else {
                 const conds = whereClause.split(/\s+and\s+/i);
                 for (const docItem of [...docs]) {
                   let matches = true;
                   for (const cond of conds) {
-                    const m = cond.match(/(\w+)\s*=\s*'([^']*)'/);
-                    if (m) {
-                      const col = m[1];
-                      const val = m[2];
-                      if (String(docItem[col]) !== val) {
+                    const cleanedCond = cond.trim();
+                    const equalMatch = cleanedCond.match(/(\w+)\s*=\s*['"]?([^'"]*)['"]?/i);
+                    const likeMatch = cleanedCond.match(/(\w+)\s+like\s+['"]%?([^'"%]*)%?['"]/i);
+                    
+                    if (equalMatch) {
+                      const col = equalMatch[1];
+                      let val = equalMatch[2].replace(/\\'/g, "'").trim();
+                      const docVal = String(docItem[col] || '').trim();
+                      if (col.toLowerCase() === 'date') {
+                        if (!docVal.startsWith(val) && docVal !== val) {
+                          matches = false;
+                          break;
+                        }
+                      } else {
+                        if (docVal !== val) {
+                          matches = false;
+                          break;
+                        }
+                      }
+                    } else if (likeMatch) {
+                      const col = likeMatch[1];
+                      const val = likeMatch[2].trim().toLowerCase();
+                      const docVal = String(docItem[col] || '').toLowerCase();
+                      if (!docVal.includes(val)) {
                         matches = false;
                         break;
                       }

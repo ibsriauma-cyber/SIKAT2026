@@ -91,6 +91,60 @@ service cloud.firestore {
     match /key_value_store/{id} {
       allow read, write: if true;
     }
+    match /perpustakaan_buku/{id} {
+      allow read, write: if true;
+    }
+    match /perpustakaan_pinjam/{id} {
+      allow read, write: if true;
+    }
+    match /ekskul/{id} {
+      allow read, write: if true;
+    }
+    match /ekskul_members/{id} {
+      allow read, write: if true;
+    }
+    match /pelanggaran_siswa/{id} {
+      allow read, write: if true;
+    }
+    match /prestasi_siswa/{id} {
+      allow read, write: if true;
+    }
+    match /tugas_siswa/{id} {
+      allow read, write: if true;
+    }
+    match /pengumpulan_tugas/{id} {
+      allow read, write: if true;
+    }
+    match /hafalan_quran/{id} {
+      allow read, write: if true;
+    }
+    match /quran_records/{id} {
+      allow read, write: if true;
+    }
+    match /catatan_wali_kelas/{id} {
+      allow read, write: if true;
+    }
+    match /surat_peringatan/{id} {
+      allow read, write: if true;
+    }
+    match /sp_letters/{id} {
+      allow read, write: if true;
+    }
+    match /kesiswaan_sp/{id} {
+      allow read, write: if true;
+    }
+    match /alumni/{id} {
+      allow read, write: if true;
+    }
+    match /system_config/{id} {
+      allow read, write: if true;
+    }
+    match /school_profile/{id} {
+      allow read, write: if true;
+    }
+    match /settings/{id} {
+      allow read, write: if true;
+    }
     match /{document=**} {
       allow read, write: if false;
     }

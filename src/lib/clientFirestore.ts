@@ -77,8 +77,9 @@ export async function clientGetCollection(tableName: string, forceRefresh = fals
 }
 
 export async function clientSaveDoc(tableName: string, id: string | number, data: any): Promise<any> {
-  const strId = String(id);
-  const cleanData = { ...data, id: isNaN(Number(id)) ? strId : Number(id) };
+  const generatedId = id || (data?.id ? data.id : `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`);
+  const strId = String(generatedId);
+  const cleanData = { ...data, id: isNaN(Number(strId)) ? strId : Number(strId) };
 
   if (!cache[tableName]) cache[tableName] = [];
   const idx = cache[tableName].findIndex((item: any) => String(item.id) === strId);
@@ -90,10 +91,10 @@ export async function clientSaveDoc(tableName: string, id: string | number, data
 
   try {
     await setDoc(doc(db, tableName, strId), cleanData, { merge: true });
-    return { insertId: id, id };
+    return { insertId: cleanData.id, id: cleanData.id };
   } catch (err: any) {
     console.warn(`[clientFirestore] SaveDoc to Firestore delayed or failed:`, err.message);
-    return { insertId: id, id };
+    return { insertId: cleanData.id, id: cleanData.id };
   }
 }
 
@@ -176,16 +177,42 @@ export async function clientHandleQuery(sqlQuery: string): Promise<any> {
         const table = match[1];
         const docs = await clientGetCollection(table);
         const whereClause = match[3];
-        if (whereClause) {
+        if (!whereClause || !whereClause.trim()) {
+          // No WHERE clause - delete all docs in the collection
+          for (const docItem of docs) {
+            if (docItem.id) {
+              await clientDeleteDoc(table, docItem.id);
+            }
+          }
+        } else {
           const conds = whereClause.split(/\s+and\s+/i);
           for (const docItem of [...docs]) {
             let matches = true;
             for (const cond of conds) {
-              const m = cond.match(/(\w+)\s*=\s*'([^']*)'/);
-              if (m) {
-                const col = m[1];
-                const val = m[2];
-                if (String(docItem[col]) !== val) {
+              const cleanedCond = cond.trim();
+              const equalMatch = cleanedCond.match(/(\w+)\s*=\s*['"]?([^'"]*)['"]?/i);
+              const likeMatch = cleanedCond.match(/(\w+)\s+like\s+['"]%?([^'"%]*)%?['"]/i);
+              
+              if (equalMatch) {
+                const col = equalMatch[1];
+                let val = equalMatch[2].replace(/\\'/g, "'").trim();
+                const docVal = String(docItem[col] || '').trim();
+                if (col.toLowerCase() === 'date') {
+                  if (!docVal.startsWith(val) && docVal !== val) {
+                    matches = false;
+                    break;
+                  }
+                } else {
+                  if (docVal !== val) {
+                    matches = false;
+                    break;
+                  }
+                }
+              } else if (likeMatch) {
+                const col = likeMatch[1];
+                const val = likeMatch[2].trim().toLowerCase();
+                const docVal = String(docItem[col] || '').toLowerCase();
+                if (!docVal.includes(val)) {
                   matches = false;
                   break;
                 }

@@ -370,6 +370,7 @@ export function SholatZuhurWalas() {
     year: 'numeric'
   });
   useEffect(() => {
+    let isMounted = true;
     if (selectedClass) {
       const storageKey = `zuhur_${selectedClass}`;
       const existingData = JSON.parse(remoteStorage.getItem(storageKey) || '{}');
@@ -391,7 +392,32 @@ export function SholatZuhurWalas() {
         setAttendance(defaultAtt);
         setIsLocked(false);
       }
+
+      // Also query directly from database to ensure fresh state across devices & deployments
+      apiClient('/crud.php?table=ibadah_siswa').then(records => {
+        if (!isMounted || !Array.isArray(records)) return;
+        const norm = (s: any) => String(s || '').trim().toLowerCase().replace(/[\s\-_]/g, '');
+        const matching = records.filter((r: any) => 
+          norm(r.class_name) === norm(selectedClass) && 
+          String(r.type || '').toLowerCase() === 'zuhur' && 
+          String(r.date || '').startsWith(todayKey)
+        );
+        if (matching.length > 0) {
+          const dbAtt: Record<string, { status: string; ket: string }> = {};
+          matching.forEach((r: any) => {
+            dbAtt[String(r.student_id)] = {
+              status: r.status || 'Jamaah',
+              ket: r.notes || r.ket || ''
+            };
+          });
+          setAttendance(prev => ({ ...prev, ...dbAtt }));
+          setIsLocked(true);
+          existingData[todayKey] = { ...existingData[todayKey], ...dbAtt };
+          remoteStorage.setItem(storageKey, JSON.stringify(existingData));
+        }
+      }).catch(err => console.warn('Failed to load ibadah_siswa from db:', err));
     }
+    return () => { isMounted = false; };
   }, [selectedClass, students, selectedDate]);
   const handleSetStatus = (id: string, status: string) => {
     if (isLocked) return;

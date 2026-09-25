@@ -111,6 +111,7 @@ export function GuruQuranAbsensiDhuha() {
     }
   }, [availableClasses, selectedClass]);
   useEffect(() => {
+    let isMounted = true;
     if (selectedClass) {
       const storageKey = `dhuha_${selectedClass}`;
       const existingData = JSON.parse(remoteStorage.getItem(storageKey) || '{}');
@@ -133,7 +134,32 @@ export function GuruQuranAbsensiDhuha() {
         setAttendance(defaultAtt);
         setIsLocked(false);
       }
+
+      // Also query directly from database to ensure fresh state across devices & deployments
+      apiClient('/crud.php?table=ibadah_siswa').then(records => {
+        if (!isMounted || !Array.isArray(records)) return;
+        const norm = (s: any) => String(s || '').trim().toLowerCase().replace(/[\s\-_]/g, '');
+        const matching = records.filter((r: any) => 
+          norm(r.class_name) === norm(selectedClass) && 
+          String(r.type || '').toLowerCase() === 'dhuha' && 
+          String(r.date || '').startsWith(today)
+        );
+        if (matching.length > 0) {
+          const dbAtt: Record<string, { status: string; ket: string }> = {};
+          matching.forEach((r: any) => {
+            dbAtt[String(r.student_id)] = {
+              status: r.status || 'Jamaah',
+              ket: r.notes || r.ket || ''
+            };
+          });
+          setAttendance(prev => ({ ...prev, ...dbAtt }));
+          setIsLocked(true);
+          existingData[today] = { ...existingData[today], ...dbAtt };
+          remoteStorage.setItem(storageKey, JSON.stringify(existingData));
+        }
+      }).catch(err => console.warn('Failed to load ibadah_siswa Dhuha from db:', err));
     }
+    return () => { isMounted = false; };
   }, [selectedClass, students, selectedDate]);
   const handleSetStatus = (id: string, status: string) => {
     if (isLocked) return;
