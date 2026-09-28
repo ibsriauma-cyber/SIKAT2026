@@ -9,34 +9,39 @@ import { pool } from './src/lib/mysqlWrapper';
 import dotenv from 'dotenv';
 import bcrypt from 'bcryptjs';
 import cors from 'cors';
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import {
-  firestoreDb,
-  getCollectionDocs,
-  getDocById,
-  saveDoc,
-  removeDoc,
-  getKV,
-  getAllKV,
-  setKV,
-  deleteKV
-} from './src/lib/firestoreAdapter';
 
 dotenv.config();
 
+// In-memory cache for fast read responses (<1ms)
+const tableCache = new Map<string, { data: any[]; timestamp: number }>();
+const CACHE_TTL = 3000; // 3 seconds TTL
 
-
-async function testPoolAndInit() {
-  if (firestoreDb) {
-    console.log('[Firebase] Google Firebase Firestore initialized and active.');
+function invalidateCache(table?: string) {
+  if (table) {
+    tableCache.delete(table);
+  } else {
+    tableCache.clear();
   }
 }
 
-
-
-async function ensureDatabaseColumns() {
-  // Skipped for Postgres since we already fully initialized schema
+async function getCachedTableData(table: string): Promise<any[]> {
+  const cached = tableCache.get(table);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return cached.data;
+  }
+  const [rows]: any = await pool.query(`SELECT * FROM \`${table}\``);
+  const data = Array.isArray(rows) ? rows : [];
+  tableCache.set(table, { data, timestamp: Date.now() });
+  return data;
 }
+
+const allowedTables = [
+  'academic_history', 'academic_terms', 'agenda', 'announcements', 'bk_cases',
+  'cbt_exams', 'cbt_questions', 'cbt_submissions', 'classes', 'grades',
+  'ibadah_guru', 'ibadah_siswa', 'kinerja_staf', 'leave_requests', 'materi_ajar', 'materi_objectives',
+  'notifications', 'sarpras', 'schedules', 'student_attendance', 'students', 'pemantauan_pagi', 'nilai_sikap',
+  'subjects', 'teacher_attendance', 'laporan_harian', 'teaching_assignments', 'users', 'key_value_store'
+];
 
 async function startServer() {
   const app = express();
@@ -46,89 +51,78 @@ async function startServer() {
   app.use(express.json({ limit: '50mb' }));
   app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+  // Realtime Server-Sent Events (SSE)
   app.get('/api/events', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
     res.flushHeaders();
-    
-    const onUpdate = (data) => {
+
+    const onUpdate = (data: any) => {
       res.write(`data: ${JSON.stringify(data)}\n\n`);
     };
-    
+
     globalEmitter.on('update', onUpdate);
-    
+
     req.on('close', () => {
       globalEmitter.off('update', onUpdate);
     });
   });
 
-
-  // Ensure database columns and pre-warm memory cache on start
-  testPoolAndInit().catch(console.error);
-
-  // Pre-warm tables in background to make Kinerja and other menus instantaneous
-  setTimeout(() => {
-    Promise.all([
-      getCollectionDocs('users'),
-      getCollectionDocs('kinerja_staf'),
-      getCollectionDocs('schedules'),
-      getCollectionDocs('teaching_assignments'),
-      getCollectionDocs('materi_ajar'),
-      getCollectionDocs('classes')
-    ]).catch(err => console.warn('[Warmup] Pre-warm notice:', err.message));
-  }, 100);
-
-  // API Routes
-
-
-  
   app.post('/api/trigger-update', (req, res) => {
+    invalidateCache();
     globalEmitter.emit('update', { timestamp: Date.now() });
     res.json({ success: true });
   });
 
   app.get('/api/health', async (req, res) => {
     try {
+      const [r]: any = await pool.query('SELECT 1 as ping');
       res.json({
         status: 'ok',
-        database: 'google_firebase_firestore',
-        firestore: firestoreDb ? 'connected' : 'offline',
-        message: 'Database Google Firebase Firestore active'
+        database: 'mysql_realtime',
+        connected: Boolean(r && r[0]?.ping),
+        message: 'Realtime MySQL Database Active'
       });
     } catch (e: any) {
       res.status(500).json({ status: 'error', message: e.message });
     }
   });
 
-  const allowedTables = [
-    'academic_history', 'academic_terms', 'agenda', 'announcements', 'bk_cases',
-    'cbt_exams', 'cbt_questions', 'cbt_submissions', 'classes', 'grades',
-    'ibadah_guru', 'ibadah_siswa', 'kinerja_staf', 'leave_requests', 'materi_ajar', 'materi_objectives',
-    'notifications', 'sarpras', 'schedules', 'student_attendance', 'students', 'pemantauan_pagi', 'nilai_sikap',
-    'subjects', 'teacher_attendance', 'laporan_harian', 'teaching_assignments', 'users'
-  ];
-
+  // Key-Value Store endpoint (/api/keyval.php and /api/keyval)
   app.all(['/api/keyval', '/api/keyval.php'], async (req, res) => {
     try {
       const method = req.method;
       if (method === 'GET') {
         const key = req.query.key as string;
         if (key) {
-          const val = await getKV(key);
+          const [rows]: any = await pool.query('SELECT v FROM `key_value_store` WHERE `k` = ?', [key]);
+          const val = rows && rows[0] ? rows[0].v : null;
           return res.json({ value: val });
         } else {
-          const all = await getAllKV();
+          const [rows]: any = await pool.query('SELECT `k`, `v` FROM `key_value_store`');
+          const all: Record<string, string> = {};
+          if (Array.isArray(rows)) {
+            rows.forEach((r: any) => {
+              all[r.k] = r.v;
+            });
+          }
           return res.json(all);
         }
       } else if (method === 'POST') {
         const { key, value } = req.body;
         if (!key || value === undefined) return res.status(400).json({ error: 'Missing key or value' });
-        await setKV(key, String(value));
+        await pool.query('REPLACE INTO `key_value_store` (`k`, `v`) VALUES (?, ?)', [key, String(value)]);
+        globalEmitter.emit('update', { table: 'key_value_store', key });
         return res.json({ status: 'success' });
       } else if (method === 'DELETE') {
         const key = req.query.key as string;
-        await deleteKV(key);
+        if (key) {
+          await pool.query('DELETE FROM `key_value_store` WHERE `k` = ?', [key]);
+        } else {
+          await pool.query('DELETE FROM `key_value_store`');
+        }
+        globalEmitter.emit('update', { table: 'key_value_store', key });
         return res.json({ status: 'success' });
       } else {
         return res.status(405).json({ error: 'Method not allowed' });
@@ -139,12 +133,12 @@ async function startServer() {
     }
   });
 
+  // URL rewrite for crud.php
   app.all('/api/crud.php', (req, res, next) => {
-    const table = req.query.table;
-    const id = req.query.id;
+    const table = req.query.table as string;
+    const id = req.query.id as string;
     if (!table) return res.status(400).json({ error: 'Missing table param' });
-    
-    // Rewrite the url to match the existing Express routes
+
     if (id) {
       req.url = `/api/crud/${table}/${id}`;
     } else {
@@ -153,11 +147,12 @@ async function startServer() {
     next();
   });
 
+  // Generic CRUD GET
   app.get(['/api/crud/:table', '/api/data/:table'], async (req, res) => {
     const { table } = req.params;
     if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
     try {
-      const rows = await getCollectionDocs(table);
+      const rows = await getCachedTableData(table);
       res.json(rows);
     } catch (err: any) {
       console.error(`Error querying table ${table}:`, err.message);
@@ -165,55 +160,100 @@ async function startServer() {
     }
   });
 
+  // Generic CRUD POST
   app.post(['/api/crud/:table', '/api/data/:table'], async (req, res) => {
     const { table } = req.params;
     if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
     try {
       const data = req.body;
-      let id = data.id || `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      await saveDoc(table, id, { ...data, id });
-      globalEmitter.emit('update', { table, action: 'insert', id });
-      res.json({ insertId: id, id });
+      const [cols]: any = await pool.query(`SHOW COLUMNS FROM \`${table}\``);
+      const validCols = new Set(cols.map((c: any) => c.Field));
+
+      const insertObj: any = {};
+      for (const [key, val] of Object.entries(data)) {
+        if (validCols.has(key)) {
+          insertObj[key] = val;
+        }
+      }
+
+      const keys = Object.keys(insertObj);
+      if (keys.length === 0) return res.status(400).json({ error: 'No valid columns provided' });
+
+      const placeholders = keys.map(() => '?').join(', ');
+      const values = keys.map(k => insertObj[k]);
+      const sql = `REPLACE INTO \`${table}\` (${keys.map(k => `\`${k}\``).join(', ')}) VALUES (${placeholders})`;
+
+      const [result]: any = await pool.query(sql, values);
+      const insertId = result.insertId || insertObj.id;
+
+      invalidateCache(table);
+      globalEmitter.emit('update', { table, action: 'insert', id: insertId });
+      res.json({ insertId, id: insertId });
     } catch (err: any) {
+      console.error(`Error inserting into ${table}:`, err.message);
       res.status(500).json({ error: err.message });
     }
   });
 
+  // Generic CRUD PUT
   app.put(['/api/crud/:table/:id', '/api/data/:table/:id'], async (req, res) => {
     const { table, id } = req.params;
     if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
     try {
       const data = req.body;
-      await saveDoc(table, id, data);
+      const [cols]: any = await pool.query(`SHOW COLUMNS FROM \`${table}\``);
+      const validCols = new Set(cols.map((c: any) => c.Field));
+
+      const updateObj: any = {};
+      for (const [key, val] of Object.entries(data)) {
+        if (validCols.has(key) && key !== 'id') {
+          updateObj[key] = val;
+        }
+      }
+
+      const keys = Object.keys(updateObj);
+      if (keys.length > 0) {
+        const setClause = keys.map(k => `\`${k}\` = ?`).join(', ');
+        const values = [...keys.map(k => updateObj[k]), id];
+        const sql = `UPDATE \`${table}\` SET ${setClause} WHERE \`id\` = ?`;
+        await pool.query(sql, values);
+      }
+
+      invalidateCache(table);
       globalEmitter.emit('update', { table, action: 'update', id });
       res.json({ affectedRows: 1 });
     } catch (err: any) {
+      console.error(`Error updating ${table}:`, err.message);
       res.status(500).json({ error: err.message });
     }
   });
 
+  // Generic CRUD DELETE
   app.delete(['/api/crud/:table/:id', '/api/data/:table/:id'], async (req, res) => {
     const { table, id } = req.params;
     if (!allowedTables.includes(table)) return res.status(403).json({ error: 'Forbidden table' });
     try {
-      await removeDoc(table, id);
+      await pool.query(`DELETE FROM \`${table}\` WHERE \`id\` = ?`, [id]);
+      invalidateCache(table);
       globalEmitter.emit('update', { table, action: 'delete', id });
       res.json({ affectedRows: 1 });
     } catch (err: any) {
+      console.error(`Error deleting from ${table}:`, err.message);
       res.status(500).json({ error: err.message });
     }
   });
 
-  
-  // Announcements from Firestore
+  // Announcements
   app.all(['/api/announcements', '/api/announcements.php'], async (req, res) => {
     try {
       const method = req.method;
       if (method === 'GET') {
-        const rows = await getCollectionDocs('announcements');
+        const rows: any = await getCachedTableData('announcements');
         const formatted = rows.map((r: any) => ({
           ...r,
           id: String(r.id),
+          title: r.title || '',
+          content: r.content || '',
           category: r.category || 'Informasi',
           target: r.target || r.target_audience || 'Semua',
           date: r.date || r.created_at || new Date().toISOString().split('T')[0],
@@ -222,23 +262,31 @@ async function startServer() {
         res.json(formatted);
       } else if (method === 'POST') {
         const { title, content, target, category } = req.body;
-        const id = Date.now().toString();
-        await saveDoc('announcements', id, {
-          id,
-          title,
-          content,
-          target_audience: target || 'Semua',
-          category: category || 'Informasi',
-          created_at: new Date().toISOString()
-        });
-        res.json({ status: 'success', id });
+        const targetAudience = target || req.body.target_audience || 'Semua';
+        const [result]: any = await pool.query(
+          'INSERT INTO `announcements` (`title`, `content`, `target_audience`, `created_at`) VALUES (?, ?, ?, NOW())',
+          [title, content, targetAudience]
+        );
+        invalidateCache('announcements');
+        globalEmitter.emit('update', { table: 'announcements', action: 'insert' });
+        res.json({ status: 'success', id: result.insertId });
       } else if (method === 'PUT') {
-        const { id, title, content, target, category } = req.body;
-        await saveDoc('announcements', id, { title, content, target_audience: target, category });
+        const { id, title, content, target } = req.body;
+        const targetAudience = target || req.body.target_audience || 'Semua';
+        await pool.query(
+          'UPDATE `announcements` SET `title` = ?, `content` = ?, `target_audience` = ? WHERE `id` = ?',
+          [title, content, targetAudience, id]
+        );
+        invalidateCache('announcements');
+        globalEmitter.emit('update', { table: 'announcements', action: 'update', id });
         res.json({ status: 'success' });
       } else if (method === 'DELETE') {
         const id = req.query.id || req.body.id;
-        if (id) await removeDoc('announcements', id);
+        if (id) {
+          await pool.query('DELETE FROM `announcements` WHERE `id` = ?', [id]);
+          invalidateCache('announcements');
+          globalEmitter.emit('update', { table: 'announcements', action: 'delete', id });
+        }
         res.json({ status: 'success' });
       } else {
         res.status(405).json({ error: 'Method not allowed' });
@@ -249,10 +297,11 @@ async function startServer() {
     }
   });
 
-  app.post('/api/login.php', async (req, res) => {
+  // Login
+  app.post(['/api/login', '/api/login.php'], async (req, res) => {
     const { username, password } = req.body;
     try {
-      const users = await getCollectionDocs('users');
+      const users: any = await getCachedTableData('users');
       const search = String(username || '').trim().toLowerCase();
       const user = users.find((u: any) =>
         (u.username && String(u.username).toLowerCase() === search) ||
@@ -286,9 +335,9 @@ async function startServer() {
   app.get('/api/get_user.php', async (req, res) => {
     const { id } = req.query;
     try {
-      const user = await getDocById('users', id as string);
-      if (user) {
-        return res.json({ status: 'success', user });
+      const [rows]: any = await pool.query('SELECT * FROM `users` WHERE `id` = ?', [id]);
+      if (rows && rows[0]) {
+        return res.json({ status: 'success', user: rows[0] });
       }
       return res.json({ status: 'error', message: 'User not found' });
     } catch (err: any) {
@@ -299,7 +348,8 @@ async function startServer() {
   app.post('/api/update_avatar.php', async (req, res) => {
     const { user_id, avatar_base64 } = req.body;
     try {
-      await saveDoc('users', user_id, { avatar: avatar_base64 });
+      await pool.query('UPDATE `users` SET `avatar` = ? WHERE `id` = ?', [avatar_base64, user_id]);
+      invalidateCache('users');
       return res.json({ status: 'success', avatar_url: avatar_base64 });
     } catch (err: any) {
       return res.json({ status: 'error', message: err.message });
@@ -309,19 +359,15 @@ async function startServer() {
   app.post(['/api/request_reset', '/api/request_reset.php'], async (req, res) => {
     const { username } = req.body;
     try {
-      const users = await getCollectionDocs('users');
+      const users: any = await getCachedTableData('users');
       const u = users.find((x: any) => x.username === username || String(x.id) === String(username));
       if (u) {
-        const notifId = Date.now().toString();
-        await saveDoc('notifications', notifId, {
-          id: notifId,
-          user_id: 1,
-          title: 'Permintaan Reset Password',
-          message: `Pengguna ${u.name} (${u.username}) meminta reset password.`,
-          type: 'warning',
-          is_read: 0,
-          created_at: new Date().toISOString()
-        });
+        await pool.query(
+          'INSERT INTO `notifications` (`user_id`, `title`, `message`, `type`, `is_read`, `created_at`) VALUES (?, ?, ?, ?, ?, NOW())',
+          [1, 'Permintaan Reset Password', `Pengguna ${u.name} (${u.username}) meminta reset password.`, 'warning', 0]
+        );
+        invalidateCache('notifications');
+        globalEmitter.emit('update', { table: 'notifications' });
       }
       return res.json({ status: 'success' });
     } catch (err: any) {
@@ -349,9 +395,11 @@ async function startServer() {
   app.get('/api/notifications/:user_id', async (req, res) => {
     const { user_id } = req.params;
     try {
-      const all = await getCollectionDocs('notifications');
-      const userNotifs = all.filter((n: any) => String(n.user_id) === String(user_id) || String(n.user_id) === '1');
-      res.json(userNotifs);
+      const [rows]: any = await pool.query(
+        'SELECT * FROM `notifications` WHERE `user_id` = ? OR `user_id` = 1 ORDER BY `created_at` DESC',
+        [user_id]
+      );
+      res.json(rows || []);
     } catch (err: any) {
       console.error(err);
       res.status(500).json({ error: err.message });
@@ -361,7 +409,8 @@ async function startServer() {
   app.post('/api/notifications/:id/read', async (req, res) => {
     const { id } = req.params;
     try {
-      await saveDoc('notifications', id, { is_read: 1 });
+      await pool.query('UPDATE `notifications` SET `is_read` = 1 WHERE `id` = ?', [id]);
+      invalidateCache('notifications');
       res.json({ status: 'success' });
     } catch (err: any) {
       res.status(500).json({ error: err.message });
@@ -371,10 +420,10 @@ async function startServer() {
   app.get('/api/sync.php', async (req, res) => {
     try {
       const [users, students, classes, subjects] = await Promise.all([
-        getCollectionDocs('users'),
-        getCollectionDocs('students'),
-        getCollectionDocs('classes'),
-        getCollectionDocs('subjects')
+        getCachedTableData('users'),
+        getCachedTableData('students'),
+        getCachedTableData('classes'),
+        getCachedTableData('subjects')
       ]);
       res.json({ users, students, classes, subjects });
     } catch (error: any) {
@@ -386,9 +435,9 @@ async function startServer() {
   app.get(['/api/get_materi', '/api/get_materi.php'], async (req, res) => {
     try {
       const [materi, users, objectives] = await Promise.all([
-        getCollectionDocs('materi_ajar'),
-        getCollectionDocs('users'),
-        getCollectionDocs('materi_objectives')
+        getCachedTableData('materi_ajar'),
+        getCachedTableData('users'),
+        getCachedTableData('materi_objectives')
       ]);
 
       const userMap = new Map(users.map((u: any) => [String(u.id), u]));
@@ -432,17 +481,17 @@ async function startServer() {
         materiAjar,
         classes
       ] = await Promise.all([
-        getCollectionDocs('users'),
-        getCollectionDocs('kinerja_staf'),
-        getCollectionDocs('schedules'),
-        getCollectionDocs('teaching_assignments'),
-        getCollectionDocs('student_attendance'),
-        getCollectionDocs('pemantauan_pagi'),
-        getCollectionDocs('nilai_sikap'),
-        getCollectionDocs('ibadah_siswa'),
-        getCollectionDocs('laporan_harian'),
-        getCollectionDocs('materi_ajar'),
-        getCollectionDocs('classes')
+        getCachedTableData('users'),
+        getCachedTableData('kinerja_staf'),
+        getCachedTableData('schedules'),
+        getCachedTableData('teaching_assignments'),
+        getCachedTableData('student_attendance'),
+        getCachedTableData('pemantauan_pagi'),
+        getCachedTableData('nilai_sikap'),
+        getCachedTableData('ibadah_siswa'),
+        getCachedTableData('laporan_harian'),
+        getCachedTableData('materi_ajar'),
+        getCachedTableData('classes')
       ]);
 
       res.json({
@@ -470,30 +519,30 @@ async function startServer() {
   app.post(['/api/save_materi', '/api/save_materi.php'], async (req, res) => {
     try {
       const { id, user_id, subject, class_name, title, description, file_name, status, date, objectives } = req.body;
-      const materiId = id || Date.now();
-      await saveDoc('materi_ajar', materiId, {
-        id: materiId,
-        user_id,
-        subject,
-        class_name,
-        title,
-        description,
-        file_name,
-        status,
-        date
-      });
+      let materiId = id;
+      if (id) {
+        await pool.query(
+          'UPDATE `materi_ajar` SET `user_id` = ?, `subject` = ?, `class_name` = ?, `title` = ?, `description` = ?, `file_name` = ?, `status` = ?, `date` = ? WHERE `id` = ?',
+          [user_id, subject, class_name, title, description, file_name, status, date, id]
+        );
+        await pool.query('DELETE FROM `materi_objectives` WHERE `materi_id` = ?', [id]);
+      } else {
+        const [result]: any = await pool.query(
+          'INSERT INTO `materi_ajar` (`user_id`, `subject`, `class_name`, `title`, `description`, `file_name`, `status`, `date`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+          [user_id, subject, class_name, title, description, file_name, status, date]
+        );
+        materiId = result.insertId;
+      }
 
       if (objectives && Array.isArray(objectives)) {
-        for (let i = 0; i < objectives.length; i++) {
-          const objId = `${materiId}_${i}`;
-          await saveDoc('materi_objectives', objId, {
-            id: objId,
-            materi_id: materiId,
-            objective: objectives[i]
-          });
+        for (const obj of objectives) {
+          await pool.query('INSERT INTO `materi_objectives` (`materi_id`, `objective`) VALUES (?, ?)', [materiId, obj]);
         }
       }
 
+      invalidateCache('materi_ajar');
+      invalidateCache('materi_objectives');
+      globalEmitter.emit('update', { table: 'materi_ajar' });
       res.json({ status: 'success', id: materiId });
     } catch (error: any) {
       console.error(error);
@@ -505,7 +554,11 @@ async function startServer() {
     try {
       const { id } = req.body;
       if (id) {
-        await removeDoc('materi_ajar', id);
+        await pool.query('DELETE FROM `materi_objectives` WHERE `materi_id` = ?', [id]);
+        await pool.query('DELETE FROM `materi_ajar` WHERE `id` = ?', [id]);
+        invalidateCache('materi_ajar');
+        invalidateCache('materi_objectives');
+        globalEmitter.emit('update', { table: 'materi_ajar' });
       }
       res.json({ status: 'success' });
     } catch (error: any) {
@@ -516,7 +569,7 @@ async function startServer() {
 
   app.get(['/api/sarpras', '/api/sarpras.php'], async (req, res) => {
     try {
-      const rows = await getCollectionDocs('sarpras');
+      const rows = await getCachedTableData('sarpras');
       res.json(rows);
     } catch (error: any) {
       console.error('Database query error:', error);
@@ -527,65 +580,13 @@ async function startServer() {
   app.post(['/api/query', '/api/query.php'], async (req, res) => {
     try {
       const { query: sqlQuery } = req.body;
-      if (typeof sqlQuery === 'string') {
-        const trimmed = sqlQuery.trim();
-        if (/^delete\s+from\s+/i.test(trimmed)) {
-          const match = trimmed.match(/^delete\s+from\s+(\w+)\s*(where\s+(.*))?$/i);
-          if (match) {
-            const table = match[1];
-            if (allowedTables.includes(table)) {
-              const docs = await getCollectionDocs(table);
-              const whereClause = match[3];
-              if (!whereClause || !whereClause.trim()) {
-                for (const docItem of docs) {
-                  if (docItem.id) {
-                    await removeDoc(table, docItem.id);
-                  }
-                }
-              } else {
-                const conds = whereClause.split(/\s+and\s+/i);
-                for (const docItem of [...docs]) {
-                  let matches = true;
-                  for (const cond of conds) {
-                    const cleanedCond = cond.trim();
-                    const equalMatch = cleanedCond.match(/(\w+)\s*=\s*['"]?([^'"]*)['"]?/i);
-                    const likeMatch = cleanedCond.match(/(\w+)\s+like\s+['"]%?([^'"%]*)%?['"]/i);
-                    
-                    if (equalMatch) {
-                      const col = equalMatch[1];
-                      let val = equalMatch[2].replace(/\\'/g, "'").trim();
-                      const docVal = String(docItem[col] || '').trim();
-                      if (col.toLowerCase() === 'date') {
-                        if (!docVal.startsWith(val) && docVal !== val) {
-                          matches = false;
-                          break;
-                        }
-                      } else {
-                        if (docVal !== val) {
-                          matches = false;
-                          break;
-                        }
-                      }
-                    } else if (likeMatch) {
-                      const col = likeMatch[1];
-                      const val = likeMatch[2].trim().toLowerCase();
-                      const docVal = String(docItem[col] || '').toLowerCase();
-                      if (!docVal.includes(val)) {
-                        matches = false;
-                        break;
-                      }
-                    }
-                  }
-                  if (matches && docItem.id) {
-                    await removeDoc(table, docItem.id);
-                  }
-                }
-              }
-            }
-          }
-        }
+      if (typeof sqlQuery === 'string' && sqlQuery.trim()) {
+        const [result]: any = await pool.query(sqlQuery);
+        invalidateCache();
+        globalEmitter.emit('update', { query: sqlQuery });
+        return res.json({ status: 'success', result });
       }
-      res.json({ status: 'success', affectedRows: 1 });
+      res.json({ status: 'success' });
     } catch (err: any) {
       console.error('query.php error:', err.message);
       res.status(500).json({ error: err.message });
@@ -595,9 +596,9 @@ async function startServer() {
   app.get(['/api/stats', '/api/stats.php'], async (req, res) => {
     try {
       const [users, students, classes] = await Promise.all([
-        getCollectionDocs('users'),
-        getCollectionDocs('students'),
-        getCollectionDocs('classes')
+        getCachedTableData('users'),
+        getCachedTableData('students'),
+        getCachedTableData('classes')
       ]);
       res.json({
         totalUsers: users.length,
@@ -613,8 +614,6 @@ async function startServer() {
       res.status(500).json({ error: 'Failed to fetch stats' });
     }
   });
-
-
 
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
@@ -632,7 +631,7 @@ async function startServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://0.0.0.0:${PORT}`);
+    console.log(`Server running on http://0.0.0.0:${PORT} with Realtime MySQL`);
   });
 }
 
