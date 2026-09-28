@@ -65,7 +65,7 @@ export function SiswaHafalan() {
                   <p className="text-sm text-slate-500">Penyimak: {h.ustadz}</p>
                 </div>
                 <div className="flex items-center gap-4 w-full md:w-auto justify-between md:justify-end">
-                  <span className="text-sm font-semibold text-slate-600">{h.date}</span>
+                  <span className="text-sm font-semibold text-slate-600">{typeof h.date === 'string' ? h.date : ''}</span>
                   <span className={`px-3 py-1 rounded text-xs font-bold uppercase ${h.status === 'Lancar' ? 'bg-emerald-100 text-emerald-700' : 'bg-amber-100 text-amber-700'}`}>
                     {h.status}
                   </span>

@@ -8,14 +8,55 @@ import {
   deleteDoc,
   query,
   where,
-  limit,
-  orderBy
+  limit
 } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
 
 // Cache for rapid repeated reads (<2ms)
 const localCache = new Map<string, { data: any; time: number }>();
 const CACHE_TTL = 3000;
+
+export function sanitizeFirestoreData<T = any>(val: T): T {
+  if (val === null || val === undefined) return val;
+
+  // 1. If it's a Firestore Timestamp instance with toDate()
+  if (typeof val === 'object' && typeof (val as any).toDate === 'function') {
+    try {
+      const d = (val as any).toDate();
+      const pad = (n: number) => n.toString().padStart(2, '0');
+      return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}` as any;
+    } catch (_) {
+      return new Date((val as any).seconds * 1000).toISOString() as any;
+    }
+  }
+
+  // 2. If it's an object with { seconds, nanoseconds }
+  if (
+    typeof val === 'object' &&
+    typeof (val as any).seconds === 'number' &&
+    typeof (val as any).nanoseconds === 'number'
+  ) {
+    const d = new Date((val as any).seconds * 1000);
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}` as any;
+  }
+
+  // 3. Arrays
+  if (Array.isArray(val)) {
+    return val.map(item => sanitizeFirestoreData(item)) as any;
+  }
+
+  // 4. Plain Objects
+  if (typeof val === 'object' && (val.constructor === Object || !val.constructor)) {
+    const out: Record<string, any> = {};
+    for (const k of Object.keys(val)) {
+      out[k] = sanitizeFirestoreData((val as any)[k]);
+    }
+    return out as any;
+  }
+
+  return val;
+}
 
 export const firestoreClient = {
   // 1. Login Authentication
@@ -50,22 +91,22 @@ export const firestoreClient = {
         return { status: 'error', message: 'Username / NIPTK atau password salah' };
       }
 
-      const user = matched.data();
+      const user = sanitizeFirestoreData(matched.data());
       const isCorrect = verifyPassword(password, user.password);
       if (isCorrect) {
         const cleanUser = { ...user };
         delete cleanUser.password;
-        return { status: 'success', user: cleanUser };
+        return { status: 'success', user: sanitizeFirestoreData(cleanUser) };
       }
       return { status: 'error', message: 'Username / NIPTK atau password salah' };
     }
 
-    const user = snap.docs[0].data();
+    const user = sanitizeFirestoreData(snap.docs[0].data());
     const isCorrect = verifyPassword(password, user.password);
     if (isCorrect) {
       const cleanUser = { ...user };
       delete cleanUser.password;
-      return { status: 'success', user: cleanUser };
+      return { status: 'success', user: sanitizeFirestoreData(cleanUser) };
     }
     return { status: 'error', message: 'Username / NIPTK atau password salah' };
   },
@@ -79,10 +120,10 @@ export const firestoreClient = {
       getDocs(collection(db, 'subjects')),
     ]);
 
-    const users = usersSnap.docs.map(d => ({ ...d.data(), id: d.id }));
-    const students = studentsSnap.docs.map(d => ({ ...d.data(), id: d.id }));
-    const classes = classesSnap.docs.map(d => ({ ...d.data(), id: d.id }));
-    const subjects = subjectsSnap.docs.map(d => ({ ...d.data(), id: d.id }));
+    const users = usersSnap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
+    const students = studentsSnap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
+    const classes = classesSnap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
+    const subjects = subjectsSnap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
 
     return { users, students, classes, subjects };
   },
@@ -91,7 +132,7 @@ export const firestoreClient = {
   async getTable(table: string, id?: string): Promise<any> {
     if (id) {
       const snap = await getDoc(doc(db, table, String(id)));
-      return snap.exists() ? { ...snap.data(), id: snap.id } : null;
+      return snap.exists() ? sanitizeFirestoreData({ ...snap.data(), id: snap.id }) : null;
     }
 
     const cacheKey = `table_${table}`;
@@ -101,7 +142,7 @@ export const firestoreClient = {
     }
 
     const snap = await getDocs(collection(db, table));
-    const list = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+    const list = snap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
     localCache.set(cacheKey, { data: list, time: Date.now() });
     return list;
   },
@@ -110,16 +151,18 @@ export const firestoreClient = {
   async insert(table: string, data: any): Promise<any> {
     localCache.delete(`table_${table}`);
     const id = String(data.id || `doc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`);
+    const cleanData = sanitizeFirestoreData({ ...data, id });
     const docRef = doc(db, table, id);
-    await setDoc(docRef, { ...data, id }, { merge: true });
+    await setDoc(docRef, cleanData, { merge: true });
     return { status: 'success', insertId: id, id };
   },
 
   // 5. CRUD PUT (Update)
   async update(table: string, id: string | number, data: any): Promise<any> {
     localCache.delete(`table_${table}`);
+    const cleanData = sanitizeFirestoreData(data);
     const docRef = doc(db, table, String(id));
-    await setDoc(docRef, data, { merge: true });
+    await setDoc(docRef, cleanData, { merge: true });
     return { status: 'success', affectedRows: 1 };
   },
 
@@ -142,7 +185,7 @@ export const firestoreClient = {
     snap.docs.forEach(d => {
       const data = d.data();
       if (data && data.v !== undefined) {
-        all[d.id] = data.v;
+        all[d.id] = String(data.v);
       }
     });
     return all;
@@ -167,15 +210,22 @@ export const firestoreClient = {
   async getAnnouncements(): Promise<any[]> {
     const snap = await getDocs(collection(db, 'announcements'));
     return snap.docs.map(d => {
-      const r = d.data();
+      const raw = sanitizeFirestoreData(d.data());
+      const rawDate = raw.date || raw.created_at;
+      let finalDate = new Date().toISOString().split('T')[0];
+
+      if (typeof rawDate === 'string' && rawDate) {
+        finalDate = rawDate.split(' ')[0].split('T')[0];
+      }
+
       return {
-        ...r,
+        ...raw,
         id: d.id,
-        title: r.title || '',
-        content: r.content || '',
-        category: r.category || 'Informasi',
-        target: r.target || r.target_audience || 'Semua',
-        date: r.date || r.created_at || new Date().toISOString().split('T')[0],
+        title: String(raw.title || ''),
+        content: String(raw.content || ''),
+        category: String(raw.category || 'Informasi'),
+        target: String(raw.target || raw.target_audience || 'Semua'),
+        date: finalDate,
         isPublished: true
       };
     });

@@ -193,12 +193,19 @@ export function DashboardAdmin() {
 
         annList.forEach((a: any) => {
           if (a && a.isPublished !== false && a.status !== 'Draft') {
+            let strDate = 'Terbaru';
+            const rawD = a.date || a.created_at;
+            if (typeof rawD === 'string' && rawD) {
+              strDate = rawD.split(' ')[0].split('T')[0];
+            } else if (rawD && typeof rawD === 'object' && 'seconds' in rawD) {
+              strDate = new Date(rawD.seconds * 1000).toISOString().split('T')[0];
+            }
             combined.push({
               id: a.id || `ann_${Date.now()}_${Math.random()}`,
               title: a.title || 'Pengumuman Madrasah',
               content: a.content || '',
               category: a.category || 'Penting',
-              date: a.date || a.created_at || 'Terbaru',
+              date: strDate,
               isAnnouncement: true
             });
           }
@@ -287,7 +294,7 @@ export function DashboardAdmin() {
                     <span className={`px-2 py-0.5 text-[9px] font-black rounded uppercase tracking-wider ${ann.category === 'Penting' ? 'bg-red-100/80 text-red-800' : ann.category === 'Maintenance' ? 'bg-orange-100/80 text-orange-800' : ann.category === 'Kegiatan' ? 'bg-indigo-100/80 text-indigo-800' : 'bg-emerald-100/80 text-emerald-800'}`}>
                       {ann.category}
                     </span>
-                    <span className="text-[9px] text-slate-400 font-bold">{ann.date}</span>
+                    <span className="text-[9px] text-slate-400 font-bold">{typeof ann.date === 'string' ? ann.date : 'Terbaru'}</span>
                   </div>
                   <p className="text-sm font-extrabold text-slate-800 mt-1.5 truncate">
                     {ann.title}

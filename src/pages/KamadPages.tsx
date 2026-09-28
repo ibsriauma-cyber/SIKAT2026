@@ -475,7 +475,7 @@ export function DashboardKamad() {
                       </div>
                       <div className="flex items-center justify-between gap-2 pt-0.5">
                         <span className="text-[10px] text-slate-400 font-medium">
-                          Diunggah: {mat.date}
+                          Diunggah: {typeof mat.date === 'string' ? mat.date : ''}
                         </span>
                         {mat.file_name && <a href={mat.file_name} target="_blank" rel="noopener noreferrer" className="text-[10px] font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-0.5">
                             Buka Drive <ExternalLink className="w-2.5 h-2.5" />
@@ -725,7 +725,7 @@ export function KamadMateriAjar() {
                       <div className="flex items-center gap-3 pt-0.5">
                         <div className="flex items-center gap-1 text-[11px] text-slate-400">
                           <Calendar className="w-3 h-3" />
-                          <span>{item.date}</span>
+                          <span>{typeof item.date === 'string' ? item.date : ''}</span>
                         </div>
                         <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border ${item.status === 'Sudah Membuat' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-amber-700 border-amber-200'}`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${item.status === 'Sudah Membuat' ? 'bg-emerald-500' : 'bg-amber-500'}`} />

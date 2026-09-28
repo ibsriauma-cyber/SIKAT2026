@@ -219,7 +219,7 @@ export function AbsensiAnak() {
                       }`}>
                         {detail.status}
                       </span>
-                      <span className="font-bold text-slate-800 text-sm">{detail.date}</span>
+                      <span className="font-bold text-slate-800 text-sm">{typeof detail.date === 'string' ? detail.date : ''}</span>
                     </div>
                     <p className="text-xs text-slate-600 leading-relaxed font-medium">
                       <span className="font-bold text-slate-700">Keterangan:</span> {detail.reason}
@@ -347,7 +347,7 @@ export function SikapAnak() {
                 <div key={sp.id} className="p-4 border border-amber-200 bg-amber-50 rounded-xl">
                   <div className="flex justify-between items-start mb-2">
                     <span className="font-bold text-amber-700">{sp.type}</span>
-                    <span className="text-xs font-semibold text-amber-600 bg-amber-100 px-2 py-1 rounded">{sp.date}</span>
+                    <span className="text-xs font-semibold text-amber-600 bg-amber-100 px-2 py-1 rounded">{typeof sp.date === 'string' ? sp.date : ''}</span>
                   </div>
                   <p className="text-sm text-slate-700">Alasan: {sp.reason}</p>
                   <p className="text-xs text-amber-600 font-bold mt-2">Poin Diberikan: {sp.points}</p>
@@ -371,7 +371,7 @@ export function SikapAnak() {
                 <div key={bk.id} className="p-4 border border-blue-200 bg-blue-50 rounded-xl">
                   <div className="flex justify-between items-start mb-2">
                     <span className="font-bold text-blue-700">{bk.topic}</span>
-                    <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded">{bk.date}</span>
+                    <span className="text-xs font-semibold text-blue-600 bg-blue-100 px-2 py-1 rounded">{typeof bk.date === 'string' ? bk.date : ''}</span>
                   </div>
                   <p className="text-sm text-slate-700">Konselor: {bk.counselor}</p>
                   <p className="text-xs text-blue-600 font-bold mt-2">Status: {bk.status}</p>

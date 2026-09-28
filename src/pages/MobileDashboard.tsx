@@ -1207,7 +1207,7 @@ export function MobileDashboard() {
                       <span className={`px-2 py-0.5 text-[8px] font-black rounded uppercase tracking-wider ${ann.category === 'Penting' ? 'bg-red-100/80 text-red-800' : ann.category === 'Maintenance' ? 'bg-orange-100/80 text-orange-800' : ann.category === 'Kegiatan' ? 'bg-indigo-100/80 text-indigo-800' : 'bg-emerald-100/80 text-emerald-800'}`}>
                         {ann.category}
                       </span>
-                      <span className="text-[8px] text-slate-400 font-bold">{ann.date}</span>
+                      <span className="text-[8px] text-slate-400 font-bold">{typeof ann.date === 'string' ? ann.date : 'Terbaru'}</span>
                     </div>
                     <p className="text-xs font-extrabold text-slate-800 mt-1 truncate">
                       {ann.title}

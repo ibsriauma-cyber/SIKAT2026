@@ -107,9 +107,19 @@ export function Notifications() {
                   <div className="flex justify-between items-start gap-2 mb-1">
                     <h4 className={`font-bold text-sm text-slate-800 truncate ${!notif.is_read ? 'text-emerald-800' : ''}`}>{notif.title}</h4>
                     <span className="text-[10px] text-slate-400 font-medium whitespace-nowrap shrink-0 uppercase tracking-wider">
-                      {format(new Date(notif.created_at || new Date()), 'dd MMM, HH:mm', {
-                  locale: id
-                })}
+                      {(() => {
+                        try {
+                          let d = notif.created_at;
+                          if (typeof d === 'object' && d !== null && 'seconds' in d) {
+                            d = new Date((d as any).seconds * 1000);
+                          } else {
+                            d = new Date(d || Date.now());
+                          }
+                          return format(isNaN(d.getTime()) ? new Date() : d, 'dd MMM, HH:mm', { locale: id });
+                        } catch (_) {
+                          return '';
+                        }
+                      })()}
                     </span>
                   </div>
                   <p className="text-xs text-slate-600 line-clamp-2">{notif.message}</p>

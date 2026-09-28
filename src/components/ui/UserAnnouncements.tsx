@@ -14,6 +14,22 @@ interface Announcement {
   isPublished: boolean;
 }
 
+const safeFormatDate = (dateVal: any): string => {
+  if (!dateVal) return '';
+  if (typeof dateVal === 'object' && dateVal !== null) {
+    if ('seconds' in dateVal) {
+      dateVal = new Date(dateVal.seconds * 1000);
+    }
+  }
+  try {
+    const d = new Date(dateVal);
+    if (isNaN(d.getTime())) return typeof dateVal === 'string' ? dateVal : '';
+    return d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch (_) {
+    return '';
+  }
+};
+
 export function UserAnnouncements() {
   const { user } = useAuth();
   const [announcements, setAnnouncements] = useState<Announcement[]>([]);
@@ -92,7 +108,7 @@ export function UserAnnouncements() {
                         )}
                       </div>
                       <span className="text-[9px] font-bold text-slate-400">
-                        {new Date(ann.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        {safeFormatDate(ann.date)}
                       </span>
                     </div>
                     <h3 className="text-xs sm:text-sm font-bold text-slate-800 leading-snug mb-1 line-clamp-2">{ann.title}</h3>
@@ -135,7 +151,7 @@ export function UserAnnouncements() {
                   )}
                 </div>
                 <span className="text-[10px] font-bold text-slate-400">
-                  {new Date(ann.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  {safeFormatDate(ann.date)}
                 </span>
               </div>
               <h3 className="text-sm font-bold text-slate-800 leading-snug mb-1">{ann.title}</h3>

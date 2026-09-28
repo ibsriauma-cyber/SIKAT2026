@@ -69,7 +69,7 @@ export function KesiswaanSP() {
                     <td className="px-4 py-3 font-black text-rose-600">{item.points}</td>
                     <td className="px-4 py-3">
                       <p className="text-slate-800 line-clamp-1">{item.reason}</p>
-                      <p className="text-[10px] text-slate-500">{item.date}</p>
+                      <p className="text-[10px] text-slate-500">{typeof item.date === 'string' ? item.date : ''}</p>
                     </td>
                     <td className="px-4 py-3 text-right">
                       <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="Cetak Surat Peringatan">

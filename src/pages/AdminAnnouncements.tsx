@@ -216,7 +216,7 @@ export function AdminAnnouncements() {
                       <Users className="w-3 h-3" /> {ann.target}
                     </span>
                   </div>
-                  <span className="text-xs text-slate-400 font-medium">{ann.date}</span>
+                  <span className="text-xs text-slate-400 font-medium">{typeof ann.date === 'string' ? ann.date : 'Terbaru'}</span>
                 </div>
 
                 <div className="space-y-1.5">
