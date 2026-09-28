@@ -76,11 +76,14 @@ export default defineConfig(() => {
       {
         name: 'copy-api-to-dist',
         closeBundle() {
+          if (process.env.VERCEL) {
+            return;
+          }
           const src = path.resolve(process.cwd(), 'api');
           const dest = path.resolve(process.cwd(), 'dist/api');
           if (fs.existsSync(src)) {
             copyFolderRecursive(src, dest);
-            console.log('Successfully copied api folder to dist/api');
+            console.log('Successfully copied api folder to dist/api for Hostinger/Apache');
           }
         }
       }

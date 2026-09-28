@@ -4,6 +4,11 @@ require_once "config.php";
 header("Content-Type: application/json; charset=UTF-8");
 
 $method = $_SERVER['REQUEST_METHOD'];
+if (isset($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'])) {
+    $method = strtoupper($_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE']);
+} elseif (isset($_REQUEST['_method'])) {
+    $method = strtoupper($_REQUEST['_method']);
+}
 $table = isset($_GET['table']) ? trim($_GET['table']) : '';
 $id = isset($_GET['id']) ? trim($_GET['id']) : '';
 

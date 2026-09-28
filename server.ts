@@ -48,6 +48,15 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// Method override middleware for PUT and DELETE tunneling
+app.use((req, res, next) => {
+  const override = req.headers['x-http-method-override'] || req.headers['x-method'] || req.query._method;
+  if (override) {
+    req.method = String(override).toUpperCase();
+  }
+  next();
+});
+
 // Realtime Server-Sent Events (SSE)
 app.get('/api/events', (req, res) => {
   res.setHeader('Content-Type', 'text/event-stream');
