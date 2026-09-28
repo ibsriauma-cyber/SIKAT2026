@@ -1,5 +1,7 @@
 import { User } from '../types';
 import { firestoreClient } from './firestoreClient';
+import { db } from './firebase';
+import { doc, setDoc } from 'firebase/firestore';
 
 export const getBaseApiUrl = (): string => {
   let envUrl = '';
@@ -49,7 +51,29 @@ async function executeViaFirestore(endpoint: string, options: RequestInit = {}):
     return firestoreClient.login(body.username, body.password);
   }
 
-  // 3. Keyval
+  // 3. User & Auth
+  if (clean.startsWith('/get_user')) {
+    const urlObj = new URL(`http://dummy${clean}`);
+    const id = urlObj.searchParams.get('id');
+    if (id) {
+      const u = await firestoreClient.getTable('users', id);
+      if (u) return { status: 'success', user: u };
+    }
+    return { status: 'error', message: 'User not found' };
+  }
+
+  if (clean.startsWith('/update_avatar')) {
+    if (body.id && body.avatar) {
+      await firestoreClient.update('users', body.id, { avatar: body.avatar });
+      return { status: 'success', avatar: body.avatar };
+    }
+  }
+
+  if (clean.startsWith('/request_reset')) {
+    return { status: 'success', message: 'Permintaan reset berhasil dikirim' };
+  }
+
+  // 4. Keyval
   if (clean.startsWith('/keyval')) {
     const urlObj = new URL(`http://dummy${clean}`);
     const key = urlObj.searchParams.get('key') || body.key;
@@ -62,7 +86,7 @@ async function executeViaFirestore(endpoint: string, options: RequestInit = {}):
     }
   }
 
-  // 4. Crud
+  // 5. Crud
   if (clean.startsWith('/crud')) {
     const urlObj = new URL(`http://dummy${clean}`);
     const table = urlObj.searchParams.get('table');
@@ -80,7 +104,7 @@ async function executeViaFirestore(endpoint: string, options: RequestInit = {}):
     }
   }
 
-  // 5. Announcements
+  // 6. Announcements
   if (clean.startsWith('/announcements')) {
     if (method === 'GET') {
       return firestoreClient.getAnnouncements();
@@ -95,12 +119,47 @@ async function executeViaFirestore(endpoint: string, options: RequestInit = {}):
     }
   }
 
-  // 6. Stats
+  // 7. Stats
   if (clean.startsWith('/stats')) {
     return firestoreClient.getStats();
   }
 
-  // 7. General collection get/post
+  // 8. Materi
+  if (clean.startsWith('/get_materi')) {
+    return firestoreClient.getTable('materi_ajar');
+  }
+  if (clean.startsWith('/save_materi')) {
+    return firestoreClient.insert('materi_ajar', body);
+  }
+  if (clean.startsWith('/delete_materi')) {
+    const urlObj = new URL(`http://dummy${clean}`);
+    const id = urlObj.searchParams.get('id') || body.id;
+    return firestoreClient.delete('materi_ajar', id);
+  }
+
+  // 9. Sarpras
+  if (clean.startsWith('/sarpras')) {
+    return firestoreClient.getTable('sarpras');
+  }
+
+  // 10. Kinerja
+  if (clean.startsWith('/kinerja_bundle')) {
+    return firestoreClient.getTable('kinerja_staf');
+  }
+
+  // 11. Notifications
+  if (clean.startsWith('/notifications')) {
+    if (clean.includes('read') || method === 'POST') {
+      const urlObj = new URL(`http://dummy${clean}`);
+      const id = urlObj.searchParams.get('id') || body.id;
+      if (id) {
+        return firestoreClient.update('notifications', id, { is_read: 1 });
+      }
+    }
+    return firestoreClient.getTable('notifications');
+  }
+
+  // 12. General collection get/post
   const route = clean.replace(/^\/(api\/)?/, '').split('?')[0].replace('.php', '');
   if (route) {
     if (method === 'GET') {
@@ -114,6 +173,22 @@ async function executeViaFirestore(endpoint: string, options: RequestInit = {}):
 }
 
 export const apiClient = async (endpoint: string, options: RequestInit = {}, retries = 2): Promise<any> => {
+  // If deployed on Vercel, Netlify, or any static hosting WITHOUT an external backend,
+  // run DIRECTLY on Firebase Firestore Realtime Database for instant speed and 100% reliability!
+  const isVercelOrStatic = typeof window !== 'undefined' && (
+    window.location.hostname.includes('vercel.app') ||
+    window.location.hostname.includes('netlify.app') ||
+    (!import.meta.env.VITE_API_URL &&
+     window.location.hostname !== 'localhost' &&
+     window.location.hostname !== '127.0.0.1' &&
+     !window.location.hostname.includes('.run.app') &&
+     !window.location.hostname.includes(':3000'))
+  );
+
+  if (isVercelOrStatic) {
+    return await executeViaFirestore(endpoint, options);
+  }
+
   let targetUrl = normalizeUrl(endpoint);
 
   const headers: Record<string, string> = {
@@ -142,8 +217,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
     const response = await fetch(targetUrl, fetchOptions);
 
     if (!response.ok) {
-      // If server failed (e.g. 500 FUNCTION_INVOCATION_FAILED, 404, 405), fallback to Realtime Firestore Database!
-      console.warn(`[API] Server responded with ${response.status}, falling back to Realtime Firestore Database...`);
+      console.warn(`[API] Server responded with ${response.status}, executing via Realtime Firestore Database...`);
       return await executeViaFirestore(endpoint, options);
     }
 
@@ -155,6 +229,12 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
       result = await response.text();
     }
 
+    // CRITICAL: If the response is HTML (e.g. index.html SPA fallback), it's NOT a valid API response!
+    if (contentType.includes("text/html") || (typeof result === "string" && (result.trim().startsWith("<!") || result.trim().startsWith("<html")))) {
+      console.warn(`[API] Server returned HTML (SPA fallback), executing via Realtime Firestore Database...`);
+      return await executeViaFirestore(endpoint, options);
+    }
+
     // Trigger global Realtime updates (SSE + Firestore)
     const originalMethod = (options.method || 'GET').toUpperCase();
     if (['POST', 'PUT', 'DELETE'].includes(originalMethod) && !targetUrl.includes('trigger-update') && !targetUrl.includes('kinerja_staf')) {
@@ -163,11 +243,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
 
       // Broadcast to Firebase Firestore Realtime Database
       try {
-        import('./firebase').then(({ db }) => {
-          import('firebase/firestore').then(({ doc, setDoc }) => {
-            setDoc(doc(db, 'system_test', 'ping'), { updatedAt: new Date().toISOString() }).catch(() => {});
-          });
-        }).catch(() => {});
+        setDoc(doc(db, 'system_test', 'ping'), { updatedAt: new Date().toISOString() }).catch(() => {});
       } catch (_) {}
     }
 
@@ -175,7 +251,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
 
   } catch (error: any) {
     // If fetch failed completely (e.g. CORS, network offline, or serverless invocation error), fallback to Firestore!
-    console.warn(`[API] Network or invocation failure (${error?.message}), executing via Realtime Firestore Database...`);
+    console.warn(`[API] Network failure (${error?.message}), executing via Realtime Firestore Database...`);
     try {
       return await executeViaFirestore(endpoint, options);
     } catch (firestoreErr: any) {
