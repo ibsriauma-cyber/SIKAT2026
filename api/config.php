@@ -2,7 +2,7 @@
 // api/config.php
 
 $host = "localhost"; // Di Hostinger biasanya tetap 'localhost'
-$db_name = "1_datamaibsriau"; // Nama database Hostinger
+$db_name = "u988740981_datamaibsriau"; // Nama database Hostinger
 $username = "u988740981_maibsriau"; // User database Hostinger
 $password = "MAIBSRiau2026"; // Password database Hostinger
 

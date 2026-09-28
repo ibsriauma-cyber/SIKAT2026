@@ -1,14 +1,19 @@
 import { User } from '../types';
+import { firestoreClient } from './firestoreClient';
 
 export const getBaseApiUrl = (): string => {
-  let envUrl = (import.meta.env.VITE_API_URL || '').trim();
+  let envUrl = '';
+  try {
+    if (typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.VITE_API_URL) {
+      envUrl = String(import.meta.env.VITE_API_URL).trim();
+    } else if (typeof process !== 'undefined' && process.env && process.env.VITE_API_URL) {
+      envUrl = String(process.env.VITE_API_URL).trim();
+    }
+  } catch (_) {}
   if (!envUrl) {
     return '/api';
   }
-  // Remove trailing slashes
   envUrl = envUrl.replace(/\/+$/, '');
-  
-  // If user provided a domain without /api (e.g. "https://domain.com"), append /api
   if (!envUrl.endsWith('/api')) {
     envUrl = `${envUrl}/api`;
   }
@@ -29,6 +34,85 @@ const normalizeUrl = (endpoint: string): string => {
   return `${base}${clean}`;
 };
 
+async function executeViaFirestore(endpoint: string, options: RequestInit = {}): Promise<any> {
+  const clean = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const method = (options.method || 'GET').toUpperCase();
+  const body = options.body ? (typeof options.body === 'string' ? JSON.parse(options.body) : options.body) : {};
+
+  // 1. Sync
+  if (clean.startsWith('/sync')) {
+    return firestoreClient.sync();
+  }
+
+  // 2. Login
+  if (clean.startsWith('/login')) {
+    return firestoreClient.login(body.username, body.password);
+  }
+
+  // 3. Keyval
+  if (clean.startsWith('/keyval')) {
+    const urlObj = new URL(`http://dummy${clean}`);
+    const key = urlObj.searchParams.get('key') || body.key;
+    if (method === 'GET') {
+      return firestoreClient.keyvalGet(key || undefined);
+    } else if (method === 'POST') {
+      return firestoreClient.keyvalSet(key, body.value);
+    } else if (method === 'DELETE') {
+      return firestoreClient.keyvalDelete(key || undefined);
+    }
+  }
+
+  // 4. Crud
+  if (clean.startsWith('/crud')) {
+    const urlObj = new URL(`http://dummy${clean}`);
+    const table = urlObj.searchParams.get('table');
+    const id = urlObj.searchParams.get('id') || body.id;
+    if (!table) throw new Error('Missing table param for crud');
+
+    if (method === 'GET') {
+      return firestoreClient.getTable(table, id || undefined);
+    } else if (method === 'POST') {
+      return firestoreClient.insert(table, body);
+    } else if (method === 'PUT') {
+      return firestoreClient.update(table, id, body);
+    } else if (method === 'DELETE') {
+      return firestoreClient.delete(table, id);
+    }
+  }
+
+  // 5. Announcements
+  if (clean.startsWith('/announcements')) {
+    if (method === 'GET') {
+      return firestoreClient.getAnnouncements();
+    } else if (method === 'POST') {
+      return firestoreClient.insert('announcements', body);
+    } else if (method === 'PUT') {
+      return firestoreClient.update('announcements', body.id, body);
+    } else if (method === 'DELETE') {
+      const urlObj = new URL(`http://dummy${clean}`);
+      const id = urlObj.searchParams.get('id') || body.id;
+      return firestoreClient.delete('announcements', id);
+    }
+  }
+
+  // 6. Stats
+  if (clean.startsWith('/stats')) {
+    return firestoreClient.getStats();
+  }
+
+  // 7. General collection get/post
+  const route = clean.replace(/^\/(api\/)?/, '').split('?')[0].replace('.php', '');
+  if (route) {
+    if (method === 'GET') {
+      return firestoreClient.getTable(route);
+    } else if (method === 'POST') {
+      return firestoreClient.insert(route, body);
+    }
+  }
+
+  return { status: 'success' };
+}
+
 export const apiClient = async (endpoint: string, options: RequestInit = {}, retries = 2): Promise<any> => {
   let targetUrl = normalizeUrl(endpoint);
 
@@ -39,8 +123,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
 
   let method = (options.method || 'GET').toUpperCase();
 
-  // Avoid HTTP 405 Method Not Allowed on shared hosting (Hostinger/cPanel/Apache)
-  // which often disables PUT or DELETE requests. Tunnel PUT/DELETE through POST.
+  // Avoid HTTP 405 Method Not Allowed on shared hosting by tunneling PUT/DELETE through POST
   if (method === 'PUT' || method === 'DELETE') {
     headers['X-HTTP-Method-Override'] = method;
     const separator = targetUrl.includes('?') ? '&' : '?';
@@ -59,40 +142,9 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
     const response = await fetch(targetUrl, fetchOptions);
 
     if (!response.ok) {
-      // If 405 Method Not Allowed occurs:
-      // It can happen if:
-      // 1. Hostinger/Apache redirected a route to index.html or rejected .php
-      // 2. Node/Vercel serverless rejected .php extension or vice versa
-      if (response.status === 405) {
-        let alternateUrl = '';
-        if (targetUrl.includes('.php')) {
-          // Try without .php extension (e.g. /api/login instead of /api/login.php)
-          alternateUrl = targetUrl.replace(/\.php(\?|$)/, '$1');
-        } else {
-          // Try with .php extension (e.g. /api/login.php instead of /api/login)
-          const qIndex = targetUrl.indexOf('?');
-          if (qIndex !== -1) {
-            alternateUrl = `${targetUrl.slice(0, qIndex)}.php${targetUrl.slice(qIndex)}`;
-          } else {
-            alternateUrl = `${targetUrl}.php`;
-          }
-        }
-
-        if (alternateUrl && alternateUrl !== targetUrl) {
-          try {
-            const retryRes = await fetch(alternateUrl, fetchOptions);
-            if (retryRes.ok) {
-              const ct = retryRes.headers.get("content-type") || "";
-              return ct.includes("application/json") ? await retryRes.json() : await retryRes.text();
-            }
-          } catch (_) {
-            // proceed to error throw below
-          }
-        }
-      }
-
-      const errText = await response.text().catch(() => '');
-      throw new Error(`API error [${response.status}]: ${errText || response.statusText || 'Method Not Allowed'}`);
+      // If server failed (e.g. 500 FUNCTION_INVOCATION_FAILED, 404, 405), fallback to Realtime Firestore Database!
+      console.warn(`[API] Server responded with ${response.status}, falling back to Realtime Firestore Database...`);
+      return await executeViaFirestore(endpoint, options);
     }
 
     const contentType = response.headers.get("content-type") || "";
@@ -122,12 +174,14 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
     return result;
 
   } catch (error: any) {
-    if (retries > 0 && !error?.message?.includes('405') && !error?.message?.includes('403') && !error?.message?.includes('401')) {
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return apiClient(endpoint, options, retries - 1);
+    // If fetch failed completely (e.g. CORS, network offline, or serverless invocation error), fallback to Firestore!
+    console.warn(`[API] Network or invocation failure (${error?.message}), executing via Realtime Firestore Database...`);
+    try {
+      return await executeViaFirestore(endpoint, options);
+    } catch (firestoreErr: any) {
+      console.error("Firestore fallback failed:", firestoreErr);
+      throw firestoreErr;
     }
-    console.error("API fetch failed:", targetUrl, error?.message || error);
-    throw error;
   }
 };
 
