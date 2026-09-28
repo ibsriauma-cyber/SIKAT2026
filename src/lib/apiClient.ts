@@ -126,15 +126,15 @@ async function executeViaFirestore(endpoint: string, options: RequestInit = {}):
 
   // 8. Materi
   if (clean.startsWith('/get_materi')) {
-    return firestoreClient.getTable('materi_ajar');
+    return firestoreClient.getMateri();
   }
   if (clean.startsWith('/save_materi')) {
-    return firestoreClient.insert('materi_ajar', body);
+    return firestoreClient.saveMateri(body);
   }
   if (clean.startsWith('/delete_materi')) {
     const urlObj = new URL(`http://dummy${clean}`);
     const id = urlObj.searchParams.get('id') || body.id;
-    return firestoreClient.delete('materi_ajar', id);
+    return firestoreClient.deleteMateri(id);
   }
 
   // 9. Sarpras

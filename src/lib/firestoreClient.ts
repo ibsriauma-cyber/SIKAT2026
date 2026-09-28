@@ -247,6 +247,90 @@ export const firestoreClient = {
       students: s.size,
       classes: c.size
     };
+  },
+
+  // 10. Materi Ajar
+  async getMateri(): Promise<any> {
+    const [materi, users, objectives] = await Promise.all([
+      this.getTable('materi_ajar'),
+      this.getTable('users'),
+      this.getTable('materi_objectives')
+    ]);
+
+    const userList = Array.isArray(users) ? users : [];
+    const userMap = new Map(userList.map((u: any) => [String(u.id), u]));
+
+    const objList = Array.isArray(objectives) ? objectives : [];
+    const objMap = new Map<string, string[]>();
+    objList.forEach((o: any) => {
+      const mId = String(o.materi_id);
+      if (!objMap.has(mId)) objMap.set(mId, []);
+      objMap.get(mId)!.push(o.objective);
+    });
+
+    const materiList = Array.isArray(materi) ? materi : [];
+    const formatted = materiList.map((m: any) => {
+      const author = userMap.get(String(m.user_id));
+      const subj = String(m.subject || '');
+      const isQuran = subj.toLowerCase().includes('quran') || subj.toLowerCase().includes('tahfizh');
+      const authorRole = author?.role || m.role || (isQuran ? 'guru_quran' : 'guru');
+      let category = 'guru_mapel';
+      if (authorRole === 'guru_quran' || isQuran) category = 'guru_quran';
+      else if (authorRole === 'walas') category = 'wali_kelas';
+
+      const rawDate = m.date || m.created_at;
+      let dateStr = '-';
+      if (typeof rawDate === 'string' && rawDate) {
+        dateStr = rawDate.split(' ')[0].split('T')[0];
+      }
+
+      return {
+        ...m,
+        id: String(m.id),
+        name: author?.name || m.name || m.teacherName || 'Guru',
+        teacherName: author?.name || m.name || m.teacherName || 'Guru',
+        role: authorRole,
+        category,
+        class: m.class_name || m.class || m.className || '-',
+        className: m.class_name || m.class || m.className || '-',
+        date: dateStr,
+        file_name: m.file_name || m.driveUrl || '',
+        driveUrl: m.file_name || m.driveUrl || '',
+        objectives: objMap.get(String(m.id)) || (Array.isArray(m.objectives) ? m.objectives : [])
+      };
+    });
+
+    return { status: 'success', data: formatted };
+  },
+
+  async saveMateri(body: any): Promise<any> {
+    const id = String(body.id || `mat_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`);
+    const objectives = Array.isArray(body.objectives) ? body.objectives : [];
+    const cleanDoc = {
+      ...body,
+      id,
+      class_name: body.class_name || body.class || body.className || '',
+      date: body.date ? String(body.date).slice(0, 10) : new Date().toISOString().split('T')[0]
+    };
+    await this.insert('materi_ajar', cleanDoc);
+
+    // Save objectives
+    if (objectives.length > 0) {
+      for (let i = 0; i < objectives.length; i++) {
+        const objId = `obj_${id}_${i}`;
+        await this.insert('materi_objectives', {
+          id: objId,
+          materi_id: id,
+          objective: objectives[i]
+        });
+      }
+    }
+    return { status: 'success', id };
+  },
+
+  async deleteMateri(id: string | number): Promise<any> {
+    await this.delete('materi_ajar', String(id));
+    return { status: 'success' };
   }
 };
 

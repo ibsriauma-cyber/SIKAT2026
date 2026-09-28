@@ -82,7 +82,7 @@ export function DashboardKamad() {
         // Filter and map pending leave requests
         const pLeaves = leavesList.filter((l: any) => l.status === 'pending');
         const mappedLeaves = pLeaves.map((l: any) => {
-          const matchingUser = usersList.find((u: any) => u.id === l.user_id);
+          const matchingUser = usersList.find((u: any) => String(u.id) === String(l.user_id));
           return {
             ...l,
             userName: matchingUser ? matchingUser.name : `Staf ID ${l.user_id}`,
@@ -1999,8 +1999,12 @@ export function KamadApprovalIzin() {
           };
         });
 
-        // Sort by created_at DESC
-        enriched.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+        // Sort by created_at DESC safely
+        enriched.sort((a, b) => {
+          const tA = new Date(a.created_at || a.start_date || 0).getTime() || 0;
+          const tB = new Date(b.created_at || b.start_date || 0).getTime() || 0;
+          return tB - tA;
+        });
         setRequests(enriched);
       }
     } catch (err) {
@@ -2077,11 +2081,18 @@ export function KamadApprovalIzin() {
                         <td className="py-4 px-4 text-sm font-medium text-slate-600 capitalize">{r.user_role?.replace('_', ' ')}</td>
                         <td className="py-4 px-4 text-sm font-medium text-slate-600 capitalize">{r.type?.replace('_', ' ')}</td>
                         <td className="py-4 px-4 text-sm font-medium text-slate-600">
-                           {format(new Date(r.start_date), 'dd MMM yyyy', {
-                    locale: id
-                  })} - <br /> {format(new Date(r.end_date), 'dd MMM yyyy', {
-                    locale: id
-                  })}
+                          {(() => {
+                            const fmt = (val: any) => {
+                              if (!val) return '-';
+                              try {
+                                const d = new Date(val);
+                                return isNaN(d.getTime()) ? String(val).slice(0, 10) : format(d, 'dd MMM yyyy', { locale: id });
+                              } catch (_) {
+                                return String(val).slice(0, 10);
+                              }
+                            };
+                            return <>{fmt(r.start_date)} - <br /> {fmt(r.end_date)}</>;
+                          })()}
                         </td>
                         <td className="py-4 px-4 text-sm font-medium text-slate-600">{r.reason}</td>
                         <td className="py-4 px-4 text-center">{getStatusBadge(r.status)}</td>
