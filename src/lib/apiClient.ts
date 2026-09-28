@@ -3,20 +3,8 @@ import { User } from '../types';
 export const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 export const apiClient = async (endpoint: string, options: RequestInit = {}, retries = 2): Promise<any> => {
-  let url = endpoint === '/sync' ? `${API_URL}/sync.php` : `${API_URL}${endpoint}`;
-  
-  // Clean URL rewrite for crud.php if needed
-  if (url.includes('crud.php?table=')) {
-    const tableMatch = url.match(/table=([^&]+)/);
-    const idMatch = url.match(/id=([^&]+)/);
-    if (tableMatch) {
-      if (idMatch) {
-        url = `${API_URL}/data/${tableMatch[1]}/${idMatch[1]}`;
-      } else {
-        url = `${API_URL}/data/${tableMatch[1]}`;
-      }
-    }
-  }
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const url = cleanEndpoint === '/sync' ? `${API_URL}/sync.php` : `${API_URL}${cleanEndpoint}`;
 
   const defaultHeaders = { 'Content-Type': 'application/json' };
   try {
