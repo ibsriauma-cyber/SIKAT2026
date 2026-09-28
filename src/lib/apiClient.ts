@@ -103,11 +103,20 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
       result = await response.text();
     }
 
-    // Trigger global SSE update if it was a mutation
+    // Trigger global Realtime updates (SSE + Firestore)
     const originalMethod = (options.method || 'GET').toUpperCase();
     if (['POST', 'PUT', 'DELETE'].includes(originalMethod) && !targetUrl.includes('trigger-update') && !targetUrl.includes('kinerja_staf')) {
       const sseTriggerUrl = `${getBaseApiUrl()}/trigger-update`;
       fetch(sseTriggerUrl, { method: 'POST' }).catch(() => {});
+
+      // Broadcast to Firebase Firestore Realtime Database
+      try {
+        import('./firebase').then(({ db }) => {
+          import('firebase/firestore').then(({ doc, setDoc }) => {
+            setDoc(doc(db, 'system_test', 'ping'), { updatedAt: new Date().toISOString() }).catch(() => {});
+          });
+        }).catch(() => {});
+      } catch (_) {}
     }
 
     return result;
