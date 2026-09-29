@@ -22,14 +22,23 @@ export function AdminSarpras() {
   const [assets, setAssets] = useState<Asset[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const normalizeCategory = (cat: string) => {
+    const c = String(cat || '').toLowerCase();
+    if (c.includes('elektronik') || c.includes('komputer') || c.includes('tv') || c.includes('audio') || c.includes('lab')) return 'Peralatan Elektronik';
+    if (c.includes('mebel') || c.includes('kursi') || c.includes('meja') || c.includes('lemari') || c.includes('rak')) return 'Mebel & Meja Kursi';
+    if (c.includes('gedung') || c.includes('ruang') || c.includes('tanah') || c.includes('aula') || c.includes('kelas')) return 'Gedung & Ruang';
+    if (c.includes('buku') || c.includes('media') || c.includes('kitab') || c.includes('pustaka')) return 'Buku & Media';
+    return cat || 'Peralatan Elektronik';
+  };
+
   const fetchSarpras = async () => {
       try {
         const data = await apiClient('/sarpras.php');
         if (Array.isArray(data)) {
           const formatted = data.map((item: any) => {
-             let qtyBaik = Number(item.qty_baik || item.quantityGood || 0);
-             let qtyRusakRingan = Number(item.qty_rusak_ringan || item.quantityLight || 0);
-             let qtyRusakBerat = Number(item.qty_rusak_berat || item.quantityHeavy || 0);
+             let qtyBaik = Number(item.qty_baik !== undefined ? item.qty_baik : (item.quantityGood !== undefined ? item.quantityGood : 0));
+             let qtyRusakRingan = Number(item.qty_rusak_ringan !== undefined ? item.qty_rusak_ringan : (item.quantityLight !== undefined ? item.quantityLight : 0));
+             let qtyRusakBerat = Number(item.qty_rusak_berat !== undefined ? item.qty_rusak_berat : (item.quantityHeavy !== undefined ? item.quantityHeavy : 0));
              
              if (!item.qty_baik && !item.qty_rusak_ringan && !item.qty_rusak_berat && item.condition) {
                  if (item.condition === 'Baik') qtyBaik = Number(item.quantity) || 0;
@@ -39,13 +48,13 @@ export function AdminSarpras() {
 
              return {
                 id: String(item.id),
-                name: item.item_name || item.name,
-                category: item.category,
+                name: item.item_name || item.name || 'Aset Tanpa Nama',
+                category: normalizeCategory(item.category),
                 quantityGood: qtyBaik || 0,
                 quantityLight: qtyRusakRingan || 0,
                 quantityHeavy: qtyRusakBerat || 0,
-                location: item.room || item.location,
-             }
+                location: item.room || item.location || 'Madrasah',
+             };
           });
           setAssets(formatted);
         }
