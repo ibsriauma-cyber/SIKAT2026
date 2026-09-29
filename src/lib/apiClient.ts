@@ -178,6 +178,23 @@ async function executeViaFirestore(endpoint: string, options: RequestInit = {}):
   return { status: 'success' };
 }
 
+async function executeViaFirestoreWithRetry(endpoint: string, options: RequestInit = {}, maxRetries = 3): Promise<any> {
+  let attempt = 0;
+  while (true) {
+    try {
+      return await executeViaFirestore(endpoint, options);
+    } catch (err: any) {
+      attempt++;
+      if (attempt >= maxRetries) {
+        throw err;
+      }
+      // Exponential backoff with random jitter between 100ms and 800ms
+      const delay = Math.min(200 * Math.pow(2, attempt) + Math.random() * 300, 2000);
+      await new Promise(r => setTimeout(r, delay));
+    }
+  }
+}
+
 export const apiClient = async (endpoint: string, options: RequestInit = {}, retries = 2): Promise<any> => {
   // If deployed on Vercel, Netlify, or any static hosting WITHOUT an external backend,
   // run DIRECTLY on Firebase Firestore Realtime Database for instant speed and 100% reliability!
@@ -192,7 +209,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
   );
 
   if (isVercelOrStatic) {
-    return await executeViaFirestore(endpoint, options);
+    return await executeViaFirestoreWithRetry(endpoint, options);
   }
 
   let targetUrl = normalizeUrl(endpoint);
@@ -224,7 +241,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
 
     if (!response.ok) {
       console.warn(`[API] Server responded with ${response.status}, executing via Realtime Firestore Database...`);
-      return await executeViaFirestore(endpoint, options);
+      return await executeViaFirestoreWithRetry(endpoint, options);
     }
 
     const contentType = response.headers.get("content-type") || "";
@@ -238,7 +255,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
     // CRITICAL: If the response is HTML (e.g. index.html SPA fallback), it's NOT a valid API response!
     if (contentType.includes("text/html") || (typeof result === "string" && (result.trim().startsWith("<!") || result.trim().startsWith("<html")))) {
       console.warn(`[API] Server returned HTML (SPA fallback), executing via Realtime Firestore Database...`);
-      return await executeViaFirestore(endpoint, options);
+      return await executeViaFirestoreWithRetry(endpoint, options);
     }
 
     // Trigger global Realtime updates (SSE + Firestore)
@@ -259,7 +276,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
     // If fetch failed completely (e.g. CORS, network offline, or serverless invocation error), fallback to Firestore!
     console.warn(`[API] Network failure (${error?.message}), executing via Realtime Firestore Database...`);
     try {
-      return await executeViaFirestore(endpoint, options);
+      return await executeViaFirestoreWithRetry(endpoint, options);
     } catch (firestoreErr: any) {
       console.error("Firestore fallback failed:", firestoreErr);
       throw firestoreErr;

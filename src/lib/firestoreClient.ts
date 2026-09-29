@@ -151,6 +151,54 @@ export const firestoreClient = {
   // 4. CRUD POST (Insert or Replace)
   async insert(table: string, data: any): Promise<any> {
     localCache.delete(`table_${table}`);
+
+    // If batch array provided
+    if (Array.isArray(data)) {
+      if (data.length === 0) return { status: 'success', count: 0 };
+      
+      const batches: Promise<void>[] = [];
+      let currentBatch = writeBatch(db);
+      let countInBatch = 0;
+
+      for (const item of data) {
+        let id = item.id ? String(item.id) : '';
+        if (!id) {
+          if (table === 'student_attendance' && item.student_id && item.date) {
+            id = `att_${item.student_id}_${item.class_name || ''}_${item.subject_name || ''}_${item.date}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+          } else if (table === 'ibadah_siswa' && item.student_id && item.date && item.type) {
+            id = `ibs_${item.student_id}_${item.class_name || ''}_${item.type}_${item.date}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+          } else if (table === 'ibadah_guru' && item.user_id && item.date) {
+            id = `ibg_${item.user_id}_${item.date}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+          } else if (table === 'pemantauan_pagi' && item.student_id && item.tanggal) {
+            id = `pmp_${item.student_id}_${item.tanggal}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+          } else if (table === 'nilai_sikap' && item.student_id && item.tanggal) {
+            id = `nsk_${item.student_id}_${item.tanggal}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+          } else if (table === 'grades' && item.student_id && item.subject_name && item.type) {
+            id = `grd_${item.student_id}_${item.subject_name}_${item.type}_${item.semester || '1'}_${item.class_name || ''}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+          } else {
+            id = `doc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+          }
+        }
+        const cleanData = sanitizeFirestoreData({ ...item, id });
+        const docRef = doc(db, table, id);
+        currentBatch.set(docRef, cleanData, { merge: true });
+        countInBatch++;
+
+        if (countInBatch >= 400) {
+          batches.push(currentBatch.commit());
+          currentBatch = writeBatch(db);
+          countInBatch = 0;
+        }
+      }
+
+      if (countInBatch > 0) {
+        batches.push(currentBatch.commit());
+      }
+
+      await Promise.all(batches);
+      return { status: 'success', count: data.length };
+    }
+
     let id = data.id ? String(data.id) : '';
     if (!id) {
       if (table === 'student_attendance' && data.student_id && data.date) {

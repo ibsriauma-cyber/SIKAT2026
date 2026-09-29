@@ -175,6 +175,28 @@ app.post(['/api/crud/:table', '/api/data/:table'], async (req, res) => {
     const [cols]: any = await pool.query(`SHOW COLUMNS FROM \`${table}\``);
     const validCols = new Set(cols.map((c: any) => c.Field));
 
+    if (Array.isArray(data)) {
+      if (data.length === 0) return res.json({ status: 'success', count: 0 });
+      for (const item of data) {
+        const insertObj: any = {};
+        for (const [key, val] of Object.entries(item)) {
+          if (validCols.has(key)) {
+            insertObj[key] = val;
+          }
+        }
+        const keys = Object.keys(insertObj);
+        if (keys.length > 0) {
+          const placeholders = keys.map(() => '?').join(', ');
+          const values = keys.map(k => insertObj[k]);
+          const sql = `REPLACE INTO \`${table}\` (${keys.map(k => `\`${k}\``).join(', ')}) VALUES (${placeholders})`;
+          await pool.query(sql, values);
+        }
+      }
+      invalidateCache(table);
+      globalEmitter.emit('update', { table, action: 'insert_batch', count: data.length });
+      return res.json({ status: 'success', count: data.length });
+    }
+
     const insertObj: any = {};
     for (const [key, val] of Object.entries(data)) {
       if (validCols.has(key)) {
