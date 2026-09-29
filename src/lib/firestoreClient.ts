@@ -413,69 +413,106 @@ export const firestoreClient = {
 
   // 7. Key-Value Store
   async keyvalGet(key?: string): Promise<any> {
-    if (typeof window !== 'undefined') {
-      if (key) {
-        return { value: localStorage.getItem(`kv_${key}`) || null };
-      }
-      const all: Record<string, string> = {};
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (k && k.startsWith('kv_')) {
-          all[k.substring(3)] = localStorage.getItem(k) || '';
-        }
-      }
-      return all;
-    }
+    const localKvList = getLocalStorageTable('key_value_store');
+    const storeMap: Record<string, string> = {};
 
-    try {
-      if (key) {
-        const snap = await getDoc(doc(db, 'key_value_store', key));
-        return { value: snap.exists() ? snap.data()?.v : null };
-      }
-      const snap = await getDocs(collection(db, 'key_value_store'));
-      const all: Record<string, string> = {};
-      snap.docs.forEach(d => {
-        const data = d.data();
-        if (data && data.v !== undefined) {
-          all[d.id] = String(data.v);
+    // 1. Populate from persistent database/snapshot key_value_store table
+    if (Array.isArray(localKvList)) {
+      localKvList.forEach((item: any) => {
+        if (item && item.k) {
+          storeMap[String(item.k)] = String(item.v !== undefined ? item.v : '');
         }
       });
-      return all;
-    } catch (_) {
-      return key ? { value: null } : {};
     }
+
+    // 2. Overlay any active localStorage edits
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith('kv_')) {
+            const actualKey = k.substring(3);
+            const val = localStorage.getItem(k);
+            if (val !== null) storeMap[actualKey] = val;
+          }
+        }
+      } catch (_) {}
+    }
+
+    if (key) {
+      if (storeMap[key] !== undefined) {
+        return { value: storeMap[key] };
+      }
+      try {
+        const snap = await getDoc(doc(db, 'key_value_store', key));
+        if (snap.exists()) {
+          const val = String(snap.data()?.v || '');
+          storeMap[key] = val;
+          return { value: val };
+        }
+      } catch (_) {}
+      return { value: null };
+    }
+
+    return storeMap;
   },
 
   async keyvalSet(key: string, value: string): Promise<any> {
-    if (typeof window !== 'undefined') {
+    const valStr = String(value !== undefined && value !== null ? value : '');
+    
+    // 1. Save to localStorage
+    if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
       try {
-        localStorage.setItem(`kv_${key}`, String(value));
+        localStorage.setItem(`kv_${key}`, valStr);
       } catch (_) {}
     }
+
+    // 2. Update key_value_store table
+    const localKvList = [...getLocalStorageTable('key_value_store')];
+    const idx = localKvList.findIndex((item: any) => String(item.k) === String(key));
+    if (idx >= 0) {
+      localKvList[idx] = { k: key, v: valStr };
+    } else {
+      localKvList.push({ k: key, v: valStr });
+    }
+    setLocalStorageTable('key_value_store', localKvList);
+
+    // 3. Save to Firestore in background
     try {
-      await setDoc(doc(db, 'key_value_store', key), { k: key, v: String(value) });
+      await setDoc(doc(db, 'key_value_store', key), { k: key, v: valStr });
     } catch (_) {}
+
     return { status: 'success' };
   },
 
   async keyvalDelete(key?: string): Promise<any> {
-    if (typeof window !== 'undefined') {
-      if (key) {
-        localStorage.removeItem(`kv_${key}`);
-      } else {
-        const keysToRemove: string[] = [];
-        for (let i = 0; i < localStorage.length; i++) {
-          const k = localStorage.key(i);
-          if (k && k.startsWith('kv_')) keysToRemove.push(k);
-        }
-        keysToRemove.forEach(k => localStorage.removeItem(k));
+    const localKvList = getLocalStorageTable('key_value_store');
+
+    if (key) {
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        try {
+          localStorage.removeItem(`kv_${key}`);
+        } catch (_) {}
       }
-    }
-    try {
-      if (key) {
+      const filtered = localKvList.filter((item: any) => String(item.k) !== String(key));
+      setLocalStorageTable('key_value_store', filtered);
+      try {
         await deleteDoc(doc(db, 'key_value_store', key));
+      } catch (_) {}
+    } else {
+      if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+        try {
+          const keysToRemove: string[] = [];
+          for (let i = 0; i < localStorage.length; i++) {
+            const k = localStorage.key(i);
+            if (k && k.startsWith('kv_')) keysToRemove.push(k);
+          }
+          keysToRemove.forEach(k => localStorage.removeItem(k));
+        } catch (_) {}
       }
-    } catch (_) {}
+      setLocalStorageTable('key_value_store', []);
+    }
+
     return { status: 'success' };
   },
 

@@ -93,20 +93,30 @@ export function AdminSettings() {
     };
   }, []);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
-    remoteStorage.setItem('school_name', schoolName);
-    remoteStorage.setItem('npsn', npsn);
-    remoteStorage.setItem('school_address', schoolAddress);
-    remoteStorage.setItem('school_lat_l', schoolLatL);
-    remoteStorage.setItem('school_lng_l', schoolLngL);
-    remoteStorage.setItem('school_radius_l', schoolRadiusL);
-    remoteStorage.setItem('school_lat_p', schoolLatP);
-    remoteStorage.setItem('school_lng_p', schoolLngP);
-    remoteStorage.setItem('school_radius_p', schoolRadiusP);
-    remoteStorage.setItem('limit_absen_siswa', limitAbsenSiswa);
-    remoteStorage.setItem('limit_absen_zuhur', limitAbsenZuhur);
-    setSuccessMessage('Setelan profil berhasil disimpan!');
+    try {
+      const items = [
+        { k: 'school_name', v: schoolName },
+        { k: 'npsn', v: npsn },
+        { k: 'school_address', v: schoolAddress },
+        { k: 'school_lat_l', v: schoolLatL },
+        { k: 'school_lng_l', v: schoolLngL },
+        { k: 'school_radius_l', v: schoolRadiusL },
+        { k: 'school_lat_p', v: schoolLatP },
+        { k: 'school_lng_p', v: schoolLngP },
+        { k: 'school_radius_p', v: schoolRadiusP },
+        { k: 'limit_absen_siswa', v: limitAbsenSiswa },
+        { k: 'limit_absen_zuhur', v: limitAbsenZuhur }
+      ];
+
+      for (const item of items) {
+        remoteStorage.setItem(item.k, item.v);
+      }
+      setSuccessMessage('Setelan profil berhasil disimpan!');
+    } catch (err: any) {
+      setErrorMessage('Gagal menyimpan profil: ' + err.message);
+    }
     setTimeout(() => setSuccessMessage(null), 3000);
   };
 
