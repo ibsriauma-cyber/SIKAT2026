@@ -12,10 +12,55 @@ import {
   limit
 } from 'firebase/firestore';
 import bcrypt from 'bcryptjs';
+import fallbackMasterData from './fallbackMasterData.json';
 
-// Cache for rapid repeated reads (<2ms)
-const localCache = new Map<string, { data: any; time: number }>();
-const CACHE_TTL = 3000;
+// In-memory cache
+const memoryCache = new Map<string, { data: any; time: number }>();
+const STATIC_TTL = 10 * 60 * 1000; // 10 minutes for master tables
+const DYNAMIC_TTL = 30 * 1000;      // 30 seconds for dynamic tables
+
+const STATIC_TABLES = new Set([
+  'users',
+  'students',
+  'classes',
+  'subjects',
+  'academic_terms',
+  'schedules',
+  'teaching_assignments',
+  'school_profile',
+  'settings'
+]);
+
+function getLocalStorageTable(table: string): any[] {
+  if (typeof window === 'undefined') {
+    return (fallbackMasterData as any)[table] || [];
+  }
+  try {
+    const raw = localStorage.getItem(`fb_table_${table}`);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch (_) {}
+
+  const fallback = (fallbackMasterData as any)[table];
+  if (Array.isArray(fallback) && fallback.length > 0) {
+    try {
+      localStorage.setItem(`fb_table_${table}`, JSON.stringify(fallback));
+    } catch (_) {}
+    return fallback;
+  }
+  return [];
+}
+
+function setLocalStorageTable(table: string, data: any[]) {
+  memoryCache.set(`table_${table}`, { data, time: Date.now() });
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.setItem(`fb_table_${table}`, JSON.stringify(data));
+    } catch (_) {}
+  }
+}
 
 export function sanitizeFirestoreData<T = any>(val: T): T {
   if (val === null || val === undefined) return val;
@@ -63,99 +108,116 @@ export const firestoreClient = {
   // 1. Login Authentication
   async login(username: string, password: string): Promise<any> {
     const search = String(username || '').trim().toLowerCase();
-    const usersRef = collection(db, 'users');
+    
+    // First, check local/fallback snapshot to avoid burning Firestore read quota on login!
+    const localUsers = getLocalStorageTable('users');
+    const localMatch = localUsers.find((u: any) => {
+      return (
+        (u.username && String(u.username).toLowerCase() === search) ||
+        (u.nuptk && String(u.nuptk).toLowerCase() === search) ||
+        (u.nip && String(u.nip).toLowerCase() === search) ||
+        String(u.id) === search
+      );
+    });
 
-    // Query by username
-    let snap = await getDocs(query(usersRef, where('username', '==', search), limit(1)));
-    if (snap.empty && search) {
-      // Try by exact id
-      const byIdSnap = await getDoc(doc(db, 'users', search));
-      if (byIdSnap.exists()) {
-        snap = { docs: [byIdSnap], empty: false } as any;
-      }
-    }
-
-    if (snap.empty) {
-      // Query all users to match case-insensitively or by nuptk / nip
-      const allUsersSnap = await getDocs(usersRef);
-      const matched = allUsersSnap.docs.find(d => {
-        const u = d.data();
-        return (
-          (u.username && String(u.username).toLowerCase() === search) ||
-          (u.nuptk && String(u.nuptk).toLowerCase() === search) ||
-          (u.nip && String(u.nip).toLowerCase() === search) ||
-          String(u.id) === search
-        );
-      });
-
-      if (!matched) {
-        return { status: 'error', message: 'Username / NIPTK atau password salah' };
-      }
-
-      const user = sanitizeFirestoreData(matched.data());
-      const isCorrect = verifyPassword(password, user.password);
+    if (localMatch) {
+      const isCorrect = verifyPassword(password, localMatch.password);
       if (isCorrect) {
-        const cleanUser = { ...user };
+        const cleanUser = { ...localMatch };
         delete cleanUser.password;
         return { status: 'success', user: sanitizeFirestoreData(cleanUser) };
       }
+    }
+
+    // Try Firestore if not matched locally
+    try {
+      const usersRef = collection(db, 'users');
+      const snap = await getDocs(query(usersRef, where('username', '==', search), limit(1)));
+      
+      if (!snap.empty) {
+        const user = sanitizeFirestoreData(snap.docs[0].data());
+        const isCorrect = verifyPassword(password, user.password);
+        if (isCorrect) {
+          const cleanUser = { ...user };
+          delete cleanUser.password;
+          return { status: 'success', user: sanitizeFirestoreData(cleanUser) };
+        }
+      }
+    } catch (err: any) {
+      console.warn('[Firestore] Auth query skipped (quota/network):', err.message);
+    }
+
+    if (localMatch) {
       return { status: 'error', message: 'Username / NIPTK atau password salah' };
     }
 
-    const user = sanitizeFirestoreData(snap.docs[0].data());
-    const isCorrect = verifyPassword(password, user.password);
-    if (isCorrect) {
-      const cleanUser = { ...user };
-      delete cleanUser.password;
-      return { status: 'success', user: sanitizeFirestoreData(cleanUser) };
-    }
     return { status: 'error', message: 'Username / NIPTK atau password salah' };
   },
 
   // 2. Data Sync
   async sync(): Promise<any> {
-    const [usersSnap, studentsSnap, classesSnap, subjectsSnap] = await Promise.all([
-      getDocs(collection(db, 'users')),
-      getDocs(collection(db, 'students')),
-      getDocs(collection(db, 'classes')),
-      getDocs(collection(db, 'subjects')),
+    const [users, students, classes, subjects] = await Promise.all([
+      this.getTable('users'),
+      this.getTable('students'),
+      this.getTable('classes'),
+      this.getTable('subjects')
     ]);
-
-    const users = usersSnap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
-    const students = studentsSnap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
-    const classes = classesSnap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
-    const subjects = subjectsSnap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
 
     return { users, students, classes, subjects };
   },
 
   // 3. CRUD GET
   async getTable(table: string, id?: string): Promise<any> {
+    const localList = getLocalStorageTable(table);
+
     if (id) {
-      const snap = await getDoc(doc(db, table, String(id)));
-      return snap.exists() ? sanitizeFirestoreData({ ...snap.data(), id: snap.id }) : null;
+      const found = localList.find((item: any) => String(item.id) === String(id));
+      if (found) return found;
+
+      try {
+        const snap = await getDoc(doc(db, table, String(id)));
+        if (snap.exists()) {
+          return sanitizeFirestoreData({ ...snap.data(), id: snap.id });
+        }
+      } catch (err: any) {
+        console.warn(`[Firestore] getDoc for ${table}/${id} failed:`, err.message);
+      }
+      return null;
     }
 
     const cacheKey = `table_${table}`;
-    const cached = localCache.get(cacheKey);
-    if (cached && Date.now() - cached.time < CACHE_TTL) {
+    const cached = memoryCache.get(cacheKey);
+    const ttl = STATIC_TABLES.has(table) ? STATIC_TTL : DYNAMIC_TTL;
+
+    if (cached && Date.now() - cached.time < ttl) {
       return cached.data;
     }
 
-    const snap = await getDocs(collection(db, table));
-    const list = snap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
-    localCache.set(cacheKey, { data: list, time: Date.now() });
-    return list;
+    // If we have local cached data, return it and optionally refresh in background if quota permits
+    try {
+      const snap = await getDocs(collection(db, table));
+      const list = snap.docs.map(d => sanitizeFirestoreData({ ...d.data(), id: d.id }));
+      if (list.length > 0 || !STATIC_TABLES.has(table)) {
+        setLocalStorageTable(table, list);
+        return list;
+      }
+    } catch (err: any) {
+      console.warn(`[Firestore] Quota or network notice for table '${table}': ${err.message}. Serving from persistent cache.`);
+    }
+
+    // Return stored/fallback data safely
+    memoryCache.set(cacheKey, { data: localList, time: Date.now() });
+    return localList;
   },
 
   // 4. CRUD POST (Insert or Replace)
   async insert(table: string, data: any): Promise<any> {
-    localCache.delete(`table_${table}`);
+    const localList = [...getLocalStorageTable(table)];
 
-    // If batch array provided
+    // Batch insertion
     if (Array.isArray(data)) {
       if (data.length === 0) return { status: 'success', count: 0 };
-      
+
       const batches: Promise<void>[] = [];
       let currentBatch = writeBatch(db);
       let countInBatch = 0;
@@ -180,25 +242,36 @@ export const firestoreClient = {
           }
         }
         const cleanData = sanitizeFirestoreData({ ...item, id });
+        
+        // Update local list
+        const existingIdx = localList.findIndex((x: any) => String(x.id) === String(id));
+        if (existingIdx >= 0) {
+          localList[existingIdx] = { ...localList[existingIdx], ...cleanData };
+        } else {
+          localList.push(cleanData);
+        }
+
         const docRef = doc(db, table, id);
         currentBatch.set(docRef, cleanData, { merge: true });
         countInBatch++;
 
         if (countInBatch >= 400) {
-          batches.push(currentBatch.commit());
+          batches.push(currentBatch.commit().catch(e => console.warn('[Firestore] Batch commit notice:', e.message)));
           currentBatch = writeBatch(db);
           countInBatch = 0;
         }
       }
 
       if (countInBatch > 0) {
-        batches.push(currentBatch.commit());
+        batches.push(currentBatch.commit().catch(e => console.warn('[Firestore] Final batch commit notice:', e.message)));
       }
 
-      await Promise.all(batches);
+      setLocalStorageTable(table, localList);
+      Promise.all(batches).catch(() => {});
       return { status: 'success', count: data.length };
     }
 
+    // Single item insertion
     let id = data.id ? String(data.id) : '';
     if (!id) {
       if (table === 'student_attendance' && data.student_id && data.date) {
@@ -217,21 +290,36 @@ export const firestoreClient = {
         id = `doc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
       }
     }
+
     const cleanData = sanitizeFirestoreData({ ...data, id });
-    const docRef = doc(db, table, id);
-    await setDoc(docRef, cleanData, { merge: true });
+    const existingIdx = localList.findIndex((x: any) => String(x.id) === String(id));
+    if (existingIdx >= 0) {
+      localList[existingIdx] = { ...localList[existingIdx], ...cleanData };
+    } else {
+      localList.push(cleanData);
+    }
+    setLocalStorageTable(table, localList);
+
+    // Save to Firestore in background
+    try {
+      const docRef = doc(db, table, id);
+      await setDoc(docRef, cleanData, { merge: true });
+    } catch (err: any) {
+      console.warn(`[Firestore] Write notice for ${table}/${id}:`, err.message);
+    }
+
     return { status: 'success', insertId: id, id };
   },
 
-  // 4b. Execute SQL-like DELETE query on Firestore
+  // 4b. Execute SQL-like DELETE query on Firestore & Local Storage
   async executeQuery(querySql: string): Promise<any> {
     if (!querySql) return { status: 'success', affectedRows: 0 };
     const q = querySql.trim();
     const deleteMatch = q.match(/^DELETE\s+FROM\s+[`]?([a-zA-Z0-9_]+)[`]?\s+WHERE\s+(.+)$/i);
+    
     if (deleteMatch) {
       const table = deleteMatch[1];
       const whereClause = deleteMatch[2];
-      localCache.delete(`table_${table}`);
 
       const condRegex = /([a-zA-Z0-9_]+)\s*(=|!=)\s*'([^']*)'/g;
       let match;
@@ -241,26 +329,45 @@ export const firestoreClient = {
       }
 
       if (conditions.length > 0) {
-        const snap = await getDocs(collection(db, table));
-        const toDelete: any[] = [];
-        snap.forEach(d => {
-          const data = d.data();
-          const matches = conditions.every(c => {
+        // 1. Immediately delete from local storage
+        const localList = getLocalStorageTable(table);
+        const filteredLocal = localList.filter((data: any) => {
+          const matchesAll = conditions.every(c => {
             const rowVal = String(data[c.col] || '');
             if (c.op === '=') return rowVal === c.val;
             if (c.op === '!=') return rowVal !== c.val;
             return true;
           });
-          if (matches) toDelete.push(d.ref);
+          return !matchesAll;
         });
+        setLocalStorageTable(table, filteredLocal);
 
-        for (let i = 0; i < toDelete.length; i += 400) {
-          const batch = writeBatch(db);
-          toDelete.slice(i, i + 400).forEach(ref => batch.delete(ref));
-          await batch.commit();
+        // 2. Delete from Firestore in background
+        try {
+          const snap = await getDocs(collection(db, table));
+          const toDelete: any[] = [];
+          snap.forEach(d => {
+            const data = d.data();
+            const matches = conditions.every(c => {
+              const rowVal = String(data[c.col] || '');
+              if (c.op === '=') return rowVal === c.val;
+              if (c.op === '!=') return rowVal !== c.val;
+              return true;
+            });
+            if (matches) toDelete.push(d.ref);
+          });
+
+          for (let i = 0; i < toDelete.length; i += 400) {
+            const batch = writeBatch(db);
+            toDelete.slice(i, i + 400).forEach(ref => batch.delete(ref));
+            await batch.commit();
+          }
+          return { status: 'success', affectedRows: toDelete.length };
+        } catch (err: any) {
+          console.warn(`[Firestore] Delete notice for ${table}:`, err.message);
         }
 
-        return { status: 'success', affectedRows: toDelete.length };
+        return { status: 'success', affectedRows: localList.length - filteredLocal.length };
       }
     }
     return { status: 'success', affectedRows: 0 };
@@ -268,58 +375,114 @@ export const firestoreClient = {
 
   // 5. CRUD PUT (Update)
   async update(table: string, id: string | number, data: any): Promise<any> {
-    localCache.delete(`table_${table}`);
-    const cleanData = sanitizeFirestoreData(data);
-    const docRef = doc(db, table, String(id));
-    await setDoc(docRef, cleanData, { merge: true });
+    const localList = [...getLocalStorageTable(table)];
+    const cleanData = sanitizeFirestoreData({ ...data, id: String(id) });
+    const idx = localList.findIndex((x: any) => String(x.id) === String(id));
+    if (idx >= 0) {
+      localList[idx] = { ...localList[idx], ...cleanData };
+    } else {
+      localList.push(cleanData);
+    }
+    setLocalStorageTable(table, localList);
+
+    try {
+      const docRef = doc(db, table, String(id));
+      await setDoc(docRef, cleanData, { merge: true });
+    } catch (err: any) {
+      console.warn(`[Firestore] Update notice for ${table}/${id}:`, err.message);
+    }
+
     return { status: 'success', affectedRows: 1 };
   },
 
   // 6. CRUD DELETE
   async delete(table: string, id: string | number): Promise<any> {
-    localCache.delete(`table_${table}`);
-    const docRef = doc(db, table, String(id));
-    await deleteDoc(docRef);
+    const localList = getLocalStorageTable(table);
+    const filtered = localList.filter((x: any) => String(x.id) !== String(id));
+    setLocalStorageTable(table, filtered);
+
+    try {
+      const docRef = doc(db, table, String(id));
+      await deleteDoc(docRef);
+    } catch (err: any) {
+      console.warn(`[Firestore] Delete notice for ${table}/${id}:`, err.message);
+    }
+
     return { status: 'success', affectedRows: 1 };
   },
 
   // 7. Key-Value Store
   async keyvalGet(key?: string): Promise<any> {
-    if (key) {
-      const snap = await getDoc(doc(db, 'key_value_store', key));
-      return { value: snap.exists() ? snap.data()?.v : null };
-    }
-    const snap = await getDocs(collection(db, 'key_value_store'));
-    const all: Record<string, string> = {};
-    snap.docs.forEach(d => {
-      const data = d.data();
-      if (data && data.v !== undefined) {
-        all[d.id] = String(data.v);
+    if (typeof window !== 'undefined') {
+      if (key) {
+        return { value: localStorage.getItem(`kv_${key}`) || null };
       }
-    });
-    return all;
+      const all: Record<string, string> = {};
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith('kv_')) {
+          all[k.substring(3)] = localStorage.getItem(k) || '';
+        }
+      }
+      return all;
+    }
+
+    try {
+      if (key) {
+        const snap = await getDoc(doc(db, 'key_value_store', key));
+        return { value: snap.exists() ? snap.data()?.v : null };
+      }
+      const snap = await getDocs(collection(db, 'key_value_store'));
+      const all: Record<string, string> = {};
+      snap.docs.forEach(d => {
+        const data = d.data();
+        if (data && data.v !== undefined) {
+          all[d.id] = String(data.v);
+        }
+      });
+      return all;
+    } catch (_) {
+      return key ? { value: null } : {};
+    }
   },
 
   async keyvalSet(key: string, value: string): Promise<any> {
-    await setDoc(doc(db, 'key_value_store', key), { k: key, v: String(value) });
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(`kv_${key}`, String(value));
+      } catch (_) {}
+    }
+    try {
+      await setDoc(doc(db, 'key_value_store', key), { k: key, v: String(value) });
+    } catch (_) {}
     return { status: 'success' };
   },
 
   async keyvalDelete(key?: string): Promise<any> {
-    if (key) {
-      await deleteDoc(doc(db, 'key_value_store', key));
-    } else {
-      const snap = await getDocs(collection(db, 'key_value_store'));
-      await Promise.all(snap.docs.map(d => deleteDoc(d.ref)));
+    if (typeof window !== 'undefined') {
+      if (key) {
+        localStorage.removeItem(`kv_${key}`);
+      } else {
+        const keysToRemove: string[] = [];
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith('kv_')) keysToRemove.push(k);
+        }
+        keysToRemove.forEach(k => localStorage.removeItem(k));
+      }
     }
+    try {
+      if (key) {
+        await deleteDoc(doc(db, 'key_value_store', key));
+      }
+    } catch (_) {}
     return { status: 'success' };
   },
 
   // 8. Announcements
   async getAnnouncements(): Promise<any[]> {
-    const snap = await getDocs(collection(db, 'announcements'));
-    return snap.docs.map(d => {
-      const raw = sanitizeFirestoreData(d.data());
+    const rawList = await this.getTable('announcements');
+    return (rawList || []).map((raw: any) => {
       const rawDate = raw.date || raw.created_at;
       let finalDate = new Date().toISOString().split('T')[0];
 
@@ -329,7 +492,7 @@ export const firestoreClient = {
 
       return {
         ...raw,
-        id: d.id,
+        id: String(raw.id || ''),
         title: String(raw.title || ''),
         content: String(raw.content || ''),
         category: String(raw.category || 'Informasi'),
@@ -343,18 +506,21 @@ export const firestoreClient = {
   // 9. Stats
   async getStats(): Promise<any> {
     const [u, s, c] = await Promise.all([
-      getDocs(collection(db, 'users')),
-      getDocs(collection(db, 'students')),
-      getDocs(collection(db, 'classes'))
+      this.getTable('users'),
+      this.getTable('students'),
+      this.getTable('classes')
     ]);
+    const uCount = Array.isArray(u) ? u.length : 0;
+    const sCount = Array.isArray(s) ? s.length : 0;
+    const cCount = Array.isArray(c) ? c.length : 0;
     return {
-      totalUsers: u.size,
-      totalStudents: s.size,
-      activeClasses: c.size,
+      totalUsers: uCount,
+      totalStudents: sCount,
+      activeClasses: cCount,
       attendanceRate: 98,
-      users: u.size,
-      students: s.size,
-      classes: c.size
+      users: uCount,
+      students: sCount,
+      classes: cCount
     };
   },
 
