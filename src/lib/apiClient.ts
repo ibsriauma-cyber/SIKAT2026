@@ -196,22 +196,6 @@ async function executeViaFirestoreWithRetry(endpoint: string, options: RequestIn
 }
 
 export const apiClient = async (endpoint: string, options: RequestInit = {}, retries = 2): Promise<any> => {
-  // If deployed on Vercel, Netlify, or any static hosting WITHOUT an external backend,
-  // run DIRECTLY on Firebase Firestore Realtime Database for instant speed and 100% reliability!
-  const isVercelOrStatic = typeof window !== 'undefined' && (
-    window.location.hostname.includes('vercel.app') ||
-    window.location.hostname.includes('netlify.app') ||
-    (!import.meta.env.VITE_API_URL &&
-     window.location.hostname !== 'localhost' &&
-     window.location.hostname !== '127.0.0.1' &&
-     !window.location.hostname.includes('.run.app') &&
-     !window.location.hostname.includes(':3000'))
-  );
-
-  if (isVercelOrStatic) {
-    return await executeViaFirestoreWithRetry(endpoint, options);
-  }
-
   let targetUrl = normalizeUrl(endpoint);
 
   const headers: Record<string, string> = {
@@ -240,7 +224,6 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
     const response = await fetch(targetUrl, fetchOptions);
 
     if (!response.ok) {
-      console.warn(`[API] Server responded with ${response.status}, executing via Realtime Firestore Database...`);
       return await executeViaFirestoreWithRetry(endpoint, options);
     }
 
@@ -254,7 +237,6 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
 
     // CRITICAL: If the response is HTML (e.g. index.html SPA fallback), it's NOT a valid API response!
     if (contentType.includes("text/html") || (typeof result === "string" && (result.trim().startsWith("<!") || result.trim().startsWith("<html")))) {
-      console.warn(`[API] Server returned HTML (SPA fallback), executing via Realtime Firestore Database...`);
       return await executeViaFirestoreWithRetry(endpoint, options);
     }
 
@@ -273,12 +255,11 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
     return result;
 
   } catch (error: any) {
-    // If fetch failed completely (e.g. CORS, network offline, or serverless invocation error), fallback to Firestore!
-    console.warn(`[API] Network failure (${error?.message}), executing via Realtime Firestore Database...`);
+    // If fetch failed (e.g. static hosting, CORS, or offline), execute via Firestore / local snapshot
     try {
       return await executeViaFirestoreWithRetry(endpoint, options);
     } catch (firestoreErr: any) {
-      console.error("Firestore fallback failed:", firestoreErr);
+      console.error("Storage fallback notice:", firestoreErr);
       throw firestoreErr;
     }
   }

@@ -28,8 +28,33 @@ const STATIC_TABLES = new Set([
   'schedules',
   'teaching_assignments',
   'school_profile',
-  'settings'
+  'settings',
+  'sarpras',
+  'key_value_store'
 ]);
+
+const CURRENT_DATA_VERSION = 'sikat_db_v2026_09_29_r2';
+
+function initializeVersionedStorage() {
+  if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;
+  try {
+    const savedVersion = localStorage.getItem('sikat_app_version');
+    if (savedVersion !== CURRENT_DATA_VERSION) {
+      // Clear old stale table caches
+      const keysToRemove: string[] = [];
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && (k.startsWith('fb_table_') || k.startsWith('kv_') || k.startsWith('cache_'))) {
+          keysToRemove.push(k);
+        }
+      }
+      keysToRemove.forEach(k => localStorage.removeItem(k));
+      localStorage.setItem('sikat_app_version', CURRENT_DATA_VERSION);
+    }
+  } catch (_) {}
+}
+
+initializeVersionedStorage();
 
 function getLocalStorageTable(table: string): any[] {
   if (typeof window === 'undefined') {

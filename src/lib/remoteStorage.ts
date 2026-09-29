@@ -1,7 +1,19 @@
 import { apiClient } from './apiClient';
+import fallbackMasterData from './fallbackMasterData.json';
 
 class RemoteStorage implements Storage {
-  private cache: Record<string, string> = {};
+  private cache: Record<string, string> = (() => {
+    const initial: Record<string, string> = {};
+    if (Array.isArray(fallbackMasterData.key_value_store)) {
+      fallbackMasterData.key_value_store.forEach((item: any) => {
+        if (item && item.k) {
+          initial[String(item.k)] = String(item.v !== undefined ? item.v : '');
+        }
+      });
+    }
+    return initial;
+  })();
+
   private initPromise: Promise<Record<string, string>> | null = null;
   private listeners: (() => void)[] = [];
 
