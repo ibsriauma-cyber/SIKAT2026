@@ -6,6 +6,7 @@ import {
   getDocs,
   setDoc,
   deleteDoc,
+  writeBatch,
   query,
   where,
   limit
@@ -150,11 +151,71 @@ export const firestoreClient = {
   // 4. CRUD POST (Insert or Replace)
   async insert(table: string, data: any): Promise<any> {
     localCache.delete(`table_${table}`);
-    const id = String(data.id || `doc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`);
+    let id = data.id ? String(data.id) : '';
+    if (!id) {
+      if (table === 'student_attendance' && data.student_id && data.date) {
+        id = `att_${data.student_id}_${data.class_name || ''}_${data.subject_name || ''}_${data.date}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+      } else if (table === 'ibadah_siswa' && data.student_id && data.date && data.type) {
+        id = `ibs_${data.student_id}_${data.class_name || ''}_${data.type}_${data.date}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+      } else if (table === 'ibadah_guru' && data.user_id && data.date) {
+        id = `ibg_${data.user_id}_${data.date}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+      } else if (table === 'pemantauan_pagi' && data.student_id && data.tanggal) {
+        id = `pmp_${data.student_id}_${data.tanggal}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+      } else if (table === 'nilai_sikap' && data.student_id && data.tanggal) {
+        id = `nsk_${data.student_id}_${data.tanggal}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+      } else if (table === 'grades' && data.student_id && data.subject_name && data.type) {
+        id = `grd_${data.student_id}_${data.subject_name}_${data.type}_${data.semester || '1'}_${data.class_name || ''}`.replace(/[^a-zA-Z0-9_-]/g, '_');
+      } else {
+        id = `doc_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+      }
+    }
     const cleanData = sanitizeFirestoreData({ ...data, id });
     const docRef = doc(db, table, id);
     await setDoc(docRef, cleanData, { merge: true });
     return { status: 'success', insertId: id, id };
+  },
+
+  // 4b. Execute SQL-like DELETE query on Firestore
+  async executeQuery(querySql: string): Promise<any> {
+    if (!querySql) return { status: 'success', affectedRows: 0 };
+    const q = querySql.trim();
+    const deleteMatch = q.match(/^DELETE\s+FROM\s+[`]?([a-zA-Z0-9_]+)[`]?\s+WHERE\s+(.+)$/i);
+    if (deleteMatch) {
+      const table = deleteMatch[1];
+      const whereClause = deleteMatch[2];
+      localCache.delete(`table_${table}`);
+
+      const condRegex = /([a-zA-Z0-9_]+)\s*(=|!=)\s*'([^']*)'/g;
+      let match;
+      const conditions: { col: string; op: string; val: string }[] = [];
+      while ((match = condRegex.exec(whereClause)) !== null) {
+        conditions.push({ col: match[1], op: match[2], val: match[3] });
+      }
+
+      if (conditions.length > 0) {
+        const snap = await getDocs(collection(db, table));
+        const toDelete: any[] = [];
+        snap.forEach(d => {
+          const data = d.data();
+          const matches = conditions.every(c => {
+            const rowVal = String(data[c.col] || '');
+            if (c.op === '=') return rowVal === c.val;
+            if (c.op === '!=') return rowVal !== c.val;
+            return true;
+          });
+          if (matches) toDelete.push(d.ref);
+        });
+
+        for (let i = 0; i < toDelete.length; i += 400) {
+          const batch = writeBatch(db);
+          toDelete.slice(i, i + 400).forEach(ref => batch.delete(ref));
+          await batch.commit();
+        }
+
+        return { status: 'success', affectedRows: toDelete.length };
+      }
+    }
+    return { status: 'success', affectedRows: 0 };
   },
 
   // 5. CRUD PUT (Update)

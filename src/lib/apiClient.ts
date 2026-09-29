@@ -86,6 +86,12 @@ async function executeViaFirestore(endpoint: string, options: RequestInit = {}):
     }
   }
 
+  // 4b. SQL Query emulation (DELETE FROM ...)
+  if (clean.startsWith('/query')) {
+    const querySql = body.query || body.q || '';
+    return firestoreClient.executeQuery(querySql);
+  }
+
   // 5. Crud
   if (clean.startsWith('/crud')) {
     const urlObj = new URL(`http://dummy${clean}`);

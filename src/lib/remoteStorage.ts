@@ -2,25 +2,46 @@ import { apiClient } from './apiClient';
 
 class RemoteStorage implements Storage {
   private cache: Record<string, string> = {};
+  private initPromise: Promise<Record<string, string>> | null = null;
+  private listeners: (() => void)[] = [];
 
-  async init() {
-    try {
-      const data = await apiClient('/keyval.php');
-      this.cache = data || {};
-    } catch (e) {
-      console.error('Failed to load remote storage', e);
-    }
+  async init(): Promise<Record<string, string>> {
+    if (this.initPromise) return this.initPromise;
+    this.initPromise = (async () => {
+      try {
+        const data = await apiClient('/keyval.php');
+        if (data && typeof data === 'object') {
+          this.cache = { ...this.cache, ...data };
+        }
+        this.listeners.forEach(fn => fn());
+      } catch (e) {
+        console.error('Failed to load remote storage', e);
+      }
+      return this.cache;
+    })();
+    return this.initPromise;
+  }
+
+  subscribe(listener: () => void) {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter(l => l !== listener);
+    };
   }
 
   getItem(key: string): string | null {
     return this.cache[key] !== undefined ? this.cache[key] : null;
   }
 
+  getAll(): Record<string, string> {
+    return { ...this.cache };
+  }
+
   setItem(key: string, value: string) {
-    this.cache[key] = value;
+    this.cache[key] = String(value);
     apiClient('/keyval.php', {
       method: 'POST',
-      body: JSON.stringify({ key, value })
+      body: JSON.stringify({ key, value: String(value) })
     }).catch(e => console.error('Failed to save to remote storage', e));
   }
 

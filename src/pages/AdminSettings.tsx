@@ -21,22 +21,77 @@ export function AdminSettings() {
   const [confirmPassword, setConfirmPassword] = useState('');
 
   // School info settings
-  const [schoolName, setSchoolName] = useState(remoteStorage.getItem('school_name') || 'MAN 1 Model');
-  const [npsn, setNpsn] = useState(remoteStorage.getItem('npsn') || '20202020');
-  const [schoolAddress, setSchoolAddress] = useState(remoteStorage.getItem('school_address') || 'Jl. Pendidikan No. 1, Kota Pelajar');
+  const [schoolName, setSchoolName] = useState(remoteStorage.getItem('school_name') || '');
+  const [npsn, setNpsn] = useState(remoteStorage.getItem('npsn') || '');
+  const [schoolAddress, setSchoolAddress] = useState(remoteStorage.getItem('school_address') || '');
 
   // Location settings
-  const [schoolLatL, setSchoolLatL] = useState(remoteStorage.getItem('school_lat_l') || '-0.502');
-  const [schoolLngL, setSchoolLngL] = useState(remoteStorage.getItem('school_lng_l') || '101.447');
-  const [schoolRadiusL, setSchoolRadiusL] = useState(remoteStorage.getItem('school_radius_l') || '200');
+  const [schoolLatL, setSchoolLatL] = useState(remoteStorage.getItem('school_lat_l') || '');
+  const [schoolLngL, setSchoolLngL] = useState(remoteStorage.getItem('school_lng_l') || '');
+  const [schoolRadiusL, setSchoolRadiusL] = useState(remoteStorage.getItem('school_radius_l') || '');
 
-  const [schoolLatP, setSchoolLatP] = useState(remoteStorage.getItem('school_lat_p') || '-0.502');
-  const [schoolLngP, setSchoolLngP] = useState(remoteStorage.getItem('school_lng_p') || '101.447');
-  const [schoolRadiusP, setSchoolRadiusP] = useState(remoteStorage.getItem('school_radius_p') || '200');
+  const [schoolLatP, setSchoolLatP] = useState(remoteStorage.getItem('school_lat_p') || '');
+  const [schoolLngP, setSchoolLngP] = useState(remoteStorage.getItem('school_lng_p') || '');
+  const [schoolRadiusP, setSchoolRadiusP] = useState(remoteStorage.getItem('school_radius_p') || '');
 
   // Time limit settings
-  const [limitAbsenSiswa, setLimitAbsenSiswa] = useState(remoteStorage.getItem('limit_absen_siswa') || '15:00');
-  const [limitAbsenZuhur, setLimitAbsenZuhur] = useState(remoteStorage.getItem('limit_absen_zuhur') || '13:00');
+  const [limitAbsenSiswa, setLimitAbsenSiswa] = useState(remoteStorage.getItem('limit_absen_siswa') || '');
+  const [limitAbsenZuhur, setLimitAbsenZuhur] = useState(remoteStorage.getItem('limit_absen_zuhur') || '');
+  const [loadingConfig, setLoadingConfig] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    const fetchConfig = async () => {
+      try {
+        setLoadingConfig(true);
+        await remoteStorage.init();
+        const data = await apiClient('/keyval.php');
+        const kv = data && typeof data === 'object' ? data : remoteStorage.getAll();
+        if (!isMounted) return;
+
+        if (kv.school_name !== undefined) setSchoolName(kv.school_name);
+        if (kv.npsn !== undefined) setNpsn(kv.npsn);
+        if (kv.school_address !== undefined) setSchoolAddress(kv.school_address);
+
+        if (kv.school_lat_l !== undefined) setSchoolLatL(kv.school_lat_l);
+        if (kv.school_lng_l !== undefined) setSchoolLngL(kv.school_lng_l);
+        if (kv.school_radius_l !== undefined) setSchoolRadiusL(kv.school_radius_l);
+
+        if (kv.school_lat_p !== undefined) setSchoolLatP(kv.school_lat_p);
+        if (kv.school_lng_p !== undefined) setSchoolLngP(kv.school_lng_p);
+        if (kv.school_radius_p !== undefined) setSchoolRadiusP(kv.school_radius_p);
+
+        if (kv.limit_absen_siswa !== undefined) setLimitAbsenSiswa(kv.limit_absen_siswa);
+        if (kv.limit_absen_zuhur !== undefined) setLimitAbsenZuhur(kv.limit_absen_zuhur);
+      } catch (err) {
+        console.error('Failed to load school config:', err);
+      } finally {
+        if (isMounted) setLoadingConfig(false);
+      }
+    };
+
+    fetchConfig();
+    const unsubscribe = remoteStorage.subscribe(() => {
+      if (!isMounted) return;
+      const kv = remoteStorage.getAll();
+      if (kv.school_name) setSchoolName(kv.school_name);
+      if (kv.npsn) setNpsn(kv.npsn);
+      if (kv.school_address) setSchoolAddress(kv.school_address);
+      if (kv.school_lat_l) setSchoolLatL(kv.school_lat_l);
+      if (kv.school_lng_l) setSchoolLngL(kv.school_lng_l);
+      if (kv.school_radius_l) setSchoolRadiusL(kv.school_radius_l);
+      if (kv.school_lat_p) setSchoolLatP(kv.school_lat_p);
+      if (kv.school_lng_p) setSchoolLngP(kv.school_lng_p);
+      if (kv.school_radius_p) setSchoolRadiusP(kv.school_radius_p);
+      if (kv.limit_absen_siswa) setLimitAbsenSiswa(kv.limit_absen_siswa);
+      if (kv.limit_absen_zuhur) setLimitAbsenZuhur(kv.limit_absen_zuhur);
+    });
+
+    return () => {
+      isMounted = false;
+      unsubscribe();
+    };
+  }, []);
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
