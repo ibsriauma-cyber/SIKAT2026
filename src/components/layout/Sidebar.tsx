@@ -86,7 +86,6 @@ export function Sidebar({ unreadNotifCount = 0 }: { unreadNotifCount?: number })
         { to: '/laporan', icon: FileText, label: 'Laporan' },
         { to: '/pemantauan', icon: ShieldCheck, label: 'Pemantauan Pagi' },
         { to: '/nilai-sikap', icon: Heart, label: 'Nilai Sikap' },
-        { to: '/sholat-zuhur', icon: Moon, label: 'Pantau Zuhur Siswa' },
         { to: '/absensi-zuhur', icon: Moon, label: 'Absensi Zuhur' },
         { to: '/prestasi-walas', icon: Target, label: 'Input Prestasi' },
         { to: '/bk-walas', icon: Stethoscope, label: 'Input BK' },
@@ -170,7 +169,6 @@ export function Sidebar({ unreadNotifCount = 0 }: { unreadNotifCount?: number })
         { to: '/kurikulum/plotting', icon: UserCheck, label: 'Plotting Pengajar' },
         { to: '/admin/terms', icon: Calendar, label: 'Tahun Ajaran & Semester' },
         { to: '/kamad/materi', icon: BookOpen, label: 'Pantau Materi Ajar' },
-        { to: '/kamad/ibadah-siswa', icon: Heart, label: 'Pantau Ibadah Siswa' },
         { to: '/kamad/kinerja-staf', icon: Users, label: 'Kinerja Staf' },
         { to: '/kamad/perizinan', icon: CheckSquare, label: 'Pantau Perizinan' },
         { to: '/kamad/ibadah-guru', icon: Activity, label: 'Ibadah Guru' },
@@ -184,14 +182,12 @@ export function Sidebar({ unreadNotifCount = 0 }: { unreadNotifCount?: number })
         { to: '/kesiswaan/prestasi', icon: Target, label: 'Prestasi & Pelanggaran' },
         { to: '/kesiswaan/sp', icon: ShieldAlert, label: 'Kelola SP & Poin' },
         { to: '/kesiswaan/ekskul', icon: Activity, label: 'Ekstrakurikuler' },
-        { to: '/kamad/ibadah-siswa', icon: Heart, label: 'Pantau Ibadah Siswa' },
         { to: '/absensi-zuhur', icon: Moon, label: 'Absensi Zuhur' },
       ];
     } else if (user?.role === 'kamad') {
       return [
         { to: '/', icon: Home, label: 'Beranda' },
         { to: '/kamad/materi', icon: BookOpen, label: 'Pantau Materi Ajar' },
-        { to: '/kamad/ibadah-siswa', icon: Heart, label: 'Pantau Ibadah Siswa' },
         { to: '/kamad/kinerja-staf', icon: Users, label: 'Kinerja Staf' },
         { to: '/kamad/perizinan', icon: CheckSquare, label: 'Approval Perizinan' },
         { to: '/kamad/ibadah-guru', icon: Activity, label: 'Ibadah Guru' },
@@ -204,7 +200,6 @@ export function Sidebar({ unreadNotifCount = 0 }: { unreadNotifCount?: number })
         { to: '/data-siswa', icon: Users, label: 'Data Siswa' },
         { to: '/jadwal-mengajar', icon: Calendar, label: 'Jadwal Mengajar' },
         { to: '/absensi', icon: CheckSquare, label: 'Absensi' },
-        { to: '/guru-quran/dhuha', icon: Heart, label: 'Absensi Dhuha' },
         { to: '/input-nilai', icon: Edit3, label: 'Input Nilai' },
         { to: '/kalender-akademik', icon: CalendarDays, label: 'Kalender Akademik' },
         { to: '/jurnal-mengajar', icon: Book, label: 'Jurnal Mengajar' },

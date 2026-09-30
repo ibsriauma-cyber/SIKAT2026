@@ -33,7 +33,7 @@ const STATIC_TABLES = new Set([
   'key_value_store'
 ]);
 
-const CURRENT_DATA_VERSION = 'sikat_db_v2026_09_29_r2';
+const CURRENT_DATA_VERSION = 'sikat_db_v2026_09_30_r1';
 
 function initializeVersionedStorage() {
   if (typeof window === 'undefined' || typeof localStorage === 'undefined') return;

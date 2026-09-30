@@ -74,10 +74,6 @@ export function DashboardWalas() {
     to: '/nilai-sikap',
     icon: Heart,
     label: 'Nilai Sikap'
-  }, {
-    to: '/sholat-zuhur',
-    icon: Moon,
-    label: 'Sholat Zuhur'
   }];
   return <div className="space-y-6">
       {/* Header Banner */}

@@ -39,7 +39,8 @@ export function AdminTeachingAssignments() {
           id: String(d.id),
           rombel: d.rombel || d.class_name,
           mapel: d.mapel || d.subject_name,
-          guruId: String(d.guruId || d.guru_id || d.teacher_id)
+          guruId: String(d.guruId || d.guru_id || d.teacher_id),
+          guruName: d.guruName || d.guru_name || users.find(u => String(u.id) === String(d.guruId || d.guru_id || d.teacher_id))?.name || ''
         })));
       }
     } catch (e) {

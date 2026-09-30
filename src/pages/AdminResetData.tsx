@@ -10,18 +10,6 @@ export function AdminResetData() {
   
   const resetOptions = [
     {
-      id: 'sholat_dhuha',
-      title: 'Absensi Sholat Dhuha',
-      desc: 'Hapus semua data absensi sholat Dhuha harian siswa.',
-      query: `DELETE FROM ibadah_siswa WHERE type = 'Dhuha'`
-    },
-    {
-      id: 'sholat_zuhur_siswa',
-      title: 'Absensi Sholat Zuhur Siswa',
-      desc: 'Hapus semua data absensi sholat Zuhur harian siswa.',
-      query: `DELETE FROM ibadah_siswa WHERE type = 'Zuhur'`
-    },
-    {
       id: 'sholat_zuhur_guru',
       title: 'Absensi Sholat Zuhur Pegawai',
       desc: 'Hapus semua data absensi sholat Zuhur harian guru dan pegawai.',

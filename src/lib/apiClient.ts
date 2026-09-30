@@ -265,7 +265,7 @@ export const apiClient = async (endpoint: string, options: RequestInit = {}, ret
   }
 };
 
-export const logKinerja = async (userId: number, task: string) => {
+export const logKinerja = async (userId: number | string, task: string) => {
   try {
     const now = new Date();
     const pad = (n: number) => n.toString().padStart(2, '0');

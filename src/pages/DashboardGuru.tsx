@@ -115,11 +115,7 @@ export function DashboardGuru() {
     to: '/absensi',
     icon: CheckSquare,
     label: 'Absensi'
-  }, ...(user?.role === 'guru_quran' ? [{
-    to: '/guru-quran/dhuha',
-    icon: Heart,
-    label: 'Absensi Dhuha'
-  }] : []), {
+  }, {
     to: '/input-nilai',
     icon: Edit3,
     label: 'Input Nilai'

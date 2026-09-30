@@ -68,12 +68,10 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
             walas_absenPagi: { mengisi: 0, telat: 0, tidak: 0 },
             walas_sikap: { mengisi: 0, telat: 0, tidak: 0 },
             walas_pemantauan: { mengisi: 0, telat: 0, tidak: 0 },
-            walas_zuhur: { mengisi: 0, telat: 0, tidak: 0 },
             // GURU MAPEL & QURAN
             guru_absenKBM: { mengisi: 0, telat: 0, tidak: 0 },
             guru_jurnal: { mengisi: 0, telat: 0, tidak: 0 },
-            guru_perangkat: { mengisi: 0, telat: 0, tidak: 0 },
-            guru_ibadah: { mengisi: 0, telat: 0, tidak: 0 } // Zuhur for mapel, Dhuha for quran
+            guru_perangkat: { mengisi: 0, telat: 0, tidak: 0 }
           };
 
           for (let i = 0; i < 6; i++) {
@@ -177,11 +175,6 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
                 const match = nilaiSikap.find((n: any) => String(n.tanggal).startsWith(filterDateStr) && (n.class_name === userClass || String(n.user_id) === String(u.id)));
                 if (match) return { completed: true, completedAt: match.created_at || match.timestamp || match.date }; return null;
               });
-              addSingleTask('Mengabsen sholat Zuhur siswa kelas binaannya', 'walas_zuhur', '13:30', '17:00', () => {
-                if (!Array.isArray(ibadahSiswa)) return null;
-                const match = ibadahSiswa.find((ib: any) => String(ib.date).startsWith(filterDateStr) && (ib.type === 'Zuhur' || String(ib.jenis_ibadah).toLowerCase() === 'zuhur') && (ib.class_name === userClass || String(ib.user_id) === String(u.id)));
-                if (match) return { completed: true, completedAt: match.created_at || match.timestamp || match.date }; return null;
-              });
             }
 
             if (r.includes('guru') || r.includes('guru_mapel')) {
@@ -202,7 +195,10 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
                 addSingleTask(`Absen ${s.class_name} (${s.subject_name})`, 'guru_absenKBM', deadline, '17:00', () => {
                   if (!Array.isArray(studentAttendance)) return null;
                   const match = studentAttendance.find((sa: any) => String(sa.date).startsWith(filterDateStr) && String(sa.class_name).trim().toLowerCase() === String(s.class_name).trim().toLowerCase() && String(sa.subject_name).trim().toLowerCase() === String(s.subject_name).trim().toLowerCase() && String(sa.user_id) === String(u.id));
-                  if (match) return { completed: true, completedAt: match.created_at || match.timestamp || match.date }; return null;
+                  // Otomatis terhubung jika Walas sudah mengisi presensi pagi
+                  const walasMatch = studentAttendance.find((sa: any) => String(sa.date).startsWith(filterDateStr) && String(sa.class_name).trim().toLowerCase() === String(s.class_name).trim().toLowerCase() && (!sa.subject_name || String(sa.subject_name).toLowerCase().includes('wali kelas')));
+                  const effective = match || walasMatch;
+                  if (effective) return { completed: true, completedAt: effective.created_at || effective.timestamp || effective.date }; return null;
                 });
                 addSingleTask(`Jurnal Ajar ${s.class_name} (${s.subject_name})`, 'guru_jurnal', deadline, '17:00', () => {
                   if (!Array.isArray(laporanHarian)) return null;
@@ -251,7 +247,10 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
                 addSingleTask(`Absen ${s.class_name} (${s.subject_name})`, 'guru_absenKBM', deadline, '17:00', () => {
                   if (!Array.isArray(studentAttendance)) return null;
                   const match = studentAttendance.find((sa: any) => String(sa.date).startsWith(filterDateStr) && String(sa.class_name).trim().toLowerCase() === String(s.class_name).trim().toLowerCase() && String(sa.subject_name).trim().toLowerCase() === String(s.subject_name).trim().toLowerCase() && String(sa.user_id) === String(u.id));
-                  if (match) return { completed: true, completedAt: match.created_at || match.timestamp || match.date }; return null;
+                  // Otomatis terhubung jika Walas sudah mengisi presensi pagi
+                  const walasMatch = studentAttendance.find((sa: any) => String(sa.date).startsWith(filterDateStr) && String(sa.class_name).trim().toLowerCase() === String(s.class_name).trim().toLowerCase() && (!sa.subject_name || String(sa.subject_name).toLowerCase().includes('wali kelas')));
+                  const effective = match || walasMatch;
+                  if (effective) return { completed: true, completedAt: effective.created_at || effective.timestamp || effective.date }; return null;
                 });
                 addSingleTask(`Jurnal Ajar ${s.class_name} (${s.subject_name})`, 'guru_jurnal', deadline, '17:00', () => {
                   if (!Array.isArray(laporanHarian)) return null;
@@ -279,12 +278,6 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
                   });
                   if (match) return { completed: true, completedAt: match.created_at || match.timestamp || match.date }; return null;
                 });
-              });
-
-              addSingleTask('Mengabsen siswa sholat Dhuha', 'guru_ibadah', '12:00', '17:00', () => {
-                if (!Array.isArray(ibadahSiswa)) return null;
-                const match = ibadahSiswa.find((ib: any) => String(ib.date).startsWith(filterDateStr) && (ib.type === 'Dhuha' || String(ib.jenis_ibadah).toLowerCase() === 'dhuha'));
-                if (match) return { completed: true, completedAt: match.created_at || match.timestamp || match.date }; return null;
               });
             }
           }
@@ -350,17 +343,15 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
           { content: 'Nama Guru/Walas', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } }, 
           { content: 'Absensi Pagi', colSpan: 2, styles: { halign: 'center' } }, 
           { content: 'Nilai Sikap', colSpan: 2, styles: { halign: 'center' } }, 
-          { content: 'Pemantauan Pagi', colSpan: 2, styles: { halign: 'center' } }, 
-          { content: 'Sholat Zuhur Siswa', colSpan: 2, styles: { halign: 'center' } }
+          { content: 'Pemantauan Pagi', colSpan: 2, styles: { halign: 'center' } }
         ],
-        ['Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi']
+        ['Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi']
       ];
       body = filteredData.map((s, i) => [
         i + 1, s.name,
         s.stats.walas_absenPagi.mengisi , s.stats.walas_absenPagi.tidak ,
         s.stats.walas_sikap.mengisi , s.stats.walas_sikap.tidak ,
-        s.stats.walas_pemantauan.mengisi , s.stats.walas_pemantauan.tidak ,
-        s.stats.walas_zuhur.mengisi , s.stats.walas_zuhur.tidak 
+        s.stats.walas_pemantauan.mengisi , s.stats.walas_pemantauan.tidak 
       ]);
     } else if (activeTab === 'guru_mapel') {
       title = '2. UNTUK GURU';
@@ -370,8 +361,8 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
           { content: 'Nama Guru', rowSpan: 2, styles: { halign: 'center', valign: 'middle' } }, 
           { content: 'Absen KBM', colSpan: 2, styles: { halign: 'center' } }, 
           { content: 'Jurnal', colSpan: 2, styles: { halign: 'center' } }, 
-          { content: 'Perangkat', colSpan: 2, styles: { halign: 'center' } }, 
-                  ],
+          { content: 'Perangkat', colSpan: 2, styles: { halign: 'center' } }
+        ],
         ['Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi']
       ];
       body = filteredData.map((s, i) => [
@@ -388,17 +379,15 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
           { content: "Nama Guru Qur'an", rowSpan: 2, styles: { halign: 'center', valign: 'middle' } }, 
           { content: 'Absen KBM', colSpan: 2, styles: { halign: 'center' } }, 
           { content: 'Jurnal', colSpan: 2, styles: { halign: 'center' } }, 
-          { content: 'Perangkat', colSpan: 2, styles: { halign: 'center' } }, 
-          { content: 'Absen Dhuha Siswa', colSpan: 2, styles: { halign: 'center' } }
+          { content: 'Perangkat', colSpan: 2, styles: { halign: 'center' } }
         ],
-        ['Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi']
+        ['Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi', 'Mengisi', 'Tidak Mengisi']
       ];
       body = filteredData.map((s, i) => [
         i + 1, s.name,
         s.stats.guru_absenKBM.mengisi , s.stats.guru_absenKBM.tidak ,
         s.stats.guru_jurnal.mengisi , s.stats.guru_jurnal.tidak ,
-        s.stats.guru_perangkat.mengisi , s.stats.guru_perangkat.tidak ,
-        s.stats.guru_ibadah.mengisi , s.stats.guru_ibadah.tidak 
+        s.stats.guru_perangkat.mengisi , s.stats.guru_perangkat.tidak 
       ]);
     }
 
@@ -428,9 +417,7 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
         'Nilai Sikap (Mengisi)': s.stats.walas_sikap.mengisi ,
         'Nilai Sikap (Tidak)': s.stats.walas_sikap.tidak ,
         'Pemantauan Pagi (Mengisi)': s.stats.walas_pemantauan.mengisi ,
-        'Pemantauan Pagi (Tidak)': s.stats.walas_pemantauan.tidak ,
-        'Sholat Zuhur Siswa (Mengisi)': s.stats.walas_zuhur.mengisi ,
-        'Sholat Zuhur Siswa (Tidak)': s.stats.walas_zuhur.tidak 
+        'Pemantauan Pagi (Tidak)': s.stats.walas_pemantauan.tidak 
       }));
     } else if (activeTab === 'guru_mapel') {
       rows = filteredData.map((s, i) => ({
@@ -452,9 +439,7 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
         'Jurnal (Mengisi)': s.stats.guru_jurnal.mengisi ,
         'Jurnal (Tidak)': s.stats.guru_jurnal.tidak ,
         'Perangkat (Mengisi)': s.stats.guru_perangkat.mengisi ,
-        'Perangkat (Tidak)': s.stats.guru_perangkat.tidak ,
-        'Absen Dhuha Siswa (Mengisi)': s.stats.guru_ibadah.mengisi ,
-        'Absen Dhuha Siswa (Tidak)': s.stats.guru_ibadah.tidak 
+        'Perangkat (Tidak)': s.stats.guru_perangkat.tidak 
       }));
     }
 
@@ -522,20 +507,13 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
                           <th colSpan={2} className="border border-slate-800 p-2 font-bold">Absensi Pagi</th>
                           <th colSpan={2} className="border border-slate-800 p-2 font-bold">Sikap</th>
                           <th colSpan={2} className="border border-slate-800 p-2 font-bold">Pemantauan Pagi</th>
-                          <th colSpan={2} className="border border-slate-800 p-2 font-bold">Sholat Zuhur Siswa</th>
                         </tr>
                         <tr>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
-                          <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
-                          <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                         </tr>
                       </>
@@ -551,13 +529,10 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
                           </tr>
                         <tr>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                         </tr>
                       </>
@@ -570,20 +545,13 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
                           <th colSpan={2} className="border border-slate-800 p-2 font-bold">Absen KBM</th>
                           <th colSpan={2} className="border border-slate-800 p-2 font-bold">Jurnal</th>
                           <th colSpan={2} className="border border-slate-800 p-2 font-bold">Perangkat</th>
-                          <th colSpan={2} className="border border-slate-800 p-2 font-bold">Absen Dhuha Siswa</th>
                         </tr>
                         <tr>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
-                          <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
-                          <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-16">Mengisi</th>
-                          
                           <th className="border border-slate-800 p-1 bg-slate-50 font-bold w-20">Tidak Mengisi</th>
                         </tr>
                       </>
@@ -598,41 +566,37 @@ export function KamadWeeklyRecapModal({ isOpen, onClose, baseDate }: Props) {
                         {activeTab === 'walas' && (
                           <>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.walas_absenPagi.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.walas_absenPagi.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.walas_absenPagi.tidak }</td>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.walas_sikap.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.walas_sikap.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.walas_sikap.tidak }</td>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.walas_pemantauan.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.walas_pemantauan.tidak }</td>
-                            <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.walas_zuhur.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.walas_zuhur.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.walas_pemantauan.tidak }</td>
                           </>
                         )}
                         {activeTab === 'guru_mapel' && (
                           <>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.guru_absenKBM.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_absenKBM.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_absenKBM.tidak }</td>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.guru_jurnal.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_jurnal.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_jurnal.tidak }</td>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.guru_perangkat.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_perangkat.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_perangkat.tidak }</td>
                           </>
                         )}
                         {activeTab === 'guru_quran' && (
                           <>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.guru_absenKBM.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_absenKBM.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_absenKBM.tidak }</td>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.guru_jurnal.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_jurnal.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_jurnal.tidak }</td>
                             <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.guru_perangkat.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_perangkat.tidak }</td>
-                            <td className="border border-slate-800 p-2 text-emerald-600 font-bold">{s.stats.guru_ibadah.mengisi }</td>
-                                                        <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_ibadah.tidak }</td>
+                            <td className="border border-slate-800 p-2 text-rose-600 font-bold">{s.stats.guru_perangkat.tidak }</td>
                           </>
                         )}
                       </tr>
                     )) : (
                       <tr>
-                        <td colSpan={10} className="border border-slate-800 p-8 text-center text-slate-500 font-medium">Tidak ada data untuk kategori ini.</td>
+                        <td colSpan={8} className="border border-slate-800 p-8 text-center text-slate-500 font-medium">Tidak ada data untuk kategori ini.</td>
                       </tr>
                     )}
                   </tbody>

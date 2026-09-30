@@ -15,17 +15,15 @@ export function AdminReports() {
   const [studentAttendance, setStudentAttendance] = useState<any[]>([]);
   const [teacherAttendance, setTeacherAttendance] = useState<any[]>([]);
   const [ibadahGuru, setIbadahGuru] = useState<any[]>([]);
-  const [ibadahSiswa, setIbadahSiswa] = useState<any[]>([]);
   const [laporanHarian, setLaporanHarian] = useState<any[]>([]);
   useEffect(() => {
-    Promise.all([apiClient('/crud.php?table=classes'), apiClient('/crud.php?table=students'), apiClient('/crud.php?table=users'), apiClient('/crud.php?table=student_attendance'), apiClient('/crud.php?table=teacher_attendance'), apiClient('/crud.php?table=ibadah_guru'), apiClient('/crud.php?table=ibadah_siswa'), apiClient('/crud.php?table=laporan_harian')]).then(([cRes, sRes, uRes, saRes, taRes, igRes, isRes, lhRes]) => {
+    Promise.all([apiClient('/crud.php?table=classes'), apiClient('/crud.php?table=students'), apiClient('/crud.php?table=users'), apiClient('/crud.php?table=student_attendance'), apiClient('/crud.php?table=teacher_attendance'), apiClient('/crud.php?table=ibadah_guru'), apiClient('/crud.php?table=laporan_harian')]).then(([cRes, sRes, uRes, saRes, taRes, igRes, lhRes]) => {
       setClasses(cRes || []);
       setStudents(sRes || []);
       setUsers(uRes || []);
       setStudentAttendance(saRes || []);
       setTeacherAttendance(taRes || []);
       setIbadahGuru(igRes || []);
-      setIbadahSiswa(isRes || []);
       setLaporanHarian(lhRes || []);
     }).catch(console.error);
   }, [_syncTick]);
@@ -113,58 +111,15 @@ export function AdminReports() {
                  walasTidak++;
                }
                
-               if (dayData.guru.includes('Hadir')) {
+               // Otomatis terhubung: jika guru belum mengisi presensi mapel, gunakan data presensi Walas pagi hari
+               const effectiveGuru = dayData.guru.length > 0 ? dayData.guru : dayData.walas;
+               if (effectiveGuru.includes('Hadir')) {
                  guruHadir++;
-               } else if (dayData.guru.some(st => st && st !== 'Hadir')) {
+               } else if (effectiveGuru.some(st => st && st !== 'Hadir')) {
                  guruTidak++;
                }
             });
             return [i + 1, s.nis || '-', s.name || '-', walasHadir, walasTidak, guruHadir, guruTidak];
-          });
-          if (classRows.length > 0) {
-            groups.push({
-              className: c.name,
-              rows: classRows
-            });
-          }
-        });
-        break;
-      case 'sholat_siswa':
-        isGrouped = true;
-        headers = ['No', 'NIS', 'Nama Siswa', 'Zuhur (Jamaah)', 'Zuhur (Tidak)', 'Dhuha (Jamaah)', 'Dhuha (Tidak)'];
-        classes.forEach(c => {
-          const classRows = currentStudents.filter(s => (s.class_name || s.className || '').trim() === (c.name || '').trim()).map((s, i) => {
-            const studentPrayers = ibadahSiswa.filter(a => String(a.student_id) === String(s.id) && isDateInRange(a.date || a.created_at));
-            
-            const prayersByDateAndType = {};
-            studentPrayers.forEach(a => {
-               const d = String(a.date || a.created_at).split(' ')[0];
-               let type = String(a.type || a.jenis_ibadah).toLowerCase();
-               const key = d + '_' + type;
-               if (!prayersByDateAndType[key]) prayersByDateAndType[key] = [];
-               prayersByDateAndType[key].push(a.status);
-            });
-            
-            let zuhurJamaah = 0;
-            let zuhurTidak = 0;
-            let dhuhaJamaah = 0;
-            let dhuhaTidak = 0;
-            
-            Object.keys(prayersByDateAndType).forEach(key => {
-               const statuses = prayersByDateAndType[key];
-               const hasJamaah = statuses.includes('Jamaah');
-               const hasTidak = statuses.includes('Tidak') || statuses.includes('Tidak Jamaah');
-               
-               if (key.endsWith('zuhur')) {
-                  if (hasJamaah) zuhurJamaah++;
-                  else if (hasTidak) zuhurTidak++;
-               } else if (key.endsWith('dhuha')) {
-                  if (hasJamaah) dhuhaJamaah++;
-                  else if (hasTidak) dhuhaTidak++;
-               }
-            });
-
-            return [i + 1, s.nis || '-', s.name || '-', zuhurJamaah, zuhurTidak, dhuhaJamaah, dhuhaTidak];
           });
           if (classRows.length > 0) {
             groups.push({
@@ -188,15 +143,7 @@ export function AdminReports() {
       active: true
     });
     setSuccessMessage(null);
-    let reportName = 'Laporan';
-    switch (selectedReportType) {
-      case 'absensi_siswa':
-        reportName = 'Laporan_Absensi_Siswa';
-        break;
-      case 'sholat_siswa':
-        reportName = 'Laporan_Sholat_Siswa';
-        break;
-    }
+    let reportName = 'Laporan_Absensi_Siswa';
     const semesterSlug = selectedSemester.replace('/', '-').replace(' ', '_');
     reportName = `${reportName}_${semesterSlug}`;
     if (startDate && endDate) {
@@ -415,10 +362,7 @@ export function AdminReports() {
                 <label className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Jenis Laporan</label>
                 <CustomSelect value={selectedReportType} onChange={setSelectedReportType} options={[{
                 value: 'absensi_siswa',
-                label: 'Absensi Siswa'
-              }, {
-                value: 'sholat_siswa',
-                label: 'Laporan Sholat Siswa'
+                label: 'Absensi Siswa (Terintegrasi Walas & Guru)'
               }]} />
               </div>
 

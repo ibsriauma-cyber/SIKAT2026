@@ -317,6 +317,7 @@ export function Absensi() {
     ket: string;
   }>>({});
   const [isLocked, setIsLocked] = useState(false);
+  const [isFromWalas, setIsFromWalas] = useState(false);
   const [studentsList, setStudentsList] = useState<any[]>([]);
   const [dbClasses, setDbClasses] = useState<string[]>([]);
   const [schedules, setSchedules] = useState<any[]>([]);
@@ -325,7 +326,6 @@ export function Absensi() {
   const [studentAttendance, setStudentAttendance] = useState<any[]>([]);
   const [grades, setGrades] = useState<any[]>([]);
   const [jurnals, setJurnals] = useState<any[]>([]);
-  const [ibadahSiswa, setIbadahSiswa] = useState<any[]>([]);
   const [semester, setSemester] = useState('Ganjil');
   useEffect(() => {
     apiClient('/crud.php?table=academic_terms').then(data => {
@@ -370,13 +370,11 @@ export function Absensi() {
     apiClient('/crud.php?table=laporan_harian').then(data => {
       if (Array.isArray(data)) setJurnals(data);
     }).catch(console.error);
-    apiClient('/crud.php?table=ibadah_siswa').then(data => {
-      if (Array.isArray(data)) setIbadahSiswa(data);
-    }).catch(console.error);
   }, [_syncTick]);
   const isWalasRole = user?.role === 'walas';
   const isWalas = user?.role === 'walas';
   const isGuru = user?.role === 'guru' || user?.role === 'guru_mapel';
+  const isGuruQuran = user?.role === 'guru_quran';
   const walasClass = user?.className || user?.class_name;
 
   // Ambil data plotting sesuai dengan ID guru
@@ -390,6 +388,10 @@ export function Absensi() {
     availableClasses = [walasClass];
   } else if (isWalas && walasClass) {
     availableClasses = Array.from(new Set([walasClass, ...availableClasses]));
+  }
+  // Pastikan Guru Mapel dan Guru Quran selalu bisa memilih kelas madrasah
+  if (availableClasses.length === 0 && dbClasses.length > 0) {
+    availableClasses = dbClasses;
   }
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedMapel, setSelectedMapel] = useState('');
@@ -406,6 +408,17 @@ export function Absensi() {
         const dateStr = String(a.date || '').split('T')[0];
         return classOk && mapelOk && dateStr === today;
       });
+
+      // Find Walas morning attendance for this class and date
+      const walasAtts = studentAttendance.filter((a: any) => {
+        const classOk = norm(a.class_name) === norm(selectedClass);
+        const mapelOk = !a.subject_name || norm(a.subject_name) === norm('Presensi Wali Kelas');
+        const dateStr = String(a.date || '').split('T')[0];
+        return classOk && mapelOk && dateStr === today;
+      });
+      const walasStorageKey = `attendance_${selectedClass}_Presensi Wali Kelas`;
+      const walasLocalData = JSON.parse(remoteStorage.getItem(walasStorageKey) || '{}')[today];
+
       if (dbAtts.length > 0) {
         const loadedAtt: Record<string, {
           status: string;
@@ -419,9 +432,30 @@ export function Absensi() {
         });
         setAttendance(loadedAtt);
         setIsLocked(true);
+        setIsFromWalas(false);
       } else if (existingData[today]) {
         setAttendance(existingData[today]);
         setIsLocked(true);
+        setIsFromWalas(false);
+      } else if (selectedMapel !== 'Presensi Wali Kelas' && (walasAtts.length > 0 || (walasLocalData && Object.keys(walasLocalData).length > 0))) {
+        // Interconnection: Otomatis terkoneksi dengan presensi pagi yang diisi oleh Wali Kelas!
+        const loadedAtt: Record<string, {
+          status: string;
+          ket: string;
+        }> = {};
+        if (walasAtts.length > 0) {
+          walasAtts.forEach((a: any) => {
+            loadedAtt[a.student_id] = {
+              status: a.status,
+              ket: a.notes || a.ket || ''
+            };
+          });
+        } else if (walasLocalData) {
+          Object.assign(loadedAtt, walasLocalData);
+        }
+        setAttendance(loadedAtt);
+        setIsLocked(true);
+        setIsFromWalas(true);
       } else {
         const classStudents = studentsList.filter(s => norm(s.class_name || s.className) === norm(selectedClass));
         const mockClassStudents = mockStudents.filter(s => norm(s.className) === norm(selectedClass));
@@ -438,6 +472,7 @@ export function Absensi() {
         });
         setAttendance(defaultAtt);
         setIsLocked(false);
+        setIsFromWalas(false);
       }
     }
   }, [selectedClass, selectedMapel, studentsList, selectedDate, studentAttendance]);
@@ -463,7 +498,12 @@ export function Absensi() {
   } else if (showWalasPresensi) {
     availableMapel = ['Presensi Wali Kelas', ...classSubjectsList];
   }
-  if (availableMapel.length === 0 && showWalasPresensi) {
+  if (isGuruQuran) {
+    const quranDefaults = ['Tahfizh Al-Quran', 'Tahsin & Tilawah', 'Halaqah Qur\'an'];
+    availableMapel = Array.from(new Set([...classSubjectsList.filter((s: string) => /quran|tahfizh|tilawah|tahsin|halaqah/i.test(s)), ...quranDefaults]));
+  } else if (availableMapel.length === 0 && ((user as any)?.subject || user?.subjects?.[0])) {
+    availableMapel = [(user as any)?.subject || user?.subjects?.[0]];
+  } else if (availableMapel.length === 0 && showWalasPresensi) {
     availableMapel = ['Presensi Wali Kelas'];
   }
   useEffect(() => {
@@ -523,7 +563,7 @@ export function Absensi() {
     }));
   };
   const hasScheduleForClass = !selectedClass || schedules.length === 0 || schedules.some((s: any) => s.class_name === selectedClass || s.rombel === selectedClass);
-  const hasScheduleForSubject = selectedMapel === 'Presensi Wali Kelas' || schedules.length === 0 || schedules.some((s: any) => (s.class_name === selectedClass || s.rombel === selectedClass) && (s.subject_name === selectedMapel || s.mapel === selectedMapel));
+  const hasScheduleForSubject = selectedMapel === 'Presensi Wali Kelas' || isGuruQuran || schedules.length === 0 || schedules.some((s: any) => (s.class_name === selectedClass || s.rombel === selectedClass) && (s.subject_name === selectedMapel || s.mapel === selectedMapel));
   const isScheduleCreated = schedules.length > 0;
   const handleSave = async () => {
     if (!selectedClass) {
@@ -534,11 +574,11 @@ export function Absensi() {
       window.alert("Pilih mata pelajaran terlebih dahulu!");
       return;
     }
-    if (!isScheduleCreated) {
+    if (!isScheduleCreated && selectedMapel !== 'Presensi Wali Kelas' && !isGuruQuran && !isFromWalas) {
       window.alert("Jadwal belum dibuat oleh Wakakurikulum dan Admin! Pengisian absensi belum dapat diproses.");
       return;
     }
-    if (selectedMapel !== 'Presensi Wali Kelas' && !hasScheduleForSubject) {
+    if (selectedMapel !== 'Presensi Wali Kelas' && !isGuruQuran && !isFromWalas && !hasScheduleForSubject) {
       window.alert(`Jadwal pelajaran ${selectedMapel} untuk ${selectedClass} belum dibuat oleh Wakakurikulum dan Admin!`);
       return;
     }
@@ -619,23 +659,27 @@ export function Absensi() {
       )}
 
       {/* Schedule Warning Banner if not created by Wakakurikulum/Admin */}
-      {schedulesLoaded && !isScheduleCreated && <Card className="border-amber-200 bg-amber-50 shadow-sm">
+      {schedulesLoaded && !isScheduleCreated && selectedMapel !== 'Presensi Wali Kelas' && !isGuruQuran && !isFromWalas && (
+        <Card className="border-amber-200 bg-amber-50 shadow-sm">
           <CardContent className="p-4 flex items-center gap-3 text-amber-800">
             <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
             <p className="text-xs sm:text-sm font-medium">
               <strong>Jadwal Pelajaran Belum Dibuat:</strong> Pengisian absensi baru dapat dilakukan setelah jadwal pelajaran dibuat oleh Wakakurikulum atau Administrator.
             </p>
           </CardContent>
-        </Card>}
+        </Card>
+      )}
 
-      {schedulesLoaded && isScheduleCreated && selectedClass && selectedMapel && selectedMapel !== 'Presensi Wali Kelas' && !hasScheduleForSubject && <Card className="border-amber-200 bg-amber-50 shadow-sm">
+      {schedulesLoaded && isScheduleCreated && selectedClass && selectedMapel && selectedMapel !== 'Presensi Wali Kelas' && !isGuruQuran && !isFromWalas && !hasScheduleForSubject && (
+        <Card className="border-amber-200 bg-amber-50 shadow-sm">
           <CardContent className="p-4 flex items-center gap-3 text-amber-800">
             <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0" />
             <p className="text-xs sm:text-sm font-medium">
               Jadwal pelajaran untuk mata pelajaran <strong>{selectedMapel}</strong> di kelas <strong>{selectedClass}</strong> belum dibuat oleh Wakakurikulum / Admin.
             </p>
           </CardContent>
-        </Card>}
+        </Card>
+      )}
 
       {/* Top Bar */}
       <Card className="border-slate-200 shadow-sm">
@@ -682,6 +726,28 @@ export function Absensi() {
             </div>
         </CardContent>
       </Card>
+
+      {/* Interconnection Info Banner */}
+      {isFromWalas && (
+        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-7 h-7 rounded-full bg-emerald-200/80 text-emerald-800 flex items-center justify-center shrink-0 font-black text-sm">
+              ✓
+            </div>
+            <div>
+              <p className="font-extrabold text-emerald-900 text-xs sm:text-sm">
+                Terkoneksi Otomatis dengan Absensi Pagi Wali Kelas
+              </p>
+              <p className="text-emerald-700 text-xs mt-0.5">
+                Data kehadiran siswa kelas <strong>{selectedClass}</strong> sudah diisi oleh Wali Kelas pada pagi hari ini. Guru Mapel & Guru Qur'an tidak perlu mengisi ulang kecuali ada perubahan kehadiran saat jam pelajaran Anda.
+              </p>
+            </div>
+          </div>
+          <span className="px-2.5 py-1 bg-emerald-200 text-emerald-900 text-[10px] font-black uppercase rounded-md tracking-wider shrink-0 self-start sm:self-center">
+            Otomatis Terhubung
+          </span>
+        </div>
+      )}
 
       {/* Main Content */}
       <Card className="border-slate-200 shadow-sm overflow-hidden">
@@ -1470,12 +1536,12 @@ export function PerangkatNgajar() {
           id: String(m.id),
           teacherName: m.name || m.teacherName || 'Guru',
           role: isQuran ? "Guru Al-Qur'an" : 'Guru Mapel',
-          category: isQuran ? 'guru_quran' : 'guru_mapel',
+          category: (isQuran ? 'guru_quran' : 'guru_mapel') as 'guru_quran' | 'guru_mapel' | 'wali_kelas',
           subject: subj || '-',
           className: m.class || m.class_name || m.className || '-',
           title: m.title || '-',
           date: m.date ? String(m.date).slice(0, 10) : '-',
-          status: m.status === 'Terbit' || m.status === 'Sudah Membuat' ? 'Sudah Membuat' : 'Belum Membuat',
+          status: (m.status === 'Terbit' || m.status === 'Sudah Membuat' ? 'Sudah Membuat' : 'Belum Membuat') as 'Sudah Membuat' | 'Belum Membuat',
           driveUrl: m.file_name || m.driveUrl || '',
           description: m.description || '',
           objectives: Array.isArray(m.objectives) ? m.objectives : []
@@ -1928,7 +1994,6 @@ export function Laporan() {
   const [studentAttendance, setStudentAttendance] = useState<any[]>([]);
   const [grades, setGrades] = useState<any[]>([]);
   const [jurnals, setJurnals] = useState<any[]>([]);
-  const [ibadahSiswa, setIbadahSiswa] = useState<any[]>([]);
   const [pemantauanPagi, setPemantauanPagi] = useState<any[]>([]);
   const [nilaiSikap, setNilaiSikap] = useState<any[]>([]);
   const [semester, setSemester] = useState('Ganjil');
@@ -1938,7 +2003,7 @@ export function Laporan() {
   const fetchData = async () => {
     setIsRefreshing(true);
     try {
-      const [termRes, stuRes, clsRes, schRes, assignRes, attRes, grdRes, jurRes, ibaRes, pemRes, nsRes] = await Promise.all([apiClient('/crud.php?table=academic_terms').catch(() => []), apiClient('/crud.php?table=students').catch(() => []), apiClient('/crud.php?table=classes').catch(() => []), apiClient('/crud.php?table=schedules').catch(() => []), apiClient('/crud.php?table=teaching_assignments').catch(() => []), apiClient('/crud.php?table=student_attendance').catch(() => []), apiClient('/crud.php?table=grades').catch(() => []), apiClient('/crud.php?table=laporan_harian').catch(() => []), apiClient('/crud.php?table=ibadah_siswa').catch(() => []), apiClient('/crud.php?table=pemantauan_pagi').catch(() => []), apiClient('/crud.php?table=nilai_sikap').catch(() => [])]);
+      const [termRes, stuRes, clsRes, schRes, assignRes, attRes, grdRes, jurRes, pemRes, nsRes] = await Promise.all([apiClient('/crud.php?table=academic_terms').catch(() => []), apiClient('/crud.php?table=students').catch(() => []), apiClient('/crud.php?table=classes').catch(() => []), apiClient('/crud.php?table=schedules').catch(() => []), apiClient('/crud.php?table=teaching_assignments').catch(() => []), apiClient('/crud.php?table=student_attendance').catch(() => []), apiClient('/crud.php?table=grades').catch(() => []), apiClient('/crud.php?table=laporan_harian').catch(() => []), apiClient('/crud.php?table=pemantauan_pagi').catch(() => []), apiClient('/crud.php?table=nilai_sikap').catch(() => [])]);
       if (Array.isArray(termRes)) {
         const selectedTermId = remoteStorage.getItem('selectedAcademicTermId');
         let activeTerm = null;
@@ -1953,7 +2018,6 @@ export function Laporan() {
       if (Array.isArray(attRes)) setStudentAttendance(attRes);
       if (Array.isArray(grdRes)) setGrades(grdRes);
       if (Array.isArray(jurRes)) setJurnals(jurRes);
-      if (Array.isArray(ibaRes)) setIbadahSiswa(ibaRes);
       if (Array.isArray(pemRes)) setPemantauanPagi(pemRes);
       if (Array.isArray(nsRes)) setNilaiSikap(nsRes);
     } catch (err) {
@@ -1978,7 +2042,7 @@ export function Laporan() {
   const subjectClasses = Array.from(new Set([...assignedClasses])).filter(Boolean) as string[];
 
   // State for form selection
-  const [reportType, setReportType] = useState<'presensi' | 'nilai' | 'jurnal' | 'analisis' | 'sholat_dhuha' | 'sholat_zuhur' | 'pemantauan_pagi' | 'nilai_sikap'>(isGuruQuran ? 'sholat_dhuha' : 'presensi');
+  const [reportType, setReportType] = useState<'presensi' | 'nilai' | 'jurnal' | 'analisis' | 'pemantauan_pagi' | 'nilai_sikap'>('presensi');
 
   // Available classes based on teacher's schedules, assignments, walas, or all classes
   let availableClasses = Array.from(new Set([...(walasClass ? [walasClass] : []), ...scheduledClasses, ...subjectClasses, ...subjects.map((s: any) => s.className || s.class_name)])).filter(Boolean).sort() as string[];
@@ -2120,12 +2184,14 @@ export function Laporan() {
             if (norm(a.class_name) !== norm(selectedClass)) return false;
           }
 
-          // 3. Subject match
+          // 3. Subject match - automatically include Walas morning attendance if not overridden
           if (selectedSubject && selectedSubject !== 'Semua') {
             if (selectedSubject === 'Presensi Wali Kelas') {
               if (a.subject_name && norm(a.subject_name) !== norm('Presensi Wali Kelas')) return false;
             } else {
-              if (norm(a.subject_name) !== norm(selectedSubject)) return false;
+              const isDirect = norm(a.subject_name) === norm(selectedSubject);
+              const isWalas = !a.subject_name || norm(a.subject_name) === norm('Presensi Wali Kelas');
+              if (!isDirect && !isWalas) return false;
             }
           }
 
@@ -2136,9 +2202,26 @@ export function Laporan() {
           }
           return true;
         });
+
+        // Group student's daily attendance by date: prefer direct subject record over Walas morning record
+        const attByDate = new Map<string, any>();
         studentAtt.forEach((dailyData: any) => {
+          const d = String(dailyData.date || '').split('T')[0];
+          const isDirect = selectedSubject && selectedSubject !== 'Semua' && norm(dailyData.subject_name) === norm(selectedSubject);
+          if (isDirect) {
+            attByDate.set(d, dailyData);
+          } else if (!attByDate.has(d)) {
+            attByDate.set(d, dailyData);
+          }
+        });
+
+        attByDate.forEach((dailyData: any) => {
           const status = String(dailyData.status || '').trim();
-          if (status === 'Hadir' || status === 'H') present++;else if (status === 'Sakit' || status === 'S') sick++;else if (status === 'Izin' || status === 'I') permission++;else if (status === 'Alpa' || status === 'A') absent++;else if (status === 'Cabut' || status === 'C') cabut++;
+          if (status === 'Hadir' || status === 'H') present++;
+          else if (status === 'Sakit' || status === 'S') sick++;
+          else if (status === 'Izin' || status === 'I') permission++;
+          else if (status === 'Alpa' || status === 'A') absent++;
+          else if (status === 'Cabut' || status === 'C') cabut++;
         });
 
         // Also check if there's local storage data if DB has no record for this student
@@ -2214,38 +2297,6 @@ export function Laporan() {
           uas: uas || '-',
           akhir: akhir || '-',
           uhCount: uhs.length
-        };
-      });
-    } else if (reportType === 'sholat_dhuha' || reportType === 'sholat_zuhur') {
-      const type = reportType === 'sholat_dhuha' ? 'Dhuha' : 'Zuhur';
-      return targetStudents.map((s, idx) => {
-        let jamaah = 0;
-        let tidak = 0;
-        const studentIbadah = ibadahSiswa.filter(i => {
-          if (filterSemester && i.semester && norm(i.semester) !== norm(filterSemester)) return false;
-          const studentMatch = String(i.student_id).trim() === String(s.id).trim() || s.nis && String(i.student_id).trim() === String(s.nis).trim();
-          const classMatch = !selectedClass || norm(i.class_name) === norm(selectedClass);
-          const typeMatch = String(i.type || '').toLowerCase() === type.toLowerCase();
-          if (!studentMatch || !classMatch || !typeMatch) return false;
-          if (selectedMonth !== 'Semua Bulan' && monthNum) {
-            const m = getMonthFromDate(i.date);
-            if (m && m !== monthNum) return false;
-          }
-          return true;
-        });
-        studentIbadah.forEach(i => {
-          const st = String(i.status || '').toLowerCase();
-          if (st === 'hadir' || st === 'jamaah' || st === 'h') jamaah++;else tidak++;
-        });
-        const total = jamaah + tidak;
-        const pct = total > 0 ? Math.round(jamaah / total * 100) : 0;
-        return {
-          no: idx + 1,
-          nama: s.name,
-          nis: s.nis || '-',
-          jamaah,
-          tidak,
-          persentase: total > 0 ? `${pct}%` : '0%'
         };
       });
     } else if (reportType === 'jurnal') {
@@ -2383,8 +2434,6 @@ export function Laporan() {
       nilai: 'LEGER_NILAI_SISWA',
       jurnal: 'JURNAL_KBM_GURU',
       analisis: 'ANALISIS_PERKEMBANGAN_SISWA',
-      sholat_dhuha: 'REKAP_SHOLAT_DHUHA',
-      sholat_zuhur: 'REKAP_SHOLAT_ZUHUR',
       pemantauan_pagi: 'PEMANTAUAN_PAGI',
       nilai_sikap: 'NILAI_SIKAP'
     };
@@ -2407,9 +2456,6 @@ export function Laporan() {
         } else if (reportType === 'jurnal') {
           headers = ['No', 'Tanggal', 'Kelas', 'Mata Pelajaran', 'Materi Pokok', 'Catatan KBM'];
           dataRows = previewRows.map((r: any) => [r.no, r.tanggal, r.kelas, r.mataPelajaran, r.materi, r.catatan]);
-        } else if (reportType === 'sholat_dhuha' || reportType === 'sholat_zuhur') {
-          headers = ['No', 'Nama Siswa', 'NIS', 'Jamaah', 'Tidak Jamaah', 'Persentase'];
-          dataRows = previewRows.map((r: any) => [r.no, r.nama, r.nis, r.jamaah, r.tidak, r.persentase]);
         } else if (reportType === 'pemantauan_pagi') {
           headers = ['No', 'Tanggal', 'Nama Siswa', 'Kelas', 'Kebersihan', 'Seragam', 'Ket. Seragam'];
           dataRows = previewRows.map((r: any) => [r.no, r.tanggal, r.nama, r.kelas, r.kebersihan, r.seragam, r.ket]);
@@ -2456,9 +2502,6 @@ export function Laporan() {
         } else if (reportType === 'jurnal') {
           headers = ['No', 'Tanggal', 'Kelas', 'Mata Pelajaran', 'Materi Pokok'];
           body = previewRows.map((r: any) => [r.no, r.tanggal, r.kelas, r.mataPelajaran, r.materi]);
-        } else if (reportType === 'sholat_dhuha' || reportType === 'sholat_zuhur') {
-          headers = ['No', 'Nama Siswa', 'NIS', 'Jamaah', 'Tidak', 'Persentase'];
-          body = previewRows.map((r: any) => [r.no, r.nama, r.nis, r.jamaah, r.tidak, r.persentase]);
         } else if (reportType === 'pemantauan_pagi') {
           headers = ['No', 'Tanggal', 'Nama', 'Kelas', 'Kebersihan', 'Seragam', 'Ket'];
           body = previewRows.map((r: any) => [r.no, r.tanggal, r.nama, r.kelas, r.kebersihan, r.seragam, r.ket]);
@@ -2522,8 +2565,7 @@ export function Laporan() {
           <CardContent className="space-y-4">
             <div>
               <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Tipe Laporan</label>
-              {isGuruQuran ? <div className="flex flex-col gap-1 p-1 bg-slate-100 rounded-lg">
-                  <div className="grid grid-cols-3 gap-1">
+              {isGuruQuran ? <div className="grid grid-cols-4 gap-1 p-1 bg-slate-100 rounded-lg">
                     <button type="button" onClick={() => setReportType('presensi')} className={`py-1.5 px-2 rounded-md text-[10px] font-bold uppercase tracking-tight transition-colors ${reportType === 'presensi' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
                       Presensi
                     </button>
@@ -2533,15 +2575,9 @@ export function Laporan() {
                     <button type="button" onClick={() => setReportType('jurnal')} className={`py-1.5 px-2 rounded-md text-[10px] font-bold uppercase tracking-tight transition-colors ${reportType === 'jurnal' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
                       Jurnal
                     </button>
-                  </div>
-                  <div className="grid grid-cols-2 gap-1">
                     <button type="button" onClick={() => setReportType('analisis')} className={`py-1.5 px-2 rounded-md text-[10px] font-bold uppercase tracking-tight transition-colors ${reportType === 'analisis' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
                       Analisis
                     </button>
-                    <button type="button" onClick={() => setReportType('sholat_dhuha')} className={`py-1.5 px-2 rounded-md text-[10px] font-bold uppercase tracking-tight transition-colors ${reportType === 'sholat_dhuha' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
-                      Dhuha
-                    </button>
-                  </div>
                 </div> : <div className="flex flex-col gap-3">
                   {isGuru && <div className="grid grid-cols-4 gap-1 p-1 bg-slate-100 rounded-lg">
                         <button type="button" onClick={() => {
@@ -2563,15 +2599,12 @@ export function Laporan() {
                         </button>
                     </div>}
 
-                  {isWalas && <div className="grid grid-cols-4 gap-1 p-1 bg-slate-100 rounded-lg">
+                  {isWalas && <div className="grid grid-cols-3 gap-1 p-1 bg-slate-100 rounded-lg">
                         <button type="button" onClick={() => {
                   setReportType('presensi');
                   setSelectedSubject('Presensi Wali Kelas');
                 }} className={`py-1.5 px-2 rounded-md text-[10px] font-bold uppercase tracking-tight transition-colors ${reportType === 'presensi' && selectedSubject === 'Presensi Wali Kelas' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
                           Presensi
-                        </button>
-                        <button type="button" onClick={() => setReportType('sholat_zuhur')} className={`py-1.5 px-2 rounded-md text-[10px] font-bold uppercase tracking-tight transition-colors ${reportType === 'sholat_zuhur' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
-                          Sholat Zuhur Siswa
                         </button>
                         <button type="button" onClick={() => setReportType('pemantauan_pagi')} className={`py-1.5 px-2 rounded-md text-[10px] font-bold uppercase tracking-tight transition-colors ${reportType === 'pemantauan_pagi' ? 'bg-white text-emerald-700 shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}>
                           Pemantauan Pagi
@@ -2640,8 +2673,6 @@ export function Laporan() {
               <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider mt-0.5">
                 {reportType === 'presensi' && 'REKAP ABSENSI KEHADIRAN SISWA'}
                 {reportType === 'nilai' && 'LEGER NILAI ULANGAN & TUGAS'}
-                {reportType === 'sholat_zuhur' && 'LAPORAN SHOLAT ZUHUR BERJAMAAH'}
-                {reportType === 'sholat_dhuha' && 'LAPORAN SHOLAT DHUHA BERJAMAAH'}
                 {reportType === 'jurnal' && 'JURNAL KEGIATAN MENGAJAR GURU'}
                 {reportType === 'analisis' && 'ANALISIS PERKEMBANGAN BELAJAR SISWA'}
                 {` • Kelas ${selectedClass || '-'} • ${selectedSubject} • ${reportType === 'pemantauan_pagi' || reportType === 'nilai_sikap' ? selectedReportDate : selectedMonth}`}
@@ -2714,60 +2745,6 @@ export function Laporan() {
                         </tr>) : <tr>
                         <td colSpan={9} className="py-8 text-center text-slate-400 font-medium text-xs">
                           Belum ada data nilai untuk filter yang dipilih.
-                        </td>
-                      </tr>}
-                  </tbody>
-                </>}
-
-              {reportType === 'sholat_dhuha' && <>
-                  <thead className="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-                    <tr>
-                      <th className="py-3 px-4 w-12">No</th>
-                      <th className="py-3 px-4">Nama Siswa</th>
-                      <th className="py-3 px-4">NIS</th>
-                      <th className="py-3 px-4 text-center">Jamaah</th>
-                      <th className="py-3 px-4 text-center">Tidak Jamaah</th>
-                      <th className="py-3 px-4 text-right">Persentase</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-xs font-semibold text-slate-700 divide-y divide-slate-100">
-                    {previewRows.length > 0 ? previewRows.map((row: any) => <tr key={row.no} className="hover:bg-slate-50/50">
-                          <td className="py-3 px-4 text-slate-400">{row.no}</td>
-                          <td className="py-3 px-4 font-bold text-slate-800">{row.nama}</td>
-                          <td className="py-3 px-4 text-slate-500 font-mono">{row.nis}</td>
-                          <td className="py-3 px-4 text-center text-emerald-600 font-bold">{row.jamaah}</td>
-                          <td className="py-3 px-4 text-center text-red-600 font-bold">{row.tidak}</td>
-                          <td className="py-3 px-4 text-right font-bold text-slate-800 font-mono">{row.persentase}</td>
-                        </tr>) : <tr>
-                        <td colSpan={6} className="py-8 text-center text-slate-400 font-medium text-xs">
-                          Belum ada data sholat dhuha untuk filter yang dipilih.
-                        </td>
-                      </tr>}
-                  </tbody>
-                </>}
-
-              {reportType === 'sholat_zuhur' && <>
-                  <thead className="bg-slate-50 text-[10px] font-bold text-slate-400 uppercase tracking-wider border-b border-slate-100">
-                    <tr>
-                      <th className="py-3 px-4 w-12">No</th>
-                      <th className="py-3 px-4">Nama Siswa</th>
-                      <th className="py-3 px-4">NIS</th>
-                      <th className="py-3 px-4 text-center">Jamaah</th>
-                      <th className="py-3 px-4 text-center">Tidak Jamaah</th>
-                      <th className="py-3 px-4 text-right">Persentase</th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-xs font-semibold text-slate-700 divide-y divide-slate-100">
-                    {previewRows.length > 0 ? previewRows.map((row: any) => <tr key={row.no} className="hover:bg-slate-50/50">
-                          <td className="py-3 px-4 text-slate-400">{row.no}</td>
-                          <td className="py-3 px-4 font-bold text-slate-800">{row.nama}</td>
-                          <td className="py-3 px-4 text-slate-500 font-mono">{row.nis}</td>
-                          <td className="py-3 px-4 text-center text-emerald-600 font-bold">{row.jamaah}</td>
-                          <td className="py-3 px-4 text-center text-red-600 font-bold">{row.tidak}</td>
-                          <td className="py-3 px-4 text-right font-bold text-slate-800 font-mono">{row.persentase}</td>
-                        </tr>) : <tr>
-                        <td colSpan={6} className="py-8 text-center text-slate-400 font-medium text-xs">
-                          Belum ada data sholat zuhur untuk filter yang dipilih.
                         </td>
                       </tr>}
                   </tbody>

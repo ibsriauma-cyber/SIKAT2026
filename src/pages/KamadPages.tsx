@@ -40,24 +40,19 @@ export function DashboardKamad() {
   });
   const chartData = [{
     day: 'Senin',
-    dhuha: 84,
-    zuhur: 91
+    kehadiran: 96
   }, {
     day: 'Selasa',
-    dhuha: 86,
-    zuhur: 93
+    kehadiran: 98
   }, {
     day: 'Rabu',
-    dhuha: 85,
-    zuhur: 92
+    kehadiran: 95
   }, {
     day: 'Kamis',
-    dhuha: 88,
-    zuhur: 94
+    kehadiran: 97
   }, {
     day: 'Jumat',
-    dhuha: 92,
-    zuhur: 96
+    kehadiran: 99
   }];
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -157,11 +152,11 @@ export function DashboardKamad() {
     icon: BookOpen,
     color: 'text-blue-600 bg-blue-50 border-blue-100 hover:bg-blue-100/50'
   }, {
-    label: 'Pantau Ibadah Siswa',
-    desc: 'Pantau dhuha, zuhur, dan kebiasaan baik siswa',
-    path: '/kamad/ibadah-siswa',
-    icon: Heart,
-    color: 'text-rose-600 bg-rose-50 border-rose-100 hover:bg-rose-100/50'
+    label: 'Presensi Siswa',
+    desc: 'Rekapitulasi kehadiran harian siswa seluruh kelas',
+    path: '/admin/reports',
+    icon: Users,
+    color: 'text-emerald-600 bg-emerald-50 border-emerald-100 hover:bg-emerald-100/50'
   }, {
     label: 'Kinerja Staf',
     desc: 'Monitoring penyelesaian jobdesk ustadz/ustadzah',
@@ -348,10 +343,10 @@ export function DashboardKamad() {
               <div className="flex items-center gap-2">
                 <div className="w-1.5 h-4 bg-emerald-600 rounded-xs" />
                 <CardTitle className="text-xs font-black uppercase tracking-wider text-slate-700 m-0">
-                  Tren Tingkat Kehadiran Ibadah Siswa (Pekan Ini)
+                  Tren Tingkat Kehadiran Presensi Siswa (Pekan Ini)
                 </CardTitle>
               </div>
-              <button onClick={() => navigate('/kamad/ibadah-siswa')} className="text-xs font-bold text-emerald-600 hover:text-emerald-700 inline-flex items-center gap-1">
+              <button onClick={() => navigate('/admin/reports')} className="text-xs font-bold text-emerald-600 hover:text-emerald-700 inline-flex items-center gap-1">
                 Selengkapnya <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </CardHeader>
@@ -365,12 +360,8 @@ export function DashboardKamad() {
                   bottom: 0
                 }}>
                     <defs>
-                      <linearGradient id="colorDhuha" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.2} />
-                        <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0} />
-                      </linearGradient>
-                      <linearGradient id="colorZuhur" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.2} />
+                      <linearGradient id="colorKehadiran" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
                         <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                       </linearGradient>
                     </defs>
@@ -400,8 +391,7 @@ export function DashboardKamad() {
                     fontWeight: 'bold',
                     paddingTop: '10px'
                   }} />
-                    <Area type="monotone" name="Sholat Dhuha %" dataKey="dhuha" stroke="#0ea5e9" strokeWidth={2.5} fillOpacity={1} fill="url(#colorDhuha)" />
-                    <Area type="monotone" name="Sholat Zuhur %" dataKey="zuhur" stroke="#10b981" strokeWidth={2.5} fillOpacity={1} fill="url(#colorZuhur)" />
+                    <Area type="monotone" name="Tingkat Kehadiran %" dataKey="kehadiran" stroke="#10b981" strokeWidth={2.5} fillOpacity={1} fill="url(#colorKehadiran)" />
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
@@ -518,12 +508,12 @@ export function KamadMateriAjar() {
           id: String(m.id),
           teacherName: m.name || m.teacherName || 'Guru',
           role: isQuran ? "Guru Al-Qur'an" : 'Guru Mapel',
-          category: isQuran ? 'guru_quran' : 'guru_mapel',
+          category: (isQuran ? 'guru_quran' : 'guru_mapel') as 'guru_quran' | 'guru_mapel' | 'wali_kelas',
           subject: subj || '-',
           className: m.class || m.class_name || m.className || '-',
           title: m.title || '-',
           date: m.date ? String(m.date).slice(0, 10) : '-',
-          status: m.status === 'Terbit' || m.status === 'Sudah Membuat' ? 'Sudah Membuat' : 'Belum Membuat',
+          status: (m.status === 'Terbit' || m.status === 'Sudah Membuat' ? 'Sudah Membuat' : 'Belum Membuat') as 'Sudah Membuat' | 'Belum Membuat',
           driveUrl: m.file_name || m.driveUrl || '',
           description: m.description || '',
           objectives: Array.isArray(m.objectives) ? m.objectives : []
@@ -824,259 +814,11 @@ export function KamadMateriAjar() {
     </div>;
 }
 export function KamadIbadahSiswa() {
-  const _syncTick = useRealtime();
-  const [selectedDate, setSelectedDate] = useState(() => (function(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})());
-  const [classDhuhaRank, setClassDhuhaRank] = useState<any[]>([]);
-  const [classZuhurRank, setClassZuhurRank] = useState<any[]>([]);
-  const [dhuhaRate, setDhuhaRate] = useState<number>(0);
-  const [zuhurRate, setZuhurRate] = useState<number>(0);
-  const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [ibadah, students, classesData] = await Promise.all([
-          apiClient('/crud.php?table=ibadah_siswa').catch(() => []),
-          apiClient('/crud.php?table=students').catch(() => []),
-          apiClient('/crud.php?table=classes').catch(() => [])
-        ]);
-
-        const ibadahList = Array.isArray(ibadah) ? ibadah : [];
-        const studentList = Array.isArray(students) ? students : [];
-        const dbClasses = Array.isArray(classesData) ? classesData.map((c: any) => c.name || c.class_name).filter(Boolean) : [];
-
-        // All unique classes from classes table and students table
-        const studentClasses = studentList.map((s: any) => s.class_name || s.className).filter(Boolean);
-        const allClasses = Array.from(new Set([...dbClasses, ...studentClasses])).sort();
-
-        const totalStudents = studentList.length || 1;
-
-        // Selected date filter
-        const today = selectedDate;
-        const todayIbadah = ibadahList.filter((i: any) => String(i.date).startsWith(today));
-        const dhuhaIbadah = todayIbadah.filter((i: any) => 
-          i.type === 'Dhuha' || String(i.jenis_ibadah).toLowerCase() === 'dhuha'
-        );
-        const zuhurIbadah = todayIbadah.filter((i: any) => 
-          i.type === 'Zuhur' || String(i.jenis_ibadah).toLowerCase() === 'zuhur'
-        );
-
-        const dhuhaPresent = dhuhaIbadah.filter((i: any) => i.status === 'Jamaah' || i.status === 'Hadir').length;
-        const zuhurPresent = zuhurIbadah.filter((i: any) => i.status === 'Jamaah' || i.status === 'Hadir').length;
-        setDhuhaRate(Math.round((dhuhaPresent / totalStudents) * 100));
-        setZuhurRate(Math.round((zuhurPresent / totalStudents) * 100));
-
-        const getClassName = (i: any) => {
-          let cName = i.class_name || i.className;
-          if (!cName || cName === 'undefined') {
-            const student = studentList.find((s: any) => String(s.id) === String(i.student_id));
-            cName = student?.class_name || student?.className || 'Tidak Diketahui';
-          }
-          return cName;
-        };
-
-        const classStats = allClasses.map(cName => {
-          const classStudents = studentList.filter((s: any) => (s.class_name || s.className) === cName);
-          return {
-            className: cName as string,
-            total: classStudents.length
-          };
-        });
-
-        const dRank = classStats.map(c => {
-          const records = dhuhaIbadah.filter((i: any) => getClassName(i) === c.className);
-          const notJamaahCount = records.filter((i: any) => 
-            i.status === 'Tidak' || 
-            i.status === 'Tidak Jamaah' || 
-            i.status === 'Alpa'
-          ).length;
-          const jamaahCount = records.filter((i: any) => i.status === 'Jamaah' || i.status === 'Hadir').length;
-          return { 
-            ...c, 
-            absent: notJamaahCount,
-            jamaah: jamaahCount,
-            hasData: records.length > 0
-          };
-        }).sort((a, b) => b.absent - a.absent);
-
-        const zRank = classStats.map(c => {
-          const records = zuhurIbadah.filter((i: any) => getClassName(i) === c.className);
-          const notJamaahCount = records.filter((i: any) => 
-            i.status === 'Tidak' || 
-            i.status === 'Tidak Jamaah' || 
-            i.status === 'Alpa'
-          ).length;
-          const jamaahCount = records.filter((i: any) => i.status === 'Jamaah' || i.status === 'Hadir').length;
-          return { 
-            ...c, 
-            absent: notJamaahCount,
-            jamaah: jamaahCount,
-            hasData: records.length > 0
-          };
-        }).sort((a, b) => b.absent - a.absent);
-
-        setClassDhuhaRank(dRank);
-        setClassZuhurRank(zRank);
-      } catch (err) {
-        console.error('Failed to fetch ibadah data', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [_syncTick, selectedDate]);
-
-  return (
-    <div className="space-y-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-800">Pantau Ibadah Siswa</h1>
-          <p className="text-slate-500 mt-1 text-sm font-medium">Monitoring pelaksanaan Sholat Dhuha dan Sholat Zuhur Berjamaah seluruh kelas.</p>
-        </div>
-        
-        <div className="flex items-center gap-3 bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm w-fit self-start md:self-auto">
-          <div className="w-8 h-8 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center">
-            <Calendar className="w-4 h-4" />
-          </div>
-          <div>
-            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">Tanggal Pantau</p>
-            <input 
-              type="date" 
-              max={(function(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');})()} 
-              value={selectedDate} 
-              onChange={e => setSelectedDate(e.target.value)} 
-              className="h-7 rounded-md border border-slate-200 bg-white px-2 py-0.5 text-xs font-bold text-slate-700 shadow-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none" 
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="border-slate-200/80 shadow-sm">
-          <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-4 px-5">
-            <CardTitle className="text-sm font-black uppercase tracking-wider text-slate-800 flex items-center justify-between">
-              <span>Sholat Dhuha</span>
-              <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                Pagi (s/d 12:00 WIB)
-              </span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-center p-5 bg-gradient-to-br from-emerald-50/40 to-slate-50 rounded-xl border border-emerald-100/60 mb-5">
-              <div className="text-center">
-                <p className="text-4xl font-black text-emerald-600 tracking-tight">{loading ? '...' : `${dhuhaRate}%`}</p>
-                <p className="text-xs text-slate-500 mt-1 font-bold uppercase tracking-wider">Tingkat Kehadiran Jamaah Dhuha</p>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-xs font-black uppercase tracking-wider text-slate-600">Daftar Seluruh Kelas:</h4>
-                <span className="text-[11px] font-bold text-slate-400">{classDhuhaRank.length} Kelas</span>
-              </div>
-              
-              <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1.5">
-                {classDhuhaRank.length > 0 ? classDhuhaRank.map((item, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`flex items-center justify-between p-3.5 rounded-xl border transition-all ${
-                      item.absent === 0 
-                        ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950' 
-                        : 'bg-rose-50/70 border-rose-200 text-rose-950'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span className={`w-2.5 h-2.5 rounded-full ${item.absent === 0 ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                      <div>
-                        <span className="font-extrabold text-slate-800 text-sm">{item.className}</span>
-                        <p className="text-[11px] text-slate-500 font-medium">Total: {item.total} Siswa</p>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      {item.absent === 0 ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-md">
-                          ✓ Semua Berjamaah ({item.total} Siswa)
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-100/80 px-2.5 py-1 rounded-md">
-                          ✕ {item.absent} Siswa Tidak Jamaah ({item.total} Siswa)
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                )) : (
-                  <p className="text-sm text-slate-500 italic text-center py-6">Belum ada data kelas.</p>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card className="border-slate-200/80 shadow-sm">
-          <CardHeader className="bg-slate-50/50 border-b border-slate-100 py-4 px-5">
-            <CardTitle className="text-sm font-black uppercase tracking-wider text-slate-800 flex items-center justify-between">
-              <span>Sholat Zuhur Berjamaah</span>
-              <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
-                Siang (s/d 13:30 WIB)
-              </span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-5">
-            <div className="flex items-center justify-center p-5 bg-gradient-to-br from-blue-50/40 to-slate-50 rounded-xl border border-blue-100/60 mb-5">
-              <div className="text-center">
-                <p className="text-4xl font-black text-blue-600 tracking-tight">{loading ? '...' : `${zuhurRate}%`}</p>
-                <p className="text-xs text-slate-500 mt-1 font-bold uppercase tracking-wider">Tingkat Kehadiran Zuhur Berjamaah</p>
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <h4 className="text-xs font-black uppercase tracking-wider text-slate-600">Daftar Seluruh Kelas:</h4>
-                <span className="text-[11px] font-bold text-slate-400">{classZuhurRank.length} Kelas</span>
-              </div>
-
-              <div className="space-y-2.5 max-h-[420px] overflow-y-auto pr-1.5">
-                {classZuhurRank.length > 0 ? classZuhurRank.map((item, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`flex items-center justify-between p-3.5 rounded-xl border transition-all ${
-                      item.absent === 0 
-                        ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950' 
-                        : 'bg-rose-50/70 border-rose-200 text-rose-950'
-                    }`}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span className={`w-2.5 h-2.5 rounded-full ${item.absent === 0 ? 'bg-emerald-500' : 'bg-rose-500'}`} />
-                      <div>
-                        <span className="font-extrabold text-slate-800 text-sm">{item.className}</span>
-                        <p className="text-[11px] text-slate-500 font-medium">Total: {item.total} Siswa</p>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      {item.absent === 0 ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 bg-emerald-100/80 px-2.5 py-1 rounded-md">
-                          ✓ Semua Berjamaah ({item.total} Siswa)
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-100/80 px-2.5 py-1 rounded-md">
-                          ✕ {item.absent} Siswa Tidak Jamaah ({item.total} Siswa)
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                )) : (
-                  <p className="text-sm text-slate-500 italic text-center py-6">Belum ada data kelas.</p>
-                )}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+    navigate('/admin/reports', { replace: true });
+  }, [navigate]);
+  return null;
 }
 import { KamadWeeklyRecapModal } from '../components/KamadWeeklyRecapModal';
 
@@ -1374,17 +1116,6 @@ export function KamadKinerjaStaf() {
               if (match) return { completed: true, completedAt: match.created_at || match.timestamp };
               return null;
             });
-
-            addSingleTask('Mengabsen sholat Zuhur siswa kelas binaannya', 'WALI KELAS', '13:30', '17:00', () => {
-              if (!Array.isArray(ibadahSiswa)) return null;
-              const match = ibadahSiswa.find((ib: any) =>
-                String(ib.date).startsWith(filterDateStr) &&
-                (ib.type === 'Zuhur' || String(ib.jenis_ibadah).toLowerCase() === 'zuhur') &&
-                (ib.class_name === userClass || String(ib.user_id) === String(u.id))
-              );
-              if (match) return { completed: true, completedAt: match.created_at || match.timestamp };
-              return null;
-            });
           }
 
           if (r.includes('guru') || r.includes('guru_mapel')) {
@@ -1412,7 +1143,14 @@ export function KamadKinerjaStaf() {
                   String(sa.subject_name).toLowerCase() === String(s.subject_name).toLowerCase() &&
                   String(sa.user_id) === String(u.id)
                 );
-                if (match) return { completed: true, completedAt: match.created_at || match.timestamp };
+                // Terkoneksi otomatis dengan presensi pagi Wali Kelas
+                const walasMatch = studentAttendance.find((sa: any) =>
+                  String(sa.date).startsWith(filterDateStr) &&
+                  String(sa.class_name).toLowerCase() === String(s.class_name).toLowerCase() &&
+                  (!sa.subject_name || String(sa.subject_name).toLowerCase().includes('wali kelas'))
+                );
+                const effective = match || walasMatch;
+                if (effective) return { completed: true, completedAt: effective.created_at || effective.timestamp || effective.date };
                 return null;
               });
 
@@ -1473,7 +1211,14 @@ const match = laporanHarian.find((lh: any) => {
                   String(sa.subject_name).toLowerCase() === String(s.subject_name).toLowerCase() &&
                   String(sa.user_id) === String(u.id)
                 );
-                if (match) return { completed: true, completedAt: match.created_at || match.timestamp };
+                // Terkoneksi otomatis dengan presensi pagi Wali Kelas
+                const walasMatch = studentAttendance.find((sa: any) =>
+                  String(sa.date).startsWith(filterDateStr) &&
+                  String(sa.class_name).toLowerCase() === String(s.class_name).toLowerCase() &&
+                  (!sa.subject_name || String(sa.subject_name).toLowerCase().includes('wali kelas'))
+                );
+                const effective = match || walasMatch;
+                if (effective) return { completed: true, completedAt: effective.created_at || effective.timestamp || effective.date };
                 return null;
               });
 
@@ -1506,16 +1251,6 @@ const match = laporanHarian.find((lh: any) => {
                 if (match) return { completed: true, completedAt: match.created_at || match.timestamp || match.date };
                 return null;
               });
-            });
-            
-            addSingleTask('Mengabsen siswa sholat Dhuha', 'GURU QUR\'AN', '12:00', '17:00', () => {
-              if (!Array.isArray(ibadahSiswa)) return null;
-              const match = ibadahSiswa.find((ib: any) =>
-                String(ib.date).startsWith(filterDateStr) &&
-                (ib.type === 'Dhuha' || String(ib.jenis_ibadah).toLowerCase() === 'dhuha')
-              );
-              if (match) return { completed: true, completedAt: match.created_at || match.timestamp };
-              return null;
             });
           }
           

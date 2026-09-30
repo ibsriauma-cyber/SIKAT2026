@@ -321,13 +321,6 @@ export function MobileDashboard() {
           bg: 'bg-pink-50',
           desc: 'Penilaian akhlak siswa'
         }, {
-          to: '/sholat-zuhur',
-          icon: Moon,
-          label: 'Pantau Zuhur Siswa',
-          color: 'text-slate-600',
-          bg: 'bg-slate-50',
-          desc: 'Absensi sholat zuhur'
-        }, {
           to: '/absensi-zuhur',
           icon: Moon,
           label: 'Absensi Zuhur',
@@ -686,13 +679,6 @@ export function MobileDashboard() {
           bg: 'bg-blue-50',
           desc: 'Pantau modul guru'
         }, {
-          to: '/kamad/ibadah-siswa',
-          icon: Heart,
-          label: 'Ibadah Siswa',
-          color: 'text-rose-600',
-          bg: 'bg-rose-50',
-          desc: 'Peringkat ibadah harian'
-        }, {
           to: '/kamad/kinerja-staf',
           icon: Users,
           label: 'Kinerja Staf',
@@ -758,13 +744,6 @@ export function MobileDashboard() {
           bg: 'bg-emerald-50',
           desc: 'Kelompok bakat minat'
         }, {
-          to: '/kamad/ibadah-siswa',
-          icon: Heart,
-          label: 'Ibadah Siswa',
-          color: 'text-rose-600',
-          bg: 'bg-rose-50',
-          desc: 'Peringkat ketaatan sholat'
-        }, {
           to: '/absensi-zuhur',
           icon: Moon,
           label: 'Absensi Zuhur',
@@ -780,13 +759,6 @@ export function MobileDashboard() {
           color: 'text-blue-600',
           bg: 'bg-blue-50',
           desc: 'Pantau materi & silabus'
-        }, {
-          to: '/kamad/ibadah-siswa',
-          icon: Heart,
-          label: 'Ibadah Siswa',
-          color: 'text-rose-600',
-          bg: 'bg-rose-50',
-          desc: 'Analisis ketaatan ibadah'
         }, {
           to: '/kamad/kinerja-staf',
           icon: Users,
@@ -845,13 +817,6 @@ export function MobileDashboard() {
           color: 'text-emerald-600',
           bg: 'bg-emerald-50',
           desc: 'Kehadiran siswa harian'
-        }, {
-          to: '/guru-quran/dhuha',
-          icon: Heart,
-          label: 'Absensi Dhuha',
-          color: 'text-emerald-600',
-          bg: 'bg-emerald-50',
-          desc: 'Input sholat dhuha siswa'
         }, {
           to: '/input-nilai',
           icon: Edit3,
